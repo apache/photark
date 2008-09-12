@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+-->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>4</version>
+    </parent>
+    <groupId>org.apache.photark</groupId>
+    <artifactId>photark</artifactId>
+    <version>1.0-incubating-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Apache PhotArk</name>
+
+    <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org/</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <inceptionYear>2008</inceptionYear>
+
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/photark/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/photark/trunk/</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://issues.apache.org/jira/browse/PHOTARK</url>
+    </issueManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Apache PhotArk User List</name>
+            <subscribe>photark-user-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>photark-user-unsubscribe@incubator.apache.org</unsubscribe>
+            <post>photark-user@incubator.apache.org</post>
+            <archive>http://mail-archives.apache.org/mod_mbox/incubator-photark-user</archive>
+        </mailingList>
+        <mailingList>
+            <name>Apache PhotArk Dev List</name>
+            <subscribe>photark-dev-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>photark-dev-unsubscribe@incubator.apache.org</unsubscribe>
+            <post>photark-dev@incubator.apache.org</post>
+            <archive>http://mail-archives.apache.org/mod_mbox/incubator-photark-dev</archive>
+        </mailingList>
+        <mailingList>
+            <name>Apache PhotArk Commits List</name>
+            <subscribe>photark-commits-subscribe@incubator.apache.org</subscribe>
+            <unsubscribe>photark-commits-unsubscribe@incubator.apache.org</unsubscribe>
+            <post>photark-commits@incubator.apache.org</post>
+            <archive>http://mail-archives.apache.org/mod_mbox/incubator-photark-commits</archive>
+        </mailingList>
+    </mailingLists>
+
+    <prerequisites>
+        <maven>2.0.8</maven>
+    </prerequisites>
+
+    <properties>
+        <notice.dir>.</notice.dir>
+    </properties>
+
+    <repositories>
+        <!--
+            The central Maven repository and Apache SNAPSHOT repository are inherited from the parent POM
+        -->
+
+        <!-- Apache Incubator repository for artifacts released by Incubator projects -->
+        <repository>
+            <id>apache.incubator</id>
+            <name>Apache Incubator Repository</name>
+            <url>http://people.apache.org/repo/m2-incubating-repository</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
+    <pluginRepositories>
+        <!-- Apache Incubator repository for artifacts released by Incubator projects -->
+        <pluginRepository>
+            <id>apache.incubator</id>
+            <name>Apache Incubator Repository</name>
+            <url>http://people.apache.org/repo/m2-incubating-repository</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+
+        <!-- Apache SNAPSHOT repository for unreleased artifacts -->
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <name>Apache SNAPSHOT Repository</name>
+            <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+
+        <!-- Codehaus SNAPSHOT repository -->
+        <pluginRepository>
+            <id>codehaus-snapshot</id>
+            <name>Codehaus Snapshot Repository</name>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <!--
+            Whilst in incubation, released project artifacts are deployed to the incubator repository 
+        -->
+        <repository>
+            <id>apache.incubator</id>
+            <name>Apache Incubator Repository</name>
+            <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
+        </repository>
+        <snapshotRepository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>photo-gallery</module>
+            </modules>
+        </profile>
+
+        <!-- profile for generating Eclipse project definitions -->
+        <profile>
+            <!-- this is kind of a hack for eclipse.   Eclipse doesn't like "." as a resource directory as then you have
+            source directories inside a source directory which causes all kinds of errors.  We'll just point
+            the resources directory back to the resources directory.   The NOTICE and LICSENSE files
+            won't be included in the eclipse builds, but it at least works.
+            -->
+            <id>eclipse</id>
+            <properties>
+                <notice.dir>src/main/resources</notice.dir>
+            </properties>
+        </profile>
+
+        <!-- profile for verifying source code correctness -->
+        <profile>
+            <id>sourcecheck</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.5</source>
+                            <target>1.5</target>
+                            <showDeprecation>true</showDeprecation>
+                            <compilerArgument>-Xlint:unchecked,deprecation,fallthrough,finally</compilerArgument>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${notice.dir}</directory>
+                <targetPath>META-INF</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>LICENSE</include>
+                    <include>NOTICE</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+
+                <!-- compiler plugin configuration -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.0.2</version>
+                    <configuration>
+<!--                        <compilerId>eclipse</compilerId> -->
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+<!--
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-compiler-eclipse</artifactId>
+                        </dependency>
+                    </dependencies>
+-->
+                </plugin>
+
+                <!-- surefire plugin configuration -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.3.1</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*TestCase.java</include>
+                        </includes>
+                        <reportFormat>brief</reportFormat>
+                        <useFile>false</useFile>
+                        <forkMode>once</forkMode>
+                        <argLine>-ea -Xmx256m</argLine>
+                    </configuration>
+                </plugin>
+
+                <!-- jar plugin configuration -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Extension-Name>${project.artifactId}</Extension-Name>
+                                <Specification-Title>${name}</Specification-Title>
+                                <Specification-Vendor>The Apache Software Foundation</Specification-Vendor>
+                                <Specification-Version>${version}</Specification-Version>
+                                <Implementation-Title>${name}</Implementation-Title>
+                                <Implementation-Vendor-Id>org.apache</Implementation-Vendor-Id>
+                                <Implementation-Vendor>The Apache Software Foundation</Implementation-Vendor>
+                                <Implementation-Version>${version}</Implementation-Version>
+                            </manifestEntries>
+                         </archive>
+                    </configuration>
+                </plugin>
+
+                <!-- code coverage check plugin configuration -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clover-plugin</artifactId>
+                    <configuration>
+                        <jdk>1.5</jdk>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
