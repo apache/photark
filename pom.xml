@@ -168,6 +168,7 @@
             </activation>
             <modules>
                 <module>photo-gallery</module>
+                <module>photo-gallery-webapp</module>
             </modules>
         </profile>
 
