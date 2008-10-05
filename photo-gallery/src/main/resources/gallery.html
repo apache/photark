@@ -6,15 +6,15 @@
     * to you under the Apache License, Version 2.0 (the
     * "License"); you may not use this file except in compliance
     * with the License.  You may obtain a copy of the License at
-    * 
+    *
     *   http://www.apache.org/licenses/LICENSE-2.0
-    * 
+    *
     * Unless required by applicable law or agreed to in writing,
     * software distributed under the License is distributed on an
     * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     * KIND, either express or implied.  See the License for the
     * specific language governing permissions and limitations
-    * under the License.    
+    * under the License.
 -->
 <html>
 <head>
@@ -27,7 +27,7 @@
 
 	//@Reference
 	var album = new Reference("album");
-		
+
 	var albumItems;
 	var currPos = 0;
 
@@ -48,29 +48,29 @@
         document.getElementById("albumImage").height=this.height;
     }
     img.src = albumItems[pos];
-    return false;   	
+    return false;
    }
-   
+
    function showAlbum() {
       if(albumItems.length > 0) {
 		showImage(currPos);
-	  }	
+	  }
    }
-   
+
    function goNext() {
    	 if(currPos < albumItems.length) {
 	 	currPos++;
 		showImage(currPos);
 	 }
    }
-   
+
    function goPrevious() {
    	if(currPos > 0) {
 		currPos--;
 		showImage(currPos);
 	}
-   }	
-		
+   }
+
 	function init() {
 		try {
 			album.getPictures(album_getResponse);
@@ -78,22 +78,22 @@
 			alert(e);
 		}
 	}
-	
-	
+
+
 	index_off= new Image(31,31); index_off.src = "index.gif";
     index_on = new Image(31,31); index_on.src = "index_on.gif";
     next_off = new Image(31,31); next_off.src = "next.gif";
 	next_on  = new Image(31,31); next_on.src = "next_on.gif";
 	prev_off = new Image(31,31); prev_off.src = "prev.gif";
 	prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
-	
+
 </script>
 
 </head>
 
 <body onload="init()">
 <br>
-<h1><center>Apache Tuscany Photo Gallery</center></h1>
+<h1><center>Apache PhotArk Gallery</center></h1>
 <br>
 <br>
   <div id="gallery">
@@ -102,7 +102,7 @@
 	</div>
 	<br>
   </div>
-  
+
   <center>
 
   <table style="height:54px;" cellspacing="0" cellpadding="0" border="0">
@@ -128,8 +128,8 @@
 		</td>
     </tr>
   </table>
-		   
+
   </center>
-  
+
 </body>
 </html>
