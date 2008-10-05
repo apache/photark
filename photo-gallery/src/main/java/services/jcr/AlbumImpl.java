@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package services.jcr;
@@ -44,7 +44,7 @@ public class AlbumImpl implements Album {
     private String location;
     private Repository repository=null;
     private Session session=null;
-    
+
     @Property
     public void setGallery(String gallery) {
         this.gallery = gallery;
@@ -55,13 +55,13 @@ public class AlbumImpl implements Album {
         this.album = album;
         this.location = null;
     }
-    
+
     protected String getLocation() {
         if (location == null) {
-            location = gallery + "/" + album + "/"; 
+            location = gallery + "/" + album + "/";
         }
         return location;
-        
+
     }
 
     @Init
@@ -87,46 +87,44 @@ public class AlbumImpl implements Album {
                         //pictures.add(image);
                       }
                   }
-                            
+
                   session.save();
                 }catch (Exception e){
                     // FIXME: ignore for now
-                    e.printStackTrace();     	
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
             // FIXME: ignore for now
             e.printStackTrace();
-        }   
+        }
     }
-    
+
     public String[] getPictures() {
       List<String> pictures = new ArrayList<String>();
-    	
-      try{	
+
+      try{
     	Node root=session.getRootNode();
         NodeIterator nodes = root.getNodes();
 
         while(nodes.hasNext()){
         	Node node=nodes.nextNode();
         	if(node.getPath().equals("/jcr:system")) continue;
-        	
+
         	pictures.add(node.getProperty("location").getString());
-        	//System.out.println(node.getProperty("name").getString());
-        	//System.out.println(node.getPath());
         }
       }catch (Exception e) {
           // FIXME: ignore for now
           e.printStackTrace();
       }
-      
+
       String[] pictureArray = new String[pictures.size()];
       pictures.toArray(pictureArray);
       removeNodes();
       return pictureArray;
     }
-    
-    
+
+
     public void removeNodes(){
       try{
     	Node root=session.getRootNode();
@@ -141,7 +139,7 @@ public class AlbumImpl implements Album {
           // FIXME: ignore for now
           e.printStackTrace();
       }
-        
+
     }
     /**
      * Inner fileFilter class
@@ -154,6 +152,6 @@ public class AlbumImpl implements Album {
           String f = new File(name).getName();
           return f.indexOf(afn) != -1;
         }
-      } ///:~ 
+      } ///:~
 
 }

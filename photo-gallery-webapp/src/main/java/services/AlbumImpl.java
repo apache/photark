@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package services;
@@ -33,7 +33,7 @@ public class AlbumImpl implements Album {
     private String album;
     private String location;
     private List<String> pictures = new ArrayList<String>();
-    
+
     @Property
     public void setGallery(String gallery) {
         this.gallery = gallery;
@@ -44,36 +44,32 @@ public class AlbumImpl implements Album {
         this.album = album;
         this.location = null;
     }
-    
+
     protected String getLocation() {
         if (location == null) {
-            location = gallery + "/" + album + "/"; 
+            location = gallery + "/" + album + "/";
         }
         return location;
-        
+
     }
 
     @Init
     public void init() {
-        System.out.println(">>> Initializing FileSystem Album : " + getLocation());
         File current = new File(".");
-        
-        System.out.println("Album abslute path : " + current.toURI());
-        
+
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
             if(albumURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 albumURL = this.getClass().getClassLoader().getResource("../../" + getLocation());
             }
-            
+
             if(albumURL != null) {
                 File album = new File(albumURL.toURI());
                 if (album.isDirectory() && album.exists()) {
                     String[] listPictures = album.list(new ImageFilter(".jpg"));
                     for(String image : listPictures) {
                         image = getLocation() + image;
-                        System.out.println("Adding : " + image);
                         pictures.add(image);
                     }
                 }
@@ -81,16 +77,15 @@ public class AlbumImpl implements Album {
         } catch (Exception e) {
             // FIXME: ignore for now
             e.printStackTrace();
-        }   
+        }
     }
-    
+
     public String[] getPictures() {
-        System.out.println(">>> Retrieving picture list");
         String[] pictureArray = new String[pictures.size()];
         pictures.toArray(pictureArray);
         return pictureArray;
     }
-    
+
     /**
      * Inner fileFilter class
      */
@@ -102,6 +97,6 @@ public class AlbumImpl implements Album {
           String f = new File(name).getName();
           return f.indexOf(afn) != -1;
         }
-      } 
+      }
 
 }
