@@ -66,6 +66,7 @@ public class AlbumImpl implements Album {
 
     @Init
     public void init() {
+        System.out.println(">>> Initializing JCR Album");
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
             if(albumURL != null) {
@@ -154,6 +155,5 @@ public class AlbumImpl implements Album {
           String f = new File(name).getName();
           return f.indexOf(afn) != -1;
         }
-      } ///:~ 
-
+      }
 }

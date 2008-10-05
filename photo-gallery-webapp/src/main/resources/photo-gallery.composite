@@ -22,26 +22,15 @@
 		targetNamespace="http://photo-gallery"
 		name="photo-gallery">
 		
-    <component name="Gallery">
-        <t:implementation.widget location="gallery.html"/>
-        <service name="Widget">
-        	<t:binding.http uri="/gallery"/>
-        </service>
-		<reference name="album" target="Album">
-		 	<t:binding.jsonrpc/>
-		 </reference>
-    </component>
-    
+	<service name="Gallery" promote="Album">
+         <interface.java interface="services.Album"/>
+         <t:binding.jsonrpc/>
+     </service>  
+         
 	<component name="Album">
 		<implementation.java class="services.AlbumImpl"/> 
 		<property name="gallery">gallery</property>
 		<property name="album">boston</property>
-		<service name="Album">
-			<t:binding.jsonrpc/>
-   		</service>
 	</component> 
-	
-	<component name="GalleryPictures">
-		<t:implementation.resource location="gallery"></t:implementation.resource>
-	</component>
+
 </composite>

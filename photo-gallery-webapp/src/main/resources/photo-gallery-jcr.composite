@@ -20,7 +20,7 @@
 <composite	xmlns="http://www.osoa.org/xmlns/sca/1.0"
 		xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
 		targetNamespace="http://photo-gallery"
-		name="photo-gallery">
+		name="photo-gallery-jcr">
 		
     <component name="Gallery">
         <t:implementation.widget location="gallery.html"/>
@@ -36,12 +36,6 @@
 		<implementation.java class="services.jcr.AlbumImpl"/> 
 		<property name="gallery">gallery</property>
 		<property name="album">boston</property>
-		<service name="Album">
-			<t:binding.jsonrpc/>
-   		</service>
 	</component> 
-	
-	<component name="GalleryPictures">
-		<t:implementation.resource location="gallery"></t:implementation.resource>
-	</component>
+
 </composite>

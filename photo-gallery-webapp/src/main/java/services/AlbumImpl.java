@@ -55,14 +55,25 @@ public class AlbumImpl implements Album {
 
     @Init
     public void init() {
+        System.out.println(">>> Initializing FileSystem Album : " + getLocation());
+        File current = new File(".");
+        
+        System.out.println("Album abslute path : " + current.toURI());
+        
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
+            if(albumURL == null) {
+                // Accomodate for J2EE classpath that starts in WEB-INF\classes
+                albumURL = this.getClass().getClassLoader().getResource("../../" + getLocation());
+            }
+            
             if(albumURL != null) {
                 File album = new File(albumURL.toURI());
                 if (album.isDirectory() && album.exists()) {
                     String[] listPictures = album.list(new ImageFilter(".jpg"));
                     for(String image : listPictures) {
                         image = getLocation() + image;
+                        System.out.println("Adding : " + image);
                         pictures.add(image);
                     }
                 }
@@ -74,6 +85,7 @@ public class AlbumImpl implements Album {
     }
     
     public String[] getPictures() {
+        System.out.println(">>> Retrieving picture list");
         String[] pictureArray = new String[pictures.size()];
         pictures.toArray(pictureArray);
         return pictureArray;
@@ -90,6 +102,6 @@ public class AlbumImpl implements Album {
           String f = new File(name).getName();
           return f.indexOf(afn) != -1;
         }
-      } ///:~ 
+      } 
 
 }
