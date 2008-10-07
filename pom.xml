@@ -167,6 +167,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
+                <module>gallery-assets</module>
                 <module>photo-gallery</module>
                 <module>photo-gallery-webapp</module>
             </modules>
