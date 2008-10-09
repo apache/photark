@@ -17,10 +17,7 @@
     * specific language governing permissions and limitations
     * under the License.    
 -->
-<contribution xmlns="http://www.osoa.org/xmlns/sca/1.0"
-              targetNamespace="http://photark"
-              xmlns:p="http://photo-gallery">
+<contribution xmlns="http://www.osoa.org/xmlns/sca/1.0">
    <import.java package="services"/>
    <import.java package="services.jcr"/>
-   <deployable composite="p:photo-gallery"/>
 </contribution>

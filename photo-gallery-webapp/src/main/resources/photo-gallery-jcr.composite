@@ -21,21 +21,15 @@
 		xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
 		targetNamespace="http://photo-gallery"
 		name="photo-gallery-jcr">
-		
-    <component name="Gallery">
-        <t:implementation.widget location="gallery.html"/>
-        <service name="Widget">
-        	<t:binding.http uri="/gallery"/>
-        </service>
-		<reference name="album" target="Album">
-		 	<t:binding.jsonrpc/>
-		 </reference>
-    </component>
-    
+
+    <service name="Gallery" promote="Album">
+         <interface.java interface="services.Album"/>
+         <t:binding.jsonrpc/>
+     </service>  
+         
 	<component name="Album">
 		<implementation.java class="services.jcr.AlbumImpl"/> 
 		<property name="gallery">gallery</property>
 		<property name="album">boston</property>
 	</component> 
-
 </composite>
