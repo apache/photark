@@ -25,8 +25,7 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photo-gallery-webapp</artifactId>
-    <packaging>war</packaging>
+    <artifactId>photoark-gallery</artifactId>
     <name>Apache PhotArk Application</name>
 
     <repositories>
@@ -39,13 +38,13 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.photark</groupId>
-            <artifactId>photo-gallery-assets</artifactId>
+            <artifactId>photoark-assets</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
-            
+
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-webapp</artifactId>
+            <artifactId>tuscany-host-embedded</artifactId>
             <version>1.3.1</version>
         </dependency>
 

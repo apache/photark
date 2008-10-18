@@ -25,7 +25,7 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photo-gallery-assets</artifactId>
+    <artifactId>photoark-assets</artifactId>
     <name>Apache PhotArk Application</name>
 
     <repositories>
