@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package services;
+package services.filesystem;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -27,6 +27,8 @@ import java.util.List;
 
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Property;
+
+import services.Album;
 
 public class AlbumImpl implements Album {
     private String gallery;

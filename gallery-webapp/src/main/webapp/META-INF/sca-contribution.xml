@@ -21,6 +21,7 @@
               targetNamespace="http://photark"
               xmlns:p="http://photo-gallery">
    <import.java package="services"/>
+   <import.java package="services.filesystem"/>
    <import.java package="services.jcr"/>
    <deployable composite="p:photo-gallery"/>
 </contribution>

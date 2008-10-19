@@ -27,19 +27,28 @@
         <service name="Widget">
         	<t:binding.http uri="/gallery"/>
         </service>
-		<reference name="album" target="Album">
+		<reference name="album" target="AlbumAgregator/Album">
 		 	<t:binding.jsonrpc/>
 		 </reference>
     </component>
     
-	<component name="Album">
-		<implementation.java class="services.AlbumImpl"/> 
-		<property name="gallery">gallery</property>
-		<property name="album">boston</property>
+    <component name="AlbumAgregator">
+        <implementation.java class="services.AlbumAgregator"/>
 		<service name="Album">
 			<t:binding.jsonrpc/>
    		</service>
+		<reference name="album" target="Album"/>
+        <reference name="albumFeed">
+           <t:binding.atom uri="http://api.flickr.com/services/feeds/photoset.gne?set=72157601530865813&amp;nsid=36437931@N00&amp;lang=en-us"/>
+        </reference>
+    </component>
+    
+	<component name="Album">
+		<implementation.java class="services.filesystem.AlbumImpl"/> 
+		<property name="gallery">gallery</property>
+		<property name="album">boston</property>
 	</component> 
+
 	
 	<component name="GalleryPictures">
 		<t:implementation.resource location="gallery"></t:implementation.resource>

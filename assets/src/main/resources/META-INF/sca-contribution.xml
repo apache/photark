@@ -19,5 +19,6 @@
 -->
 <contribution xmlns="http://www.osoa.org/xmlns/sca/1.0">
    <export.java package="services"/>
+   <export.java package="services.filesystem"/>
    <export.java package="services.jcr"/>
 </contribution>
