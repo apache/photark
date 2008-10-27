@@ -22,10 +22,10 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.abdera.model.Entry;
-import org.apache.tuscany.sca.binding.atom.collection.Collection;
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Reference;
+
+import com.google.gdata.data.Link;
 
 public class AlbumAgregator implements Album {
     private List<String> pictures = new ArrayList<String>();
@@ -34,7 +34,10 @@ public class AlbumAgregator implements Album {
     protected Album album;
     
     @Reference(required=false)
-    protected Collection albumFeed;
+    protected org.apache.tuscany.sca.binding.atom.collection.Collection albumFeed;
+    
+    @Reference(required=false)
+    protected org.apache.tuscany.sca.binding.gdata.collection.Collection albumPicassa;
 
     @Init
     public void init() {
@@ -44,13 +47,20 @@ public class AlbumAgregator implements Album {
             }            
         }
         
-        List<Entry> entries = new ArrayList<Entry>();
         if (albumFeed != null) {
-            for(Entry feedPicture : albumFeed.getFeed().getEntries()) {
+            for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
                 String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
                 pictures.add(feedImageLink);
             }
         }
+        
+        if( albumPicassa != null) {
+            for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
+                String feedImageLink = picassaPicture.getLink(Link.Rel.MEDIA_EDIT, null).getHref();
+                pictures.add(feedImageLink);
+            }            
+        }
+        
     }
     public String[] getPictures() {
         String[] pictureArray = new String[pictures.size()];

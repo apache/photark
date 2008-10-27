@@ -41,6 +41,9 @@
         <reference name="albumFeed">
            <t:binding.atom uri="http://api.flickr.com/services/feeds/photoset.gne?set=72157601530865813&amp;nsid=36437931@N00&amp;lang=en-us"/>
         </reference>
+        <reference name="albumPicassa">
+           <t:binding.gdata uri="http://picasaweb.google.com/data/feed/api/user/haibotuscany/album/flowers" serviceType="lh2" username="haibotuscany@gmail.com" password="gsocgsocgsoc"/>
+        </reference>        
     </component>
     
 	<component name="Album">
