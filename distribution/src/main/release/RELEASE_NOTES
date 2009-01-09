@@ -1,0 +1,43 @@
+Apache PhotArk 0.1 January 2009 Release Notes
+============================================================
+
+Apache PhotArk will be a complete open source photo gallery 
+application including a content repository for the images, 
+a display piece, an access control layer, and upload capabilities. 
+The idea is to have a rigid design for the content repository 
+with a very flexible display piece. The images in the content
+repository will be protected with granular access control.
+
+
+See the CHANGES file for a detailed list of the features in this release.
+
+Support
+-------
+
+For more information on Apache PhotArk visit the website at:
+
+    http://incubator.apache.org/photark
+ 
+Any issues with this release can be reported to Apache PhotArk
+using the mailing lists or in the JIRA issue tracker.
+
+    Mailing list archives:
+
+       http://mail-archives.apache.org/mod_mbox/incubator-photark-user/
+       http://mail-archives.apache.org/mod_mbox/incubator-photark-dev/
+
+    Jira:
+
+       http://issues.apache.org/jira/browse/PHOTARK
+
+To join the project's mailing lists follow the instructions at:
+
+    http://incubator.apache.org/photark/mail-lists.html
+
+Apache PhotArk welcomes your help. Any contribution, including code,
+testing, improving the documentation, or bug reporting is always
+appreciated. 
+
+Thank you for using Apache PhotArk!
+
+- The PhotArk Team.
