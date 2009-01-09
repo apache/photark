@@ -25,7 +25,7 @@
         <version>4</version>
     </parent>
     <groupId>org.apache.photark</groupId>
-    <artifactId>photark</artifactId>
+    <artifactId>photark-parent</artifactId>
     <version>1.0-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache PhotArk</name>
@@ -168,8 +168,8 @@
             </activation>
             <modules>
                 <module>assets</module>
-                <module>gallery</module>
-                <module>gallery-webapp</module>
+                <module>photark</module>
+                <module>photark-webapp</module>
             </modules>
         </profile>
 

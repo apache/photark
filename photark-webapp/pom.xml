@@ -21,12 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.photark</groupId>
-        <artifactId>photark</artifactId>
+        <artifactId>photark-parent</artifactId>
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photoark-gallery</artifactId>
-    <name>Apache PhotArk Application</name>
+    <artifactId>photoark-webapp</artifactId>
+    <packaging>war</packaging>
+    <name>Apache PhotArk Web Application</name>
 
     <repositories>
        <repository>
@@ -41,10 +42,10 @@
             <artifactId>photoark-assets</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
-
+            
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-embedded</artifactId>
+            <artifactId>tuscany-host-webapp</artifactId>
             <version>1.4-SNAPSHOT</version>
         </dependency>
 
@@ -57,13 +58,6 @@
         <dependency>
             <groupId>org.apache.tuscany.sca</groupId>
             <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>1.4-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-resource-runtime</artifactId>
             <version>1.4-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
