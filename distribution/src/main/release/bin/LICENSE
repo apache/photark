@@ -212,12 +212,6 @@ code for the these subcomponents is subject to the terms and
 conditions of the following licenses.                             
 
 ===============================================================================
-
-The following components come under Apache Software License 1.1
-
- commons-discovery-0.2.jar
- commons-primitives-1.0.jar
-
 The following components come under Apache Software License 2.0
 
  abdera-client-0.4.0-incubating.jar
@@ -228,172 +222,77 @@ The following components come under Apache Software License 2.0
  abdera-i18n-0.4.0-incubating.jar
  abdera-parser-0.4.0-incubating.jar
  abdera-server-0.4.0-incubating.jar
- activeio-2.0-r118.jar
- activeio-core-3.0.0-incubator.jar
- activeio-core-3.1.0-tests.jar
- activemq-all-5.2.0.jar
- activemq-core-5.2.0.jar
  addressing-1.3.mar
- annogen-0.1.0.jar
- aopalliance-1.0.jar
  axiom-api-1.2.7.jar
- axiom-dom-1.2.7.jar
  axiom-impl-1.2.7.jar
- axis2-adb-1.4.1.jar
- axis2-codegen-1.4.1.jar
- axis2-java2wsdl-1.4.1.jar
- axis2-kernel-1.4.1.jar
- axis2-mtompolicy-1.4.1.jar
- bcel-5.2.jar
- bsf-all-3.0-beta2.jar
- camel-core-1.3.0.jar
  cglib-nodep-2.1_3.jar
  commons-collections-3.1.jar
  commons-codec-1.3.jar
- commons-fileupload-1.2.jar
  commons-httpclient-3.1.jar
- commons-io-1.4.jar
- commons-jexl-1.1.jar
- commons-lang-2.1.jar
  commons-logging-1.1.1.jar
- commons-logging-api-1.1.jar
- derby-10.3.1.4.jar
- geronimo-common-1.2-beta.jar
+ geronimo-activation_1.1_spec-1.0.1.jar
  geronimo-commonj_1.1_spec-1.0.jar
- geronimo-connector-1.2-beta.jar
- geronimo-core-1.2-beta.jar
- geronimo-deployment-1.2-beta.jar
- geronimo-ejb_3.0_spec-1.0.jar
- geronimo-interceptor-1.2-beta.jar
- geronimo-j2ee-1.2-beta.jar
- geronimo-j2ee-connector_1.5_spec-1.1.jar
- geronimo-j2ee-jacc_1.0_spec-1.1.jar
- geronimo-j2ee-management_1.0_spec-1.0.jar
  geronimo-javamail_1.4_spec-1.2.jar
- geronimo-jms_1.1_spec-1.1.jar
- geronimo-jpa_3.0_spec-1.0.jar
- geronimo-jta_1.0.1B_spec-1.0.jar
- geronimo-kernel-1.2-beta.jar
- geronimo-management-1.2-beta.jar
- geronimo-naming-1.2-beta.jar
- geronimo-security-1.2-beta.jar
- geronimo-spec-j2ee-connector-1.5-rc4.jar
- geronimo-spec-jta-1.0.1B-rc4.jar
- geronimo-stax-api_1.0_spec-1.0.1.jar
- geronimo-system-1.2-beta.jar
- geronimo-transaction-1.2-beta.jar
- geronimo-util-1.2-beta.jar
- httpcore-4.0-beta1.jar
- httpcore-nio-4.0-beta1.jar
- httpcore-niossl-4.0-beta1.jar
  jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
  json-rpc-1.0.jar
- log4j-1.2.12.jar
- logkit-1.0.1.jar
- neethi-2.0.4.jar
- ode-bpel-api-1.1.1.jar
- ode-bpel-compiler-1.1.1.jar
- ode-bpel-dao-1.1.1.jar
- ode-bpel-epr-1.1.1.jar
- ode-bpel-obj-1.1.1.jar
- ode-bpel-runtime-1.1.1.jar
- ode-bpel-schemas-1.1.1.jar
- ode-bpel-store-1.1.1.jar
- ode-dao-jpa-1.1.1.jar
- ode-dao-jpa-ojpa-derby-1.1.1.zip
- ode-jacob-1.1.1.jar
- ode-jacob-ap-1.1.1.jar
- ode-scheduler-simple-1.1.1.jar
- ode-utils-1.1.1.jar
- openjpa-all-0.9.7-incubating.jar
- openjpa-persistence-0.9.7-incubating.jar
- org.apache.felix.bundlerepository-1.0.3.jar
- org.apache.felix.framework-1.0.4.jar
- org.apache.felix.main-1.0.4.jar
- org.apache.felix.shell-1.0.1.jar
- org.apache.felix.shell.tui-1.0.1.jar
- rampart-core-1.4.jar
- rampart-policy-1.4.jar
- rampart-trust-1.4.jar
- regexp-1.3.jar
- spring-beans-2.5.5.jar
- spring-context-2.5.5.jar
- spring-core-2.5.5.jar
- tranql-connector-1.1.jar
- tuscany-sdo-api-r2.1-1.1.1.jar
- tuscany-sdo-impl-1.1.1.jar
- tuscany-sdo-lib-1.1.1.jar
- tuscany-sdo-tools-1.1.1.jar
- woden-api-1.0M8.jar
- woden-impl-dom-1.0M8.jar
- wss4j-1.5.4.jar
+ tuscany-assembly-1.4.jar
+ tuscany-assembly-xml-1.4.jar
+ tuscany-assembly-xsd-1.4.jar
+ tuscany-binding-atom-1.4.jar
+ tuscany-binding-atom-abdera-1.4.jar
+ tuscany-binding-gdata-1.4.jar
+ tuscany-binding-gdata-runtime-1.4.jar
+ tuscany-binding-http-1.4.jar
+ tuscany-binding-http-runtime-1.4.jar
+ tuscany-binding-jsonrpc-1.4.jar
+ tuscany-binding-jsonrpc-runtime-1.4.jar
+ tuscany-binding-sca-1.4.jar
+ tuscany-binding-sca-xml-1.4.jar
+ tuscany-contribution-1.4.jar
+ tuscany-contribution-impl-1.4.jar
+ tuscany-contribution-java-1.4.jar
+ tuscany-contribution-namespace-1.4.jar
+ tuscany-contribution-xml-1.4.jar
+ tuscany-core-1.4.jar
+ tuscany-core-databinding-1.4.jar
+ tuscany-core-spi-1.4.jar
+ tuscany-data-api-1.4.jar
+ tuscany-databinding-1.4.jar
+ tuscany-databinding-jaxb-1.4.jar
+ tuscany-databinding-json-1.4.jar
+ tuscany-definitions-1.4.jar
+ tuscany-definitions-xml-1.4.jar
+ tuscany-endpoint-1.4.jar
+ tuscany-extensibility-1.4.jar
+ tuscany-host-embedded-1.4.jar
+ tuscany-host-http-1.4.jar
+ tuscany-host-jetty-1.4.jar
+ tuscany-host-webapp-1.4.jar
+ tuscany-implementation-java-1.4.jar
+ tuscany-implementation-java-runtime-1.4.jar
+ tuscany-implementation-java-xml-1.4.jar
+ tuscany-implementation-node-1.4.jar
+ tuscany-implementation-widget-1.4.jar
+ tuscany-implementation-widget-runtime-1.4.jar
+ tuscany-interface-1.4.jar
+ tuscany-interface-java-1.4.jar
+ tuscany-interface-java-jaxws-1.4.jar
+ tuscany-interface-java-xml-1.4.jar
+ tuscany-monitor-1.4.jar
+ tuscany-node-api-1.4.jar
+ tuscany-node-impl-1.4.jar
+ tuscany-policy-1.4.jar
+ tuscany-policy-security-1.4.jar
+ tuscany-policy-xml-1.4.jar
+ tuscany-sca-api-1.4.jar
+ tuscany-sca-api-extension-1.4.jar
+ tuscany-xsd-1.4.jar
  wstx-asl-3.2.4.jar
- xalan-2.7.0.jar
- xbean-naming-2.7.jar
  xercesImpl-2.8.1.jar
- xml-apis-1.3.03.jar
- xmlbeans-2.3.0.jar
- xml-resolver-1.1.jar
- xmlsec-1.4.2.jar
+ xml-apis-1.3.02.jar
  XmlSchema-1.4.2.jar
-
-===============================================================================
-axion-1.0-M3-dev.jar 
-
-Copyright (c) 2002-2003 Axion Development Team. All rights reserved.
- 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions 
-are met:
-
-1. Redistributions of source code must retain the above 
-   copyright notice, this list of conditions and the following 
-   disclaimer. 
- 
-2. Redistributions in binary form must reproduce the above copyright 
-   notice, this list of conditions and the following disclaimer in 
-   the documentation and/or other materials provided with the 
-   distribution. 
-
-3. The names "Tigris", "Axion", nor the names of its contributors may 
-   not be used to endorse or promote products derived from this 
-   software without specific prior written permission. 
- 
-4. Products derived from this software may not be called "Axion", nor 
-   may "Tigris" or "Axion" appear in their names without specific prior
-   written permission.
- 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
-The "Axion Development Team" is defined to be:
-
- * Chuck Burdick
- * James Burke
- * Morgan Delagrange
- * Geir Magnusson Jr.
- * Martin Poeschl
- * Steve Polyak
- * Daniel Rall
- * Ahimanikya Satapathy
- * Doug Sale
- * James Strachan
- * Rodney Waldhoff
- * Jason van Zyl
-
-License changes are to be determined by a simple majority vote of the 
-Axion Development Team.
 
 ===============================================================================
 dom4j-1.6.1.jar

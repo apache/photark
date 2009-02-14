@@ -1,9 +1,9 @@
-Installing the Apache PhotArk 0.1 January 2009 Release binary distribution
+Installing the Apache PhotArk 0.1 February 2009 Release binary distribution
 =========================================================================================
 
 Unzip Apache PhotArk binary distribution archive and you get the following:
 
-tuscany-sca-1.4        
+      
    INSTALL       - this help file
    LICENSE       - the Apache License and any dependecy licenses
    NOTICE        - attribution notices associated with the licenses
@@ -11,15 +11,7 @@ tuscany-sca-1.4
    RELEASE_NOTES - description of this release 
    CHANGES       - A note of the major changes in this release
 
-   /demos        - Demo applications showcasing the use of Apache Tuscany 
-
-   /lib          - The tuscany-sca-all and tuscany-sca-manifest jars and all their dependencies
-
-   /modules      - all of the individual Tuscany jars
-
-   /samples      - all the Tuscany samples, see the README in that directory
-
-   /tutorial     - The store tutorial, see the README in that directory
+   /webapp       - The PhotArk Java EE application
 
 
 
