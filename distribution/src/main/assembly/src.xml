@@ -58,10 +58,14 @@
 	     <includes>
 	         <include>**/*</include>
              </includes>
-             <excludes>
-    		<exclude>xxx</exclude>
-    		<exclude>xxx/**/*</exclude>
-             </excludes>
+            <excludes>
+                <exclude>**/.*</exclude>
+                <exclude>**/.*/**</exclude>
+                <exclude>**/*.log</exclude>
+                <exclude>**/target</exclude>
+                <exclude>**/target/**/*</exclude>
+                <exclude>**/maven-eclipse.xml</exclude>
+            </excludes>
 	 </fileSet>
      </fileSets>
 </assembly>
