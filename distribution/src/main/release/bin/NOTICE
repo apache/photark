@@ -72,6 +72,9 @@ http://www.saxonica.com/.
 This product includes/uses Serp (http://serp.sourceforge.net/) under the BSD license:
  Copyright (c) 2002, A. Abram White. All rights reserved.
 
+This product includes/uses tm-extractors (http://www.textmining.org) under AL2 license:
+ Copyright (c) Ryan Ackley. 
+
 This product also includes software under the BSD license
 with the following copyright:
  Copyright (c) 2006, Sun Microsystems, Inc. All rights reserved.

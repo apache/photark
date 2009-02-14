@@ -233,10 +233,19 @@ The following components come under Apache Software License 2.0
  geronimo-activation_1.1_spec-1.0.1.jar
  geronimo-commonj_1.1_spec-1.0.jar
  geronimo-javamail_1.4_spec-1.2.jar
+ jackrabbit-api-1.4.jar
+ jackrabbit-core-1.4.jar
+ jackrabbit-jcr-commons-1.4.jar
+ jackrabbit-spi-1.4.jar
+ jackrabbit-spi-commons-1.4.jar
+ jackrabbit-text-extractors-1.4.jar
  jettison-1.0.1.jar
  jetty-6.1.7.jar
  jetty-util-6.1.7.jar
  json-rpc-1.0.jar
+ log4j-1.2.13.jar
+ lucene-core-2.2.0.jar
+ tm-extractors-0.4.jar
  tuscany-assembly-1.4.jar
  tuscany-assembly-xml-1.4.jar
  tuscany-assembly-xsd-1.4.jar
