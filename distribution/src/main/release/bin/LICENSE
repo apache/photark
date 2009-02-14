@@ -245,6 +245,7 @@ The following components come under Apache Software License 2.0
  json-rpc-1.0.jar
  log4j-1.2.13.jar
  lucene-core-2.2.0.jar
+ poi-2.5.1-final-20040804.jar
  tm-extractors-0.4.jar
  tuscany-assembly-1.4.jar
  tuscany-assembly-xml-1.4.jar
