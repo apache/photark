@@ -48,17 +48,25 @@ public class AlbumAgregator implements Album {
         }
         
         if (albumFeed != null) {
-            for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
-                String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
-                pictures.add(feedImageLink);
-            }
+        	try {
+        		for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
+        			String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
+        			pictures.add(feedImageLink);
+        		}
+        	}catch (Exception e) {
+        		//log exception, warn user that album xxx was not processed (not found)
+        	}
         }
         
         if( albumPicassa != null) {
-            for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
-                String feedImageLink = picassaPicture.getLink(Link.Rel.MEDIA_EDIT, null).getHref();
-                pictures.add(feedImageLink);
-            }            
+        	try {
+        		for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
+        			String feedImageLink = picassaPicture.getLink(Link.Rel.MEDIA_EDIT, null).getHref();
+        			pictures.add(feedImageLink);
+        		}    
+        	}catch (Exception e) {
+        		//log exception, warn user that album xxx was not processed (not found)
+        	}
         }
         
     }
