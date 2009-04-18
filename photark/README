@@ -1,21 +1,19 @@
-Photo-Gallery Sample
+PhotoArk Gallery Application
 ======================================
 
-This is a sample store scenario that is used as a getting started guide
-for Tuscany SCA. For detailed information, please see:
-
-http://tuscany.apache.org/getting-started-with-tuscany.html
-
-or
-
-http://tuscany.apache.org/getting-started-with-tuscany-using-tuscany-eclipse-plugin.html
+Apache PhotArk will be a complete open source photo gallery 
+application including a content repository for the images, 
+a display piece, an access control layer, and upload capabilities. 
+The idea is to have a rigid design for the content repository 
+with a very flexible display piece. The images in the content
+repository will be protected with granular access control.
 
 
 Building And Running The Sample Using Ant
 -----------------------------------------
 With the binary distribution the sample can be built using Ant as follows:
 
-cd store
+cd photark
 ant compile
 
 and then, to run:
@@ -25,4 +23,4 @@ ant run
 Once the store application is running use your browser to visit the following
 URL:
 
-http://localhost:8080/gallery/
+http://localhost:8080/photark/
