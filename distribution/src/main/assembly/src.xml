@@ -64,6 +64,8 @@
                 <exclude>**/*.log</exclude>
                 <exclude>**/target</exclude>
                 <exclude>**/target/**/*</exclude>
+                <exclude>**/work</exclude>
+                <exclude>**/work/**/*</exclude>
                 <exclude>**/maven-eclipse.xml</exclude>
             </excludes>
 	 </fileSet>
