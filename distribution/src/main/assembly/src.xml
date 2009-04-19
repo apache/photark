@@ -20,52 +20,30 @@
 <assembly>
     <!-- id typically identifies the "type" (src vs bin etc) of the assembly -->
     <id>src</id>
-    <includeBaseDirectory>false</includeBaseDirectory>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>photark-${photark.version}-src</baseDirectory>
     <formats>
         <format>tar.gz</format>
-	<format>zip</format>
+        <format>zip</format>
     </formats>
 
     <fileSets>
-	 <fileSet>
-             <directory>src/main/release</directory>
-	     <outputDirectory>photark-${photark.version}-src</outputDirectory>
-	     <includes>
-             <include>CHANGES</include>
-             <include>README</include>
-             <include>RELEASE_NOTES</include>
-             </includes>
-	 </fileSet>
-	 <fileSet>
-             <directory>src/main/release/src</directory>
-	     <outputDirectory>photark-${photark.version}-src</outputDirectory>
-	     <includes>
-		 <include>BUILDING</include>
-		 <include>LICENSE</include>
-		 <include>NOTICE</include>
-             </includes>
-	 </fileSet>
-         <fileSet>
-             <directory>target/maven-shared-archive-resources/META-INF</directory>
-             <outputDirectory>photark-${photark.version}-src</outputDirectory>
-             <includes>
-                 <include>NOTICE</include>
-             </includes>
-         </fileSet>
-	 <fileSet>
+        <fileSet>
 	     <directory>..</directory>
-	     <outputDirectory>photark-${photark.version}-src</outputDirectory>
+	     <outputDirectory></outputDirectory>
 	     <includes>
 	         <include>**/*</include>
-             </includes>
-            <excludes>
-                <exclude>**/.*</exclude>
-                <exclude>**/.*/**</exclude>
-                <exclude>**/*.log</exclude>
-                <exclude>**/target</exclude>
-                <exclude>**/target/**/*</exclude>
-                <exclude>**/maven-eclipse.xml</exclude>
-            </excludes>
-	 </fileSet>
+         </includes>
+         <excludes>
+            <exclude>**/.*</exclude>
+            <exclude>**/.*/**</exclude>
+            <exclude>**/*.log</exclude>
+            <exclude>**/target</exclude>
+            <exclude>**/target/**/*</exclude>
+            <exclude>**/work</exclude>
+            <exclude>**/work/**/*</exclude>
+            <exclude>**/maven-eclipse.xml</exclude>
+         </excludes>
+        </fileSet>
      </fileSets>
 </assembly>
