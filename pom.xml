@@ -85,8 +85,10 @@
 
     <properties>
         <notice.dir>.</notice.dir>
-    </properties>
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+     </properties>
+    
     <repositories>
         <!--
             The central Maven repository and Apache SNAPSHOT repository are inherited from the parent POM
