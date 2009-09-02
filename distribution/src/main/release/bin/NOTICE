@@ -8,9 +8,6 @@ This product includes/uses XmlSchema developed at
 The Apache Software Foundation (http://ws.apache.org/commons/XmlSchema)
  Portions Copyright 2006 International Business Machines Corp.
 
-This product includes/uses the Axion : the Open Source Java Database (http://axion.tigris.org/)
- Copyright (c) 2002-2003 Axion Development Team. All rights reserved.
-
 This product includes/uses JSON-RPC-Java (http://oss.metaparadigm.com/jsonrpc/)
 
 This product includes/uses JSON-RPC JavaScript client (jsonrpc.js) 
