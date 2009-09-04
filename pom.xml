@@ -26,7 +26,7 @@
     </parent>
     <groupId>org.apache.photark</groupId>
     <artifactId>photark-parent</artifactId>
-    <version>M1-incubating-SNAPSHOT</version>
+    <version>M1-incubating</version>
     <packaging>pom</packaging>
     <name>Apache PhotArk</name>
 
