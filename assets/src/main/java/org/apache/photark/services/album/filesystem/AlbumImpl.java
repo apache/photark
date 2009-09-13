@@ -57,8 +57,6 @@ public class AlbumImpl implements Album {
 
     @Init
     public void init() {
-        File current = new File(".");
-
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
             if(albumURL == null) {
