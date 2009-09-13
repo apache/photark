@@ -18,7 +18,7 @@
     * under the License.    
 -->
 <contribution xmlns="http://www.osoa.org/xmlns/sca/1.0">
-   <export.java package="services"/>
-   <export.java package="services.filesystem"/>
-   <export.java package="services.jcr"/>
+   <export.java package="org.apache.photark.services.album"/>
+   <export.java package="org.apache.photark.services.album.filesystem"/>
+   <export.java package="org.apache.photark.services.album.jcr"/>
 </contribution>

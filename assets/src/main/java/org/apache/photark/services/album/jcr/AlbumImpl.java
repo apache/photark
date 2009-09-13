@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package services.jcr;
+package org.apache.photark.services.album.jcr;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -33,10 +33,10 @@ import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
 import org.apache.jackrabbit.core.TransientRepository;
+import org.apache.photark.services.album.Album;
 import org.osoa.sca.annotations.Init;
 import org.osoa.sca.annotations.Property;
 
-import services.Album;
 
 public class AlbumImpl implements Album {
     private String gallery;

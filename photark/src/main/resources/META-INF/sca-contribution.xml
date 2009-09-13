@@ -17,8 +17,9 @@
     * specific language governing permissions and limitations
     * under the License.    
 -->
-<contribution xmlns="http://www.osoa.org/xmlns/sca/1.0">
-   <import.java package="services"/>
-   <import.java package="services.filesystem"/>
-   <import.java package="services.jcr"/>
+<contribution xmlns="http://www.osoa.org/xmlns/sca/1.0"
+              xmlns:photark="http://org.apache.photoark">
+   <import.java package="org.apache.photark.services.album"/>
+   <import.java package="org.apache.photark.services.album.filesystem"/>
+   <import.java package="org.apache.photark.services.album.jcr"/>
 </contribution>

@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package services;
+package org.apache.photark.services.album;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,42 +18,43 @@
  * under the License.    
 -->
 <composite	xmlns="http://www.osoa.org/xmlns/sca/1.0"
-		xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
-		targetNamespace="http://photo-gallery"
+		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
+		xmlns:photark="http://org.apache.photoark"
+		targetNamespace="http://org.apache.photoark"
 		name="photo-gallery">
 		
     <component name="Gallery">
-        <t:implementation.widget location="gallery.html"/>
+        <tuscany:implementation.widget location="gallery.html"/>
         <service name="Widget">
-        	<t:binding.http uri="/gallery"/>
+        	<tuscany:binding.http uri="/gallery"/>
         </service>
 		<reference name="album" target="AlbumAgregator/Album">
-		 	<t:binding.jsonrpc/>
+		 	<tuscany:binding.jsonrpc/>
 		 </reference>
     </component>
     
     <component name="AlbumAgregator">
-        <implementation.java class="services.AlbumAgregator"/>
+        <implementation.java class="org.apache.photark.services.album.AlbumAgregator"/>
 		<service name="Album">
-			<t:binding.jsonrpc/>
+			<tuscany:binding.jsonrpc/>
    		</service>
 		<reference name="album" target="Album"/>
         <reference name="albumFeed">
-           <t:binding.atom uri="http://api.flickr.com/services/feeds/photoset.gne?set=72157601530865813&amp;nsid=36437931@N00&amp;lang=en-us"/>
+           <tuscany:binding.atom uri="http://api.flickr.com/services/feeds/photoset.gne?set=72157601530865813&amp;nsid=36437931@N00&amp;lang=en-us"/>
         </reference>
         <reference name="albumPicassa">
-           <t:binding.gdata uri="http://picasaweb.google.com/data/feed/api/user/haibotuscany/album/flowers" serviceType="lh2" username="haibotuscany@gmail.com" password="gsocgsocgsoc"/>
+           <tuscany:binding.gdata uri="http://picasaweb.google.com/data/feed/api/user/haibotuscany/album/flowers" serviceType="lh2" username="haibotuscany@gmail.com" password="gsocgsocgsoc"/>
         </reference>        
     </component>
     
 	<component name="Album">
-		<implementation.java class="services.filesystem.AlbumImpl"/> 
+		<implementation.java class="org.apache.photark.services.album.filesystem.AlbumImpl"/> 
 		<property name="gallery">gallery</property>
 		<property name="album">boston</property>
 	</component> 
 
 	
 	<component name="GalleryPictures">
-		<t:implementation.resource location="gallery"></t:implementation.resource>
+		<tuscany:implementation.resource location="gallery"/>
 	</component>
 </composite>

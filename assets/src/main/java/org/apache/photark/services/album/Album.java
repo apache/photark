@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package services;
+package org.apache.photark.services.album;
 
 import org.osoa.sca.annotations.Remotable;
 
