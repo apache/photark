@@ -39,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.photark</groupId>
-            <artifactId>photoark-assets</artifactId>
+            <artifactId>photoark</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
             

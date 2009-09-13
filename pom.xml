@@ -169,7 +169,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>assets</module>
+                <module>photark</module>
                 <module>photark-embedded</module>
                 <module>photark-webapp</module>
             </modules>

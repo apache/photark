@@ -25,8 +25,8 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photoark-assets</artifactId>
-    <name>Apache PhotArk Common Assets</name>
+    <artifactId>photoark</artifactId>
+    <name>Apache PhotArk Common Services</name>
 
     <repositories>
        <repository>
