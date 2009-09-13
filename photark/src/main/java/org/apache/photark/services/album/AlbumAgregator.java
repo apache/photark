@@ -28,6 +28,8 @@ import org.osoa.sca.annotations.Reference;
 import com.google.gdata.data.Link;
 
 public class AlbumAgregator implements Album {
+    private static String NAME = "Aggregated Album";
+    
     private List<String> pictures = new ArrayList<String>();
     
     @Reference(required=false)
@@ -70,6 +72,15 @@ public class AlbumAgregator implements Album {
         }
         
     }
+    
+    public String getName() {
+        return NAME;
+    }
+    
+    public void setName(String name) {
+        throw new UnsupportedOperationException();
+    }
+    
     public String[] getPictures() {
         String[] pictureArray = new String[pictures.size()];
         pictures.toArray(pictureArray);

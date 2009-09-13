@@ -40,29 +40,10 @@ import org.osoa.sca.annotations.Property;
 
 public class AlbumImpl implements Album {
     private String gallery;
-    private String album;
+    private String name;
     private String location;
     private Repository repository=null;
     private Session session=null;
-
-    @Property
-    public void setGallery(String gallery) {
-        this.gallery = gallery;
-        this.location = null;
-    }
-    @Property
-    public void setAlbum(String album) {
-        this.album = album;
-        this.location = null;
-    }
-
-    protected String getLocation() {
-        if (location == null) {
-            location = gallery + "/" + album + "/";
-        }
-        return location;
-
-    }
 
     @Init
     public void init() {
@@ -100,6 +81,32 @@ public class AlbumImpl implements Album {
             e.printStackTrace();
         }
     }
+    
+
+    @Property
+    public void setGallery(String gallery) {
+        this.gallery = gallery;
+        this.location = null;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    @Property
+    public void setName(String name) {
+        this.name = name;
+        this.location = null;
+    }
+
+    protected String getLocation() {
+        if (location == null) {
+            location = gallery + "/" + name + "/";
+        }
+        return location;
+
+    }
+
 
     public String[] getPictures() {
       List<String> pictures = new ArrayList<String>();

@@ -24,6 +24,10 @@ import org.osoa.sca.annotations.Remotable;
 @Remotable
 public interface Album {
     
-    public String[] getPictures();
+    String getName();
+    
+    void setName(String name);
+    
+    String[] getPictures();
 
 }
