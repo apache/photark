@@ -24,7 +24,7 @@ import org.apache.tuscany.sca.host.embedded.SCADomain;
 public class LaunchGalleryJCR {
     public static void main(String[] args) throws Exception {
         System.out.println("Starting ...");
-        SCADomain scaDomain = SCADomain.newInstance("photo-gallery-jcr.composite");
+        SCADomain scaDomain = SCADomain.newInstance("META-INF/photo-gallery-jcr.composite");
         System.out.println("photo.gallery.composite ready for big business !!!");
         System.in.read();
         System.out.println("Stopping ...");
