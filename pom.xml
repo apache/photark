@@ -214,12 +214,15 @@
                 <includes>
                     <include>LICENSE</include>
                     <include>NOTICE</include>
+                    <include>DISCLAIMER</include>                    
                     <include>README</include>
                     <include>META-INF/**/*</include>
                     <include>OSGI-INF/**/*</include>
                 </includes>
             </resource>
         </resources>
+        
+
 
         <pluginManagement>
             <plugins>
