@@ -174,19 +174,6 @@
             </modules>
         </profile>
 
-        <!-- profile for generating Eclipse project definitions -->
-        <profile>
-            <!-- this is kind of a hack for eclipse.   Eclipse doesn't like "." as a resource directory as then you have
-            source directories inside a source directory which causes all kinds of errors.  We'll just point
-            the resources directory back to the resources directory.   The NOTICE and LICSENSE files
-            won't be included in the eclipse builds, but it at least works.
-            -->
-            <id>eclipse</id>
-            <properties>
-                <notice.dir>src/main/resources</notice.dir>
-            </properties>
-        </profile>
-
         <!-- profile for verifying source code correctness -->
         <profile>
             <id>sourcecheck</id>
