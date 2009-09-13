@@ -32,4 +32,8 @@ public interface Gallery {
     
     Album[] getAlbums();
     
+    String getAlbumCover(String albumName);
+    
+    String[] getAlbumPictures(String albumName);
+    
 }

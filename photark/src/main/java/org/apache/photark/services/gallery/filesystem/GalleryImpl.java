@@ -47,10 +47,10 @@ public class GalleryImpl implements Gallery {
     @Init
     public void init() {
         try {
-            URL galleryURL = this.getClass().getClassLoader().getResource(getLocation());
+            URL galleryURL = this.getClass().getClassLoader().getResource(name);
             if(galleryURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
-                galleryURL = this.getClass().getClassLoader().getResource("../../" + getLocation());
+                galleryURL = this.getClass().getClassLoader().getResource("../../" + name);
             }
 
             if(galleryURL != null) {
@@ -84,7 +84,6 @@ public class GalleryImpl implements Gallery {
     @Property
     public void setName(String name) {
         this.name = name;
-        this.location = null;
     }
 
     public void addAlbum(Album album) {
@@ -100,11 +99,42 @@ public class GalleryImpl implements Gallery {
         albums.toArray(albumArray);
         return albumArray;
     }
+    
+    public String getAlbumCover(String albumName) {
+        Album albumLookup = getAlbum(albumName);
+        
+        if (albumLookup != null) {
+            return albumLookup.getPictures()[0];
+        } else {
+            //FIXME: return proper not found exception
+            return null;             
+        }
+    }
+    
+    public String[] getAlbumPictures(String albumName) {
+        Album albumLookup = getAlbum(albumName);
+        
+        if (albumLookup != null) {
+            return albumLookup.getPictures();
+        } else {
+            //FIXME: return proper not found exception
+            return new String[]{};             
+        }
+    }
+    
+    private Album getAlbum(String albumName) {
+        Album albumLookup = null;
+        for(Album album : albums) {
+            if(album.getName().equalsIgnoreCase(albumName)) {
+                albumLookup = album;
+                break;
+            }
+        }
+        
+        return albumLookup;
+    }
 
     private String getLocation() {
-        if(location == null) {
-            location = name;
-        }
         return location;
     }
 }

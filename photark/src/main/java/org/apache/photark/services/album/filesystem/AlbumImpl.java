@@ -31,26 +31,27 @@ import org.osoa.sca.annotations.Property;
 
 
 public class AlbumImpl implements Album {
-    private String gallery;
     private String name;
     private String location;
+    
+    private boolean initialized;
     private List<String> pictures = new ArrayList<String>();
 
     @Init
     public void init() {
         try {
-            URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
+            /*
+            URL albumURL = this.getClass().getClassLoader().getResource(name);
             if(albumURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 albumURL = this.getClass().getClassLoader().getResource("../../" + getLocation());
-            }
+            }*/
 
-            if(albumURL != null) {
-                File album = new File(albumURL.toURI());
+            if(location != null) {
+                File album = new File(location);
                 if (album.isDirectory() && album.exists()) {
                     String[] listPictures = album.list(new ImageFilter(".jpg"));
                     for(String image : listPictures) {
-                        image = getLocation() + image;
                         pictures.add(image);
                     }
                 }
@@ -59,12 +60,6 @@ public class AlbumImpl implements Album {
             // FIXME: ignore for now
             e.printStackTrace();
         }
-    }
-
-    @Property
-    public void setGallery(String gallery) {
-        this.gallery = gallery;
-        this.location = null;
     }
     
     public String getName() {
@@ -77,24 +72,24 @@ public class AlbumImpl implements Album {
         this.location = null;
     }
 
+    public String getLocation() {
+        return location;
+    }
+    
+    @Property
+    public void setLocation(String location) {
+        this.location = location;
+    }
     
     public String[] getPictures() {
+        if( ! initialized) {
+            init();
+        }
         String[] pictureArray = new String[pictures.size()];
         pictures.toArray(pictureArray);
         return pictureArray;
     }
 
-    public String getLocation() {
-        if (location == null) {
-            location = gallery + "/" + name + "/";
-        }
-        return location;
-    }
-    
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
     /**
      * Inner fileFilter class
      */
