@@ -84,7 +84,6 @@
     </prerequisites>
 
     <properties>
-        <notice.dir>.</notice.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
      </properties>
@@ -224,12 +223,13 @@
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                <directory>${notice.dir}</directory>
-                <targetPath>META-INF</targetPath>
-                <filtering>true</filtering>
+                <directory>${basedir}</directory>
                 <includes>
                     <include>LICENSE</include>
                     <include>NOTICE</include>
+                    <include>README</include>
+                    <include>META-INF/**/*</include>
+                    <include>OSGI-INF/**/*</include>
                 </includes>
             </resource>
         </resources>
