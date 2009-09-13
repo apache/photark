@@ -81,6 +81,14 @@ public class AlbumAgregator implements Album {
         throw new UnsupportedOperationException();
     }
     
+    public String getLocation() {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setLocation(String location) {
+        throw new UnsupportedOperationException();
+    }
+    
     public String[] getPictures() {
         String[] pictureArray = new String[pictures.size()];
         pictures.toArray(pictureArray);

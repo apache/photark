@@ -21,4 +21,6 @@
    <export.java package="org.apache.photark.services.album"/>
    <export.java package="org.apache.photark.services.album.filesystem"/>
    <export.java package="org.apache.photark.services.album.jcr"/>
+   <export.java package="org.apache.photark.services.gallery"/>
+   <export.java package="org.apache.photark.services.gallery.filesystem"/>
 </contribution>

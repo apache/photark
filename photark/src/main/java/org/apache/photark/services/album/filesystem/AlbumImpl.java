@@ -84,11 +84,15 @@ public class AlbumImpl implements Album {
         return pictureArray;
     }
 
-    private String getLocation() {
+    public String getLocation() {
         if (location == null) {
             location = gallery + "/" + name + "/";
         }
         return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
     }
     
     /**

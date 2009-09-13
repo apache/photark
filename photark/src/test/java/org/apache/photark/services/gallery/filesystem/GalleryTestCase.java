@@ -17,20 +17,29 @@
  * under the License.    
  */
 
-package org.apache.photark.services.album;
+package org.apache.photark.services.gallery.filesystem;
 
-import org.osoa.sca.annotations.Remotable;
+import junit.framework.Assert;
 
-@Remotable
-public interface Album {
+import org.apache.photark.services.album.Album;
+import org.apache.photark.services.gallery.Gallery;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class GalleryTestCase {
+    private static Gallery gallery;
     
-    String getName();
+    @BeforeClass
+    public static void BeforeClass() {
+        gallery = new GalleryImpl("gallery-home");
+    }
     
-    void setName(String name);
-    
-    String getLocation();
-    
-    void setLocation(String location);
-    
-    String[] getPictures();
+    @Test
+    public void testDiscoverAlbums() {
+        Album[] albums = gallery.getAlbums();
+        
+        Assert.assertEquals(2, albums.length);
+        Assert.assertEquals("album-1", albums[0].getName());
+        Assert.assertEquals("album-2", albums[1].getName());
+    }
 }

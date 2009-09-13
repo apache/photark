@@ -99,14 +99,17 @@ public class AlbumImpl implements Album {
         this.location = null;
     }
 
-    protected String getLocation() {
+    public String getLocation() {
         if (location == null) {
             location = gallery + "/" + name + "/";
         }
         return location;
 
     }
-
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String[] getPictures() {
       List<String> pictures = new ArrayList<String>();
