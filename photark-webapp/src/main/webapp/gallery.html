@@ -22,87 +22,166 @@
 
 <link href="styles.css" rel="stylesheet">
 
-<script type="text/javascript" src="SCADomain/scaDomain.js"></script>
+<script type="text/javascript" src="gallery.js"></script>
 <script language="JavaScript">
 
-	//@Reference
-	var album = Gallery;
+    index_off= new Image(31,31); index_off.src = "index.gif";
+    index_on = new Image(31,31); index_on.src = "index_on.gif";
+    next_off = new Image(31,31); next_off.src = "next.gif";
+    next_on  = new Image(31,31); next_on.src = "next_on.gif";
+    prev_off = new Image(31,31); prev_off.src = "prev.gif";
+    prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
 
+    //@Reference
+	var gallery = new tuscany.sca.Reference("gallery");
+
+	var galleryName;
+	var galleryAlbums;
+	var albumName;
 	var albumItems;
-	var currPos = 0;
+	var albumPos = 0;
 
-	function album_getResponse(items, exception) {
-		if(exception) {
-			alert(exception.msg);
-			return;
-		}
-		albumItems = items;
-		showAlbum();
-	}
-
-   function showImage(pos) {
-   	var img = document.createElement("img");
-	img.onload = function(evt) {
-		document.getElementById("albumImage").src = this.src;
-        document.getElementById("albumImage").width=this.width;
-        document.getElementById("albumImage").height=this.height;
-    }
-    img.src = albumItems[pos];
-    return false;
-   }
-
-   function showAlbum() {
-      if(albumItems.length > 0) {
-		showImage(currPos);
-	  }
-   }
-
-   function goNext() {
-   	 if(currPos < albumItems.length) {
-	 	currPos++;
-		showImage(currPos);
-	 }
-   }
-
-   function goPrevious() {
-   	if(currPos > 0) {
-		currPos--;
-		showImage(currPos);
-	}
-   }
-
-	function init() {
+	function initGallery() {
 		try {
-			album.getPictures(album_getResponse);
+			gallery.getAlbums(gallery_getAlbumsResponse);
 		} catch(exception) {
 			alert(e);
 		}
 	}
+	
+	function gallery_getAlbumsResponse(albums, exception) {
+		if(exception) {
+			alert(exception.msg);
+			return;
+		}
+		galleryAlbums = albums;
+
+		if(galleryAlbums.length > 0) {
+			initializeGallery();
+			displayGallery();
+		}
+	}
+
+	function initializeGallery() {
+		var table=document.getElementById('tableGallery');
+		var lastRow = table.rows.length;
+		for(i=0; i<galleryAlbums.length; i++) {
+			   var row=table.insertRow(lastRow++);
+			   var column=row.insertCell(0);
+
+			   var albumName = galleryAlbums[i].name;
+			   var albumCover = gallery.getAlbumCover(albumName);
+			   var img_src = albumCover;
+			   var img_html = "<img src=" + "gallery/" + albumName + "/" + img_src + " class=\"slideImage\" height=25% width=25% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
+			   var html="<a href=\"javascript:initializeAlbum('" +  albumName +"')\">" + img_html + "</a>";
+			   column.innerHTML = html;
+
+			   row = table.insertRow(lastRow++);
+			   column = row.insertCell(0)
+			   column.innerHTML = albumName;
+
+			   row = table.insertRow(lastRow++);
+			   column = row.insertCell(0)
+			   column.innerHTML = "<img src=\"space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+		   }
+
+	}
+
+	function displayGallery() {
+		setVisibility('gallery',true);
+		setVisibility('album',false);
+	}
+
+	function initializeAlbum(albumName) {
+		try {
+			this.albumName = albumName; 
+			gallery.getAlbumPictures(albumName, gallery_getAlbumPicturesResponse);
+		} catch(exception) {
+			alert(e);
+		}		
+	}
+
+	function gallery_getAlbumPicturesResponse(items, exception) {
+		if(exception) {
+			alert(exception.msg);
+			displayGallery();
+			return;
+		}
+		albumItems = items;
+		albumPos = 0;
+		showAlbum();
+	}
+
+	function showAlbum() {
+		if(albumItems.length > 0) {
+			showImage(albumPos);
+		}
+		displayAlbum();
+	}	
+	
+	function displayAlbum() {
+		setVisibility('gallery',false);
+		setVisibility('album',true);
+	}
+
+	function showImage(albumPos) {		
+	   	var img = document.createElement("img");
+		img.onload = function(evt) {
+			document.getElementById("albumImage").src = this.src;
+	        document.getElementById("albumImage").width=this.width;
+	        document.getElementById("albumImage").height=this.height;
+	    }
+	    img.src = "gallery/" + albumName + "/" + albumItems[albumPos];
+	    return false;
+	}
+
+	function goNext() {
+		if(albumPos < albumItems.length) {
+			albumPos++;
+			showImage(albumPos);
+		}
+	}
+
+	function goPrevious() {
+		if(albumPos > 0) {
+			albumPos--;
+			showImage(albumPos);
+		}
+	}
+	
+	function setVisibility(divId, visible) {
+		//valid values { visible, hidden }
+		if (document.getElementById) {
+			var element = document.getElementById(divId)
+			if(visible) {
+				element.style.display = 'block';
+				element.style.visibility = 'visible';
+			} else {
+				element.style.display = 'none';
+				element.style.visibility = 'hidden';
+			}
+		}
+	} 
 
 
-	index_off= new Image(31,31); index_off.src = "index.gif";
-    index_on = new Image(31,31); index_on.src = "index_on.gif";
-    next_off = new Image(31,31); next_off.src = "next.gif";
-	next_on  = new Image(31,31); next_on.src = "next_on.gif";
-	prev_off = new Image(31,31); prev_off.src = "prev.gif";
-	prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
 
 </script>
 
 </head>
 
-<body onload="init()">
+<body onload="initGallery()">
 <br>
 <h1><center>Apache PhotArk Gallery</center></h1>
 <br>
 <br>
-  <div id="gallery">
-	<div id="album">
-		<!--img id="albumImage" border="0" src=""-->
-	</div>
-	<br>
-  </div>
 
+<div id='gallery' style='display:none;visibility:hidden;'>
+     <center>
+     <table id='tableGallery' style='width:720px;' border='0' cellspacing='0' cellpadding='1'></table>
+     </center>
+</div>
+  
+<div id="album" style="display:none;visibility:hidden;">
   <center>
 
   <table style="height:54px;" cellspacing="0" cellpadding="0" border="0">
@@ -111,7 +190,7 @@
      	   <!-- Navigation Header -->
 		   <table style="width:100%;" cellspacing="0" cellpadding="0" border="0">
              <tr>
-             	<!-- <td style="width:31px;"><a href="javascript:showAlbum()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td> -->
+             	<td style="width:31px;"><a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td>
                 <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="document.previous.src=prev_on.src" onmouseout="document.previous.src=prev_off.src"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
                 <td style="width:31px;"><a href="javascript:goNext()" onmouseover="document.next.src=next_on.src" onmouseout="document.next.src=next_off.src"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
                 <!-- <td style="width:31px;"><a href="javascript:void(0)" onmouseover="show_over();" onmouseout="show_out();" onmousedown="show_down();" ondblclick="change_delay();"><img src="show_slide.gif" width="31" height="31" border="0" title="Start/Stop slideshow - DoubleClick to change speed" name="show" alt=""></a></td> -->
@@ -129,7 +208,8 @@
     </tr>
   </table>
 
-  </center>
+  </center>  
+</div>
 
 </body>
 </html>

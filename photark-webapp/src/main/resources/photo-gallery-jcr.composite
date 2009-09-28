@@ -22,8 +22,9 @@
 		targetNamespace="http://photo-gallery"
 		name="photo-gallery-jcr">
 
+    <!-- 
     <service name="Gallery" promote="Album">
-         <interface.java interface="services.Album"/>
+         <interface.java interface="org.apache.photark.services.Album"/>
          <t:binding.jsonrpc/>
      </service>  
          
@@ -31,5 +32,6 @@
 		<implementation.java class="services.jcr.AlbumImpl"/> 
 		<property name="gallery">gallery</property>
 		<property name="album">boston</property>
-	</component> 
+	</component>
+	 --> 
 </composite>
