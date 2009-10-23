@@ -25,7 +25,7 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photoark-webapp</artifactId>
+    <artifactId>photark-webapp</artifactId>
     <packaging>war</packaging>
     <name>Apache PhotArk Web Application</name>
 
@@ -39,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.photark</groupId>
-            <artifactId>photoark</artifactId>
+            <artifactId>photark</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
             

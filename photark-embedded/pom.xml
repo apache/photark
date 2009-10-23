@@ -25,7 +25,7 @@
         <version>1.0-incubating-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photoark-embedded</artifactId>
+    <artifactId>photark-embedded</artifactId>
     <name>Apache PhotArk Embedded Application</name>
 
     <repositories>
@@ -38,7 +38,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.photark</groupId>
-            <artifactId>photoark</artifactId>
+            <artifactId>photark</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
 
