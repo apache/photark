@@ -39,7 +39,7 @@ public class GalleryTestCase {
         Album[] albums = gallery.getAlbums();
         
         Assert.assertEquals(2, albums.length);
-        Assert.assertEquals("album-1", albums[0].getName());
-        Assert.assertEquals("album-2", albums[1].getName());
+        Assert.assertTrue(albums[0].getName().startsWith("album-"));
+        Assert.assertTrue(albums[1].getName().startsWith("album-"));
     }
 }
