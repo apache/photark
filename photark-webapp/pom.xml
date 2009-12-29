@@ -18,164 +18,165 @@
     * under the License.    
 -->
 <project>
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.apache.photark</groupId>
-        <artifactId>photark-parent</artifactId>
-        <version>1.0-incubating-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-    <artifactId>photark-webapp</artifactId>
-    <packaging>war</packaging>
-    <name>Apache PhotArk Web Application</name>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.apache.photark</groupId>
+		<artifactId>photark-parent</artifactId>
+		<version>1.0-incubating-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>photark-webapp</artifactId>
+	<packaging>war</packaging>
+	<name>Apache PhotArk Web Application</name>
 
-    <repositories>
-       <repository>
-          <id>apache.incubator</id>
-          <url>http://people.apache.org/repo/m2-incubating-repository</url>
-       </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>apache.incubator</id>
+			<url>http://people.apache.org/repo/m2-incubating-repository</url>
+		</repository>
+	</repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.photark</groupId>
-            <artifactId>photark</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
-            
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-host-webapp</artifactId>
-            <version>1.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-data-api</artifactId>
-            <version>1.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-java-runtime</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-implementation-widget-runtime-tuscany</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>        
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-atom-abdera</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-atom-js</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tuscany.sca</groupId>
-            <artifactId>tuscany-binding-jsonrpc-js</artifactId>
-            <version>1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-commonj_1.1_spec</artifactId>
-            <version>1.0</version>
-            <scope>runtime</scope>
-        </dependency>
-        
+	<dependencies>
 		<dependency>
-		    <groupId>xerces</groupId>
-		    <artifactId>xercesImpl</artifactId>
-		    <version>2.8.1</version>
-		</dependency>	
-		        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-      
-	    <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl104-over-slf4j</artifactId>
-            <version>1.3.0</version>
-        </dependency>
+			<groupId>org.apache.photark</groupId>
+			<artifactId>photark</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+		</dependency>
 
 		<dependency>
-		    <groupId>javax.jcr</groupId>
-		    <artifactId>jcr</artifactId>
-		    <version>1.0</version>
-		</dependency> 
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-host-webapp</artifactId>
+			<version>1.5</version>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-core</artifactId>
-            <version>1.4</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-data-api</artifactId>
+			<version>1.5</version>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-api</artifactId>
-            <version>1.4</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-implementation-java-runtime</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
 
-        <!-- marking dependency as provided to exclude from war file -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.3</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-implementation-widget-runtime-tuscany
+			</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.5</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    
-    <build>
-       <finalName>photark</finalName>
-       <plugins>
-          <plugin>
-             <groupId>org.codehaus.mojo</groupId>
-             <artifactId>tomcat-maven-plugin</artifactId>
-             <configuration>
-                <!-- Key used for configuring access to server in settings.xml-->
-                <server>tomcat</server>
-                <!-- context for the webapp, as finalName is not being honored -->
-                <path>/photark</path>
-             </configuration>
-          </plugin>
-        </plugins>
-    </build>
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-binding-atom-abdera</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-binding-atom-js</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-binding-jsonrpc-js</artifactId>
+			<version>1.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-commonj_1.1_spec</artifactId>
+			<version>1.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl104-over-slf4j</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-core</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-api</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<!-- marking dependency as provided to exclude from war file -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>photark</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<configuration>
+					<!-- Key used for configuring access to server in settings.xml-->
+					<server>tomcat</server>
+					<!-- context for the webapp, as finalName is not being honored -->
+					<path>/photark</path>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
