@@ -18,7 +18,7 @@
 -->
 <html>
 <head>
-<title>Photo Gallery</title>
+<title>Apache PhotArk - Photo Gallery</title>
 
 <link href="styles.css" rel="stylesheet">
 
@@ -36,34 +36,28 @@
     prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
 
     var gallery;
-     
 	var galleryName;
 	var galleryAlbums;
 	var albumCovers = new Array();
 	var albumName;
 	var albumItems;
 	var albumPos = 0;
-
-	var pos = 0;
-
+    var pos = 0;
 	
-	dojo.addOnLoad(function(){ 
+	dojo.addOnLoad(function() { 
 		dojo.require("dojo.rpc.JsonService");
 	    dojo.addOnLoad(initServices);
 	    dojo.addOnLoad(initGallery);
 	 });
-
-	 
+	 	 
 	function initServices(){
 		gallery = new dojo.rpc.JsonService("/photark/Gallery?smd");
 	}
-
 	
-	function initGallery(){
-		try{
+	function initGallery() {
+		try {
 			gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
-		 } 
-		catch(exception){
+		} catch(exception) {
 			alert(e);
 		}
 	}
@@ -73,17 +67,16 @@
 			alert(exception.msg);
 			return;
 		}
-		
 		galleryAlbums = albums;
-		
+
 		for(i=0; i< galleryAlbums.length; i++)
 		{
 			gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
 		}
 	}
 
-	function gallery_getAlbumCoverResponse(cover, exception)
-	{
+
+	function gallery_getAlbumCoverResponse(cover, exception) {
 		albumCovers[pos] = cover;
 		pos += 1;
 		if(albumCovers.length == galleryAlbums.length) 
@@ -97,24 +90,23 @@
 		var table=document.getElementById('tableGallery');
 		var lastRow = table.rows.length;
 		for(i=0; i<galleryAlbums.length; i++) {
-			   var row=table.insertRow(lastRow++);
-			   var column=row.insertCell(0);
-			   var albumName = galleryAlbums[i].name;
-			   var img = document.createElement("img");
-			   img.src = "gallery/" + albumName + "/" + albumCovers[i];
-			   var img_html = "<img src=" + img.src + " class=\"slideImage\" height=25% width=25% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
-			   var html="<a href=\"javascript:initializeAlbum('" +  albumName +"')\">" +  img_html + "</a>";
-			   column.innerHTML = html;
+		   var row=table.insertRow(lastRow++);
+		   var column=row.insertCell(0);
+		   var albumName = galleryAlbums[i].name;
+		   var img = document.createElement("img");
+		   img.src = "gallery/" + albumName + "/" + albumCovers[i];
+		   var img_html = "<img src=" + img.src + " class=\"slideImage\" height=25% width=25% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
+		   var html="<a href=\"javascript:initializeAlbum('" +  albumName +"')\">" +  img_html + "</a>";
+		   column.innerHTML = html;
 
-			   row = table.insertRow(lastRow++);
-			   column = row.insertCell(0)
-			   column.innerHTML = albumName;
+		   row = table.insertRow(lastRow++);
+		   column = row.insertCell(0)
+		   column.innerHTML = albumName;
 
-			   row = table.insertRow(lastRow++);
-			   column = row.insertCell(0)
-			   column.innerHTML = "<img src=\"space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
-		   }
-
+		   row = table.insertRow(lastRow++);
+		   column = row.insertCell(0)
+		   column.innerHTML = "<img src=\"space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+	   }
 	}
 
 	function displayGallery() {
@@ -125,7 +117,7 @@
 	function initializeAlbum(albumName) {
 		try {
 			this.albumName = albumName; 
-			gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse)
+			gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse);
 		} catch(exception) {
 			alert(e);
 		}		
@@ -161,7 +153,6 @@
 	        document.getElementById("albumImage").width=this.width;
 	        document.getElementById("albumImage").height=this.height;
 	    }
-	    var vvv = albumItems[albumPos];
 	    img.src = "gallery/" + albumName + "/" + albumItems[albumPos];
 	    return false;
 	}
