@@ -21,19 +21,14 @@
 		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.0"
 		targetNamespace="http://org.apache.photoark"
 		name="photo-gallery">
-    
-   <component name="Gallery">
-        <tuscany:implementation.widget location="gallery.html"/>
-		<reference name="gallery" target="GalleryComponentService">
-		 	<tuscany:binding.jsonrpc uri="http://localhost:8080/photark/GalleryService"/>
-		 </reference>		 
-    </component>
-        
-    <component name="GalleryComponentService">
+  
+    <component name="Gallery">
    		<implementation.java class="org.apache.photark.services.gallery.filesystem.GalleryImpl"/>
    		<property name="name">gallery</property>
    		<service name="Gallery">
-   			<tuscany:binding.jsonrpc uri="http://localhost:8080/photark/GalleryService"/>
+   			<interface.java interface="org.apache.photark.services.gallery.Gallery"/>
+   			<tuscany:binding.jsonrpc uri="/Gallery"/>
    		</service>
     </component>
+    
 </composite>
