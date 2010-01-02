@@ -169,6 +169,7 @@
             </activation>
             <modules>
                 <module>photark</module>
+                <module>photark-jcr</module>
                 <module>photark-webapp</module>
             </modules>
         </profile>
