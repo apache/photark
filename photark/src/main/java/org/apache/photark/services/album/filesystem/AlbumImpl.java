@@ -21,13 +21,12 @@ package org.apache.photark.services.album.filesystem;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.photark.services.album.Album;
-import org.osoa.sca.annotations.Init;
-import org.osoa.sca.annotations.Property;
+import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Property;
 
 
 public class AlbumImpl implements Album {

@@ -17,13 +17,15 @@
     * specific language governing permissions and limitations
     * under the License.    
 -->
-<contribution xmlns="http://www.osoa.org/xmlns/sca/1.0"
+<contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
               xmlns:photark="http://org.apache.photoark">
+   <deployable composite="photark:photo-gallery"/>
+   
+   <!-- 
    <import.java package="org.apache.photark.services.album"/>
    <import.java package="org.apache.photark.services.album.filesystem"/>
    <import.java package="org.apache.photark.services.album.jcr"/>
    <import.java package="org.apache.photark.services.gallery"/>
    <import.java package="org.apache.photark.services.gallery.filesystem"/>
-   
-   <deployable composite="photark:photo-gallery"/>
+    -->
 </contribution>

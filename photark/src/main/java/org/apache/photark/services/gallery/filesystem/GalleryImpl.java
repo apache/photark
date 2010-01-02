@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.Gallery;
-import org.osoa.sca.annotations.Init;
-import org.osoa.sca.annotations.Property;
+import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Property;
 
 public class GalleryImpl implements Gallery {
     private String name;

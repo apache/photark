@@ -22,10 +22,8 @@ package org.apache.photark.services.album;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osoa.sca.annotations.Init;
-import org.osoa.sca.annotations.Reference;
-
-import com.google.gdata.data.Link;
+import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Reference;
 
 public class AlbumAgregator implements Album {
     private static String NAME = "Aggregated Album";
@@ -38,9 +36,11 @@ public class AlbumAgregator implements Album {
     @Reference(required=false)
     protected org.apache.tuscany.sca.binding.atom.collection.Collection albumFeed;
     
+    /* FIXME: GData support not available in Tuscany 2.x
     @Reference(required=false)
     protected org.apache.tuscany.sca.binding.gdata.collection.Collection albumPicassa;
-
+    */
+    
     @Init
     public void init() {
         if(album != null) {
@@ -59,7 +59,7 @@ public class AlbumAgregator implements Album {
         		//log exception, warn user that album xxx was not processed (not found)
         	}
         }
-        
+        /* FIXME: GData support not available in Tuscany 2.x 
         if( albumPicassa != null) {
         	try {
         		for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
@@ -70,6 +70,7 @@ public class AlbumAgregator implements Album {
         		//log exception, warn user that album xxx was not processed (not found)
         	}
         }
+        */
         
     }
     

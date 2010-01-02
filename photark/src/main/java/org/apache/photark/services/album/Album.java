@@ -19,7 +19,7 @@
 
 package org.apache.photark.services.album;
 
-import org.osoa.sca.annotations.Remotable;
+import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
 public interface Album {
