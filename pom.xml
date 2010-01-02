@@ -292,8 +292,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-  <modules>
-    <module>photark-filesystem</module>
-  </modules>
 </project>
