@@ -24,7 +24,6 @@
    <!-- 
    <import.java package="org.apache.photark.services.album"/>
    <import.java package="org.apache.photark.services.album.filesystem"/>
-   <import.java package="org.apache.photark.services.album.jcr"/>
    <import.java package="org.apache.photark.services.gallery"/>
    <import.java package="org.apache.photark.services.gallery.filesystem"/>
     -->
