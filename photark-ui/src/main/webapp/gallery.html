@@ -22,9 +22,9 @@
 
 <link href="styles.css" rel="stylesheet">
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js">
-	
-</script>
+<script type="text/javascript" src="constants.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js"></script>
+
 
 <script language="JavaScript">
 
@@ -34,7 +34,7 @@
     next_on  = new Image(31,31); next_on.src = "next_on.gif";
     prev_off = new Image(31,31); prev_off.src = "prev.gif";
     prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
-
+ 
     var gallery;
 	var galleryName;
 	var galleryAlbums;
@@ -44,18 +44,23 @@
 	var albumPos = 0;
     var pos = 0;
 	
-	dojo.addOnLoad(function() { 
+	dojo.addOnLoad(function() {
+		alert( photark.constants.GalleryServiceEndpoint );
 		dojo.require("dojo.rpc.JsonService");
 	    dojo.addOnLoad(initServices);
 	    dojo.addOnLoad(initGallery);
 	 });
 	 	 
 	function initServices(){
-		gallery = new dojo.rpc.JsonService("/photark/Gallery?smd");
+		alert("x");
+		gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
 	}
 	
 	function initGallery() {
 		try {
+			if( !gallery) {
+				gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
+			}
 			gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
 		} catch(exception) {
 			alert(e);

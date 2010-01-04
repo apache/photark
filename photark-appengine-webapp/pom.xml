@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    * Licensed to the Apache Software Foundation (ASF) under one
+    * or more contributor license agreements.  See the NOTICE file
+    * distributed with this work for additional information
+    * regarding copyright ownership.  The ASF licenses this file
+    * to you under the Apache License, Version 2.0 (the
+    * "License"); you may not use this file except in compliance
+    * with the License.  You may obtain a copy of the License at
+    * 
+    *   http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing,
+    * software distributed under the License is distributed on an
+    * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    * KIND, either express or implied.  See the License for the
+    * specific language governing permissions and limitations
+    * under the License.    
+-->
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.apache.photark</groupId>
+		<artifactId>photark-parent</artifactId>
+		<version>1.0-incubating-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>photark-appengine-webapp</artifactId>
+	<packaging>war</packaging>
+	<name>Apache PhotArk Appengine Web Application</name>
+
+	<repositories>
+		<repository>
+			<id>apache.incubator</id>
+			<url>http://people.apache.org/repo/m2-incubating-repository</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.photark</groupId>
+			<artifactId>photark</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.photark</groupId>
+			<artifactId>photark-ui</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-host-webapp</artifactId>
+			<version>2.0-M4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-data-api</artifactId>
+			<version>2.0-M4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-implementation-java-runtime</artifactId>
+			<version>2.0-M4</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
+			<version>2.0-M4</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- marking dependency as provided to exclude from war file -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>photark</finalName>
+        <outputDirectory>war/WEB-INF/classes</outputDirectory>		
+		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <sourceIncludes>
+                        <sourceInclude>**/*</sourceInclude>
+                    </sourceIncludes>
+
+                    <projectnatures>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                        <projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
+                        <projectnature>com.google.gdt.eclipse.core.webAppNature</projectnature>
+                    </projectnatures>
+                    <buildcommands>
+                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                        <buildcommand>com.google.appengine.eclipse.core.enhancerbuilder</buildcommand>
+                        <buildcommand>com.google.appengine.eclipse.core.projectValidator</buildcommand>
+                        <buildcommand>com.google.gdt.eclipse.core.webAppProjectValidator</buildcommand>
+                    </buildcommands>
+                    <classpathContainers>
+                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                        <classpathContainer>com.google.appengine.eclipse.core.GAE_CONTAINER</classpathContainer>
+                    </classpathContainers>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>war/WEB-INF/lib</outputDirectory>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1-beta-1</version>
+				<configuration>
+				    <warSourceDirectory>war</warSourceDirectory>
+					<dependentWarExcludes>WEB-INF/web.xml</dependentWarExcludes>
+					<dependentWarExcludes>constants.js</dependentWarExcludes>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

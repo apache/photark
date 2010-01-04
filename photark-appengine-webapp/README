@@ -1,0 +1,10 @@
+PhotoArk Gallery Application
+======================================
+
+Apache PhotArk will be a complete open source photo gallery 
+application including a content repository for the images, 
+a display piece, an access control layer, and upload capabilities. 
+The idea is to have a rigid design for the content repository 
+with a very flexible display piece. The images in the content
+repository will be protected with granular access control.
+
