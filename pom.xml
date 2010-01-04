@@ -169,6 +169,7 @@
             <modules>
                 <module>photark</module>
                 <module>photark-jcr</module>
+                <module>photark-ui</module>                
                 <module>photark-webapp</module>
             </modules>
         </profile>
