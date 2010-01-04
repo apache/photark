@@ -23,8 +23,7 @@
 <link href="styles.css" rel="stylesheet">
 
 <script type="text/javascript" src="constants.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js"></script>
-
+<script type="text/javascript" src="dojo/dojo.js"></script>
 
 <script language="JavaScript">
 
@@ -45,14 +44,12 @@
     var pos = 0;
 	
 	dojo.addOnLoad(function() {
-		alert( photark.constants.GalleryServiceEndpoint );
 		dojo.require("dojo.rpc.JsonService");
 	    dojo.addOnLoad(initServices);
 	    dojo.addOnLoad(initGallery);
 	 });
 	 	 
 	function initServices(){
-		alert("x");
 		gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
 	}
 	
