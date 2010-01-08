@@ -52,6 +52,12 @@ public class GalleryImpl implements Gallery {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 galleryURL = this.getClass().getClassLoader().getResource("../../" + name);
             }
+            
+            if(galleryURL == null) {
+                // Workaroud for Google apps Engine 
+                String galleryDir = System.getProperty("user.dir") + "/"  + name;
+                galleryURL = new URL("file://" + galleryDir);
+            }
 
             if(galleryURL != null) {
                 File album = new File(galleryURL.toURI());
