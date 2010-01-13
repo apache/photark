@@ -19,7 +19,7 @@
 -->
 <contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200903"
               xmlns:photark="http://org.apache.photoark">
-   <deployable composite="photark:photo-gallery"/>
+   <deployable composite="photark:photo-gallery-jcr"/>
    
    <!-- 
    <import.java package="org.apache.photark.services.album"/>

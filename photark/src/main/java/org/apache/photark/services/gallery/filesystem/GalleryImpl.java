@@ -21,126 +21,58 @@ package org.apache.photark.services.gallery.filesystem;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.photark.services.album.Album;
+import org.apache.photark.services.gallery.AbsGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
-import org.oasisopen.sca.annotation.Property;
 
-public class GalleryImpl implements Gallery {
-    private String name;
-    private String location;
+public class GalleryImpl extends AbsGalleryImpl implements Gallery {
+   
+	public GalleryImpl(){
+		
+	}
+	
+	public GalleryImpl(String name){
+		super(name);
+	}
+	
+	
+	@Init
+	public void init() {
+		System.out.println(">>> Initializing fileSystem Gallery");
+		try {
+			URL galleryURL = this.getClass().getClassLoader().getResource(name);
+			if(galleryURL == null) {
+				// Accomodate for J2EE classpath that starts in WEB-INF\classes
+				galleryURL = this.getClass().getClassLoader().getResource("../../" + name);
+			}
+			if(galleryURL == null) {
+				// Workaroud for Google apps Engine 
+				String galleryDir = System.getProperty("user.dir") + "/"  + name;
+				galleryURL = new URL("file://" + galleryDir);
+			}
 
-    private boolean initialized;
-    private List<Album> albums = new ArrayList<Album>();
-    
-    public GalleryImpl() {
-        
-    }
-    
-    public GalleryImpl(String name) {
-        this.name = name;
-    }
-    
-    @Init
-    public void init() {
-        try {
-            URL galleryURL = this.getClass().getClassLoader().getResource(name);
-            if(galleryURL == null) {
-                // Accomodate for J2EE classpath that starts in WEB-INF\classes
-                galleryURL = this.getClass().getClassLoader().getResource("../../" + name);
-            }
-            
-            if(galleryURL == null) {
-                // Workaroud for Google apps Engine 
-                String galleryDir = System.getProperty("user.dir") + "/"  + name;
-                galleryURL = new URL("file://" + galleryDir);
-            }
-
-            if(galleryURL != null) {
-                File album = new File(galleryURL.toURI());
-                if (album.isDirectory() && album.exists()) {
-                    File[] albums = album.listFiles();
-                    for(File albumFile : albums) {
-                        if(! albumFile.getName().startsWith(".")) {
-                            if(albumFile.isDirectory() && albumFile.exists()) {
-                                Album newAlbum = new org.apache.photark.services.album.filesystem.AlbumImpl();
-                                newAlbum.setName(albumFile.getName());
-                                newAlbum.setLocation(albumFile.getPath());
-                                this.albums.add(newAlbum);
-                            }                                
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // FIXME: ignore for now
-            e.printStackTrace();
-        }
-        
-        initialized = true;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    @Property
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void addAlbum(Album album) {
-        
-    }
-
-    public Album[] getAlbums() {
-        if(! initialized) {
-            init();
-        }
-        
-        Album[] albumArray = new Album[albums.size()];
-        albums.toArray(albumArray);
-        return albumArray;
-    }
-    
-    public String getAlbumCover(String albumName) {
-        Album albumLookup = getAlbum(albumName);
-        
-        if (albumLookup != null) {
-            return albumLookup.getPictures()[0];
-        } else {
-            //FIXME: return proper not found exception
-            return null;             
-        }
-    }
-    
-    public String[] getAlbumPictures(String albumName) {
-        Album albumLookup = getAlbum(albumName);
-        
-        if (albumLookup != null) {
-            return albumLookup.getPictures();
-        } else {
-            //FIXME: return proper not found exception
-            return new String[]{};             
-        }
-    }
-    
-    private Album getAlbum(String albumName) {
-        Album albumLookup = null;
-        for(Album album : albums) {
-            if(album.getName().equalsIgnoreCase(albumName)) {
-                albumLookup = album;
-                break;
-            }
-        }
-        
-        return albumLookup;
-    }
-
-    private String getLocation() {
-        return location;
-    }
+			if(galleryURL != null) {
+				File album = new File(galleryURL.toURI());
+				if (album.isDirectory() && album.exists()) {
+					File[] albums = album.listFiles();
+					for(File albumFile : albums) {
+						if(! albumFile.getName().startsWith(".")) {
+							if(albumFile.isDirectory() && albumFile.exists()) {
+								Album newAlbum = new org.apache.photark.services.album.filesystem.AlbumImpl();
+								newAlbum.setName(albumFile.getName());
+								newAlbum.setLocation(albumFile.getPath());
+								this.albums.add(newAlbum);
+							}                                
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			// FIXME: ignore for now
+			e.printStackTrace();
+		}
+		initialized = true;
+	}
 }

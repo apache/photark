@@ -24,16 +24,17 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 
-import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.photark.services.album.Album;
+import org.apache.photark.services.gallery.jcr.JCRSession;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
@@ -42,31 +43,48 @@ public class AlbumImpl implements Album {
     private String gallery;
     private String name;
     private String location;
-    private Repository repository=null;
     private Session session=null;
+    private boolean initialized;
+    private static Map<String, Album> albums = new HashMap<String, Album>();
+    
+    public synchronized static Album createAlbum(String name)
+    {
+    	if (!albums.containsKey(name)) {
+    		albums.put(name, new AlbumImpl());
+		}
+    	return albums.get(name);
+    }
 
     @Init
     public void init() {
         System.out.println(">>> Initializing JCR Album");
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
+            if(albumURL == null){
+            	String loc = "../../" + getLocation();
+            	albumURL = this.getClass().getClassLoader().getResource(loc);
+            }
+
             if(albumURL != null) {
-            	repository = new TransientRepository();
-                session = repository.login(
-                    new SimpleCredentials("username", "password".toCharArray()));
+            	session = JCRSession.getSession();
                 try {
                   File album = new File(albumURL.toURI());
                   if (album.isDirectory() && album.exists()) {
                       String[] listPictures = album.list(new ImageFilter(".jpg"));
-                    for(String image : listPictures) {
-                    	Node root=session.getRootNode();
-                    	Node picNode=root.addNode(image);
-                        InputStream inFile = getClass().getClassLoader().getResourceAsStream(getLocation()+image);
-                        picNode.setProperty("image", inFile );
-                        picNode.setProperty("name", image);
-                        picNode.setProperty("location", getLocation()+image);
-                    	//image = getLocation() + image;
-                        //pictures.add(image);
+                      if(listPictures !=null && listPictures.length > 0){
+                    	  Node albumNode = getAlbumNode(name);                    	  
+                    	  for(String image : listPictures) {
+                    		  if(!albumNode.hasNode(image))
+                    		  {
+                    			  Node picNode=albumNode.addNode(image);
+                    			  InputStream inFile = getClass().getClassLoader().getResourceAsStream(getLocation()+image);
+                    			  picNode.setProperty("image", inFile );
+                    			  picNode.setProperty("name", image);
+                    			  picNode.setProperty("location", image);
+                    			  //image = getLocation() + image;
+                    			  //pictures.add(image);
+                    		  }
+                    	  }
                       }
                   }
 
@@ -80,6 +98,7 @@ public class AlbumImpl implements Album {
             // FIXME: ignore for now
             e.printStackTrace();
         }
+        initialized = true;
     }
     
 
@@ -108,20 +127,24 @@ public class AlbumImpl implements Album {
     }
     
     public void setLocation(String location) {
+    	System.out.println("inside setLocation:location:"+location);
         this.location = location;
     }
 
-    public String[] getPictures() {
+    public synchronized String[] getPictures() {
+    	if(!initialized){
+    		init();
+    	}
       List<String> pictures = new ArrayList<String>();
 
       try{
-    	Node root=session.getRootNode();
-        NodeIterator nodes = root.getNodes();
+    	Node root = session.getRootNode();
+    	Node albumNode = root.getNode(name);
+        NodeIterator nodes = albumNode.getNodes();
 
         while(nodes.hasNext()){
         	Node node=nodes.nextNode();
         	if(node.getPath().equals("/jcr:system")) continue;
-
         	pictures.add(node.getProperty("location").getString());
         }
       }catch (Exception e) {
@@ -131,7 +154,6 @@ public class AlbumImpl implements Album {
 
       String[] pictureArray = new String[pictures.size()];
       pictures.toArray(pictureArray);
-      removeNodes();
       return pictureArray;
     }
 
@@ -152,6 +174,23 @@ public class AlbumImpl implements Album {
       }
 
     }
+    
+    
+    /**
+     * This method create new album node in case it does not exists in repository or return older album node otherwise.
+     *  
+     * @param albumName
+     * @return
+     * @throws RepositoryException
+     */
+    private Node getAlbumNode(String name) throws RepositoryException{
+    	Node root = session.getRootNode();
+  	  	if(root.hasNode(name))
+  	  		return root.getNode(name);
+  	  	else
+  	  		 return root.addNode(name);
+    }
+    
     /**
      * Inner fileFilter class
      */
