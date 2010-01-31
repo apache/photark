@@ -50,6 +50,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.photark</groupId>
+			<artifactId>photark-ui-admin</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>
 			<version>2.0-M4</version>

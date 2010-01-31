@@ -170,6 +170,7 @@
                 <module>photark</module>
                 <module>photark-jcr</module>
                 <module>photark-ui</module>
+                <module>photark-ui-admin</module>
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>
             </modules>
