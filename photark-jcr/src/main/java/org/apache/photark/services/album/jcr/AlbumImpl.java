@@ -32,9 +32,9 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
-import org.apache.photark.services.album.model.Picture;
 import org.apache.photark.services.gallery.jcr.JCRSession;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;

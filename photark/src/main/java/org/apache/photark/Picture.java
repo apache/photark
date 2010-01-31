@@ -17,13 +17,20 @@
  * under the License.    
  */
 
-package org.apache.photark.services.album.model;
+package org.apache.photark;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
+/**
+ * Model representing an album image
+ */
 public class Picture {
 	private String name;
+	private String description;
 	private Date creationDate;
+	private List<Properties> imageProperties;
 	
 	public Picture(String name, Date createDate){
 		this.name = name;

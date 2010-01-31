@@ -22,7 +22,7 @@ package org.apache.photark.services.album;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.photark.services.album.model.Picture;
+import org.apache.photark.Picture;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 

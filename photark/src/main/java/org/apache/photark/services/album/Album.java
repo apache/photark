@@ -19,7 +19,7 @@
 
 package org.apache.photark.services.album;
 
-import org.apache.photark.services.album.model.Picture;
+import org.apache.photark.Picture;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable

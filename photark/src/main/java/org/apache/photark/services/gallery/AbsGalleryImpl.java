@@ -22,8 +22,8 @@ package org.apache.photark.services.gallery;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.model.Picture;
 import org.oasisopen.sca.annotation.Property;
 
 public abstract class AbsGalleryImpl implements Gallery {

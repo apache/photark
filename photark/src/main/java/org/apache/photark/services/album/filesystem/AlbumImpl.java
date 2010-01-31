@@ -23,9 +23,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
-import org.apache.photark.services.album.model.Picture;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
