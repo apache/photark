@@ -20,11 +20,12 @@
 package org.apache.photark.services.album.filesystem;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.photark.services.album.Album;
+import org.apache.photark.services.album.ImageFilter;
+import org.apache.photark.services.album.model.Picture;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
@@ -88,18 +89,12 @@ public class AlbumImpl implements Album {
         pictures.toArray(pictureArray);
         return pictureArray;
     }
-
-    /**
-     * Inner fileFilter class
-     */
-    private class ImageFilter implements FilenameFilter {
-        String afn;
-        ImageFilter(String afn) { this.afn = afn; }
-        public boolean accept(File dir, String name) {
-          // Strip path information:
-          String f = new File(name).getName();
-          return f.indexOf(afn) != -1;
-        }
-      }
-
+    
+    public void addPicture(Picture picture){
+    	
+    }
+    
+    public void deletePicture(Picture picture){
+    	
+    }
 }

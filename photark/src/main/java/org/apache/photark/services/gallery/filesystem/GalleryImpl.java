@@ -75,4 +75,8 @@ public class GalleryImpl extends AbsGalleryImpl implements Gallery {
 		}
 		initialized = true;
 	}
+	
+	public void addAlbum(String albumName){
+		 
+	}
 }

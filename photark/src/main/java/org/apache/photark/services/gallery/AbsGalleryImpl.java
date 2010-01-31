@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.photark.services.album.Album;
+import org.apache.photark.services.album.model.Picture;
 import org.oasisopen.sca.annotation.Property;
 
 public abstract class AbsGalleryImpl implements Gallery {
@@ -67,9 +68,17 @@ public abstract class AbsGalleryImpl implements Gallery {
 
 	public String getAlbumCover(String albumName) {
 		Album albumLookup = getAlbum(albumName);
-
+		
 		if (albumLookup != null) {
-			return albumLookup.getPictures()[0];
+			String [] pictures  = albumLookup.getPictures();
+			// this check is to avoid Exception
+			if(pictures.length > 0){
+				return albumLookup.getPictures()[0];
+			}
+			else{
+				System.out.println("No Album Cover Picture found for album:"+albumName);
+				return null;
+			}
 		} else {
 			//FIXME: return proper not found exception
 			return null;             

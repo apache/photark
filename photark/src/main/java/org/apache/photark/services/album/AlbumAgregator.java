@@ -22,6 +22,7 @@ package org.apache.photark.services.album;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.photark.services.album.model.Picture;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 
@@ -96,4 +97,12 @@ public class AlbumAgregator implements Album {
         return pictureArray;
     }
 
+    
+    public void addPicture(Picture picture){
+    	
+    }
+    
+    public void deletePicture(Picture picture){
+    	
+    }
 }

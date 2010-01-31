@@ -6,33 +6,35 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
+ * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License.    
  */
-package org.apache.photark.services.gallery;
 
-import org.apache.photark.services.album.Album;
-import org.oasisopen.sca.annotation.Remotable;
+package org.apache.photark.services.album.model;
 
-@Remotable
-public interface Gallery {
-    
-    String getName();
-    
-    void setName(String name);
-    
-    void addAlbum(String albumName);
-    
-    Album[] getAlbums();
-    
-    String getAlbumCover(String albumName);
-    
-    String[] getAlbumPictures(String albumName);
+import java.util.Date;
+
+public class Picture {
+	private String name;
+	private Date creationDate;
+	
+	public Picture(String name, Date createDate){
+		this.name = name;
+		this.creationDate = createDate;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public Date getCreationDate(){
+		return creationDate;
+	}
 }

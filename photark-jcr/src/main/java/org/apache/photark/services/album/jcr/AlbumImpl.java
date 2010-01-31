@@ -20,7 +20,6 @@
 package org.apache.photark.services.album.jcr;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.photark.services.album.Album;
+import org.apache.photark.services.album.ImageFilter;
+import org.apache.photark.services.album.model.Picture;
 import org.apache.photark.services.gallery.jcr.JCRSession;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
@@ -43,18 +44,22 @@ public class AlbumImpl implements Album {
     private String gallery;
     private String name;
     private String location;
-    private Session session=null;
+    private Session session=JCRSession.getSession();
     private boolean initialized;
     private static Map<String, Album> albums = new HashMap<String, Album>();
     
     public synchronized static Album createAlbum(String name)
     {
     	if (!albums.containsKey(name)) {
-    		albums.put(name, new AlbumImpl());
+    		albums.put(name, new AlbumImpl(name));
 		}
     	return albums.get(name);
     }
 
+    public AlbumImpl(String name){
+    	this.name = name;
+    }
+    
     @Init
     public void init() {
         System.out.println(">>> Initializing JCR Album");
@@ -66,7 +71,6 @@ public class AlbumImpl implements Album {
             }
 
             if(albumURL != null) {
-            	session = JCRSession.getSession();
                 try {
                   File album = new File(albumURL.toURI());
                   if (album.isDirectory() && album.exists()) {
@@ -78,7 +82,7 @@ public class AlbumImpl implements Album {
                     		  {
                     			  Node picNode=albumNode.addNode(image);
                     			  InputStream inFile = getClass().getClassLoader().getResourceAsStream(getLocation()+image);
-                    			  picNode.setProperty("image", inFile );
+                    			//  picNode.setProperty("image", inFile );
                     			  picNode.setProperty("name", image);
                     			  picNode.setProperty("location", image);
                     			  //image = getLocation() + image;
@@ -136,12 +140,11 @@ public class AlbumImpl implements Album {
     		init();
     	}
       List<String> pictures = new ArrayList<String>();
-
       try{
     	Node root = session.getRootNode();
     	Node albumNode = root.getNode(name);
         NodeIterator nodes = albumNode.getNodes();
-
+        
         while(nodes.hasNext()){
         	Node node=nodes.nextNode();
         	if(node.getPath().equals("/jcr:system")) continue;
@@ -175,6 +178,31 @@ public class AlbumImpl implements Album {
 
     }
     
+    public void addPicture(Picture picture){
+    	try {
+			Node root = session.getRootNode();
+			Node albumNode = root.getNode(name);
+			Node picNode = albumNode.addNode(picture.getName());
+			picNode.setProperty("name", picture.getName());
+			picNode.setProperty("location", picture.getName());
+			session.save();
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void deletePicture(Picture picture){
+    	try {
+			Node root = session.getRootNode();
+			Node albumNode = root.getNode(name);
+			Node picNode = albumNode.addNode(picture.getName());
+			picNode.remove();
+			session.save();
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
+    }
+    
     
     /**
      * This method create new album node in case it does not exists in repository or return older album node otherwise.
@@ -190,17 +218,4 @@ public class AlbumImpl implements Album {
   	  	else
   	  		 return root.addNode(name);
     }
-    
-    /**
-     * Inner fileFilter class
-     */
-    private class ImageFilter implements FilenameFilter {
-        String afn;
-        ImageFilter(String afn) { this.afn = afn; }
-        public boolean accept(File dir, String name) {
-          // Strip path information:
-          String f = new File(name).getName();
-          return f.indexOf(afn) != -1;
-        }
-      }
 }
