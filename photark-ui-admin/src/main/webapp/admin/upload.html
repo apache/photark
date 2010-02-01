@@ -1,0 +1,130 @@
+<!--
+    * Licensed to the Apache Software Foundation (ASF) under one
+    * or more contributor license agreements.  See the NOTICE file
+    * distributed with this work for additional information
+    * regarding copyright ownership.  The ASF licenses this file
+    * to you under the Apache License, Version 2.0 (the
+    * "License"); you may not use this file except in compliance
+    * with the License.  You may obtain a copy of the License at
+    *
+    *   http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing,
+    * software distributed under the License is distributed on an
+    * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    * KIND, either express or implied.  See the License for the
+    * specific language governing permissions and limitations
+    * under the License.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+<script type="text/javascript" src="../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
+<script type="text/javascript" src="upload.js" charset="utf-8"></script>
+
+<link href="admin.css" rel="stylesheet">
+
+<style type="text/css">
+	.uploadBtn{
+	    border:1px solid #333333;
+	    background:url(buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
+	    font-size:14px;
+	    width:201px;
+	    height:30px;
+	    vertical-align:middle; /* emulates a <button> if node is not */
+	    text-align:center;
+	}
+	.uploadHover{
+	    background-image:url(buttonHover.png);
+	    cursor:pointer;
+	    font-weight:bold;
+	}
+	.uploadPress{
+	    background-image:url(buttonActive.png);
+	}
+	.uploadDisabled{
+	    background-image:none;
+	    background-color:#666;
+	    color:#999;
+	    border:1px solid #999;
+	}
+</style>
+
+<script type="text/javascript">
+	//gallery json-rpc service
+	dojo.require("dojo.rpc.JsonService");
+
+	var gallery = new dojo.rpc.JsonService("/photark/Gallery?smd");
+	
+	function createAlbum(){
+		var albumLabel = newAlbumForm.attr('value');
+		console.log("albumLabel:"+albumLabel);	
+		var albumName;
+		for(var key in albumLabel){
+			albumName = albumLabel[key];
+			console.log("albumName:"+albumName);
+		}
+		console.log("albumName:"+albumName);
+		gallery.addAlbum(albumName);
+		dojo.byId('albumCreated').innerHTML = "Album Successfully Created:" + albumName;
+		dojo.byId('albumName').value = "";
+	}
+		
+		
+	function populateSelect(){
+		gallery.getAlbums().addCallback( function(albums, exception) {
+			if(exception) {
+				alert(exception.msg);
+				return;
+			}
+
+			var selectAlbum = dojo.byId("selectAlbum");
+
+			selectAlbum.options.length=0;
+			selectAlbum.options[selectAlbum.options.length] =  new Option("New Album", "New Album", true, false);
+	        for(var pos = 0; pos<albums.length; pos++) {	
+				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos], albums[pos], false, false);
+			}
+		});
+	}
+
+	function doUpload() {
+		console.log("doUpload");
+		var selected = dojo.byId("selectAlbum").value;
+		if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
+			alert("Photo Upload can not be started.Select Album before upload");
+		} else if(selected == "New Album") {
+			uploader.upload(dojo.byId("newAlbumName").value);
+		} else {
+			uploader.upload({selectAlbum:selected});
+		}
+	}
+</script>
+</head>
+
+<body>
+
+	<label>Select Album:</label>
+	<select  id="selectAlbum" name="selectAlbum" autoComplete="true" onfocus="populateSelect()"/>
+	
+	</br>
+	
+	<div id="divNewAlbum">
+		<label>New Album:</label>
+		<input id="newAlbumName" name="newAlbumName">
+    </div>
+
+	</br>
+	</br>    
+    </br>
+    
+
+    <div id="btnUploader" class="uploadBtn btn">Select Files</div>
+
+	<label>Files:</label>
+	<div id="files" class="field"></div>
+
+    <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">Upload</div>	
+</body>
+</html>
