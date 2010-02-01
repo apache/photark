@@ -84,16 +84,10 @@
 			alert(exception.msg);
 			return;
 		}
-		console.log("cover:"+cover);
 		albumCovers[pos] = cover;
-		console.log("pos before initilization:"+pos);
 		pos += 1;
-		console.log("pos after initilization:"+pos);
-		console.log("albumCovers.length:"+albumCovers.length);
-		console.log("galleryAlbums.length:"+galleryAlbums.length);
 		if(albumCovers.length == galleryAlbums.length) 
 		{
-			console.log("going to initlize the gallery with cover:"+cover);
 			initializeGallery();
 			displayGallery();
 		}
@@ -175,7 +169,7 @@
 	}
 
 	function goNext() {
-		if(albumPos < albumItems.length) {
+		if(albumPos < albumItems.length - 1) {
 			albumPos++;
 			showImage(albumPos);
 		}
@@ -201,6 +195,22 @@
 			}
 		}
 	} 
+	
+	function onGoPreviousMouseOver(){
+		if(albumPos == 0){
+			document.previous.src=prev_off.src;
+		}else{
+			document.previous.src=prev_on.src;
+		}
+	}
+	
+	function onGoNextMouseOver(){
+		if(albumPos == albumItems.length - 1){
+			document.next.src=next_off.src;
+		}else{
+			document.next.src=next_on.src;
+		}
+	}
 
 </script>
 
@@ -228,8 +238,8 @@
 		   <table style="width:100%;" cellspacing="0" cellpadding="0" border="0">
              <tr>
              	<td style="width:31px;"><a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="document.previous.src=prev_on.src" onmouseout="document.previous.src=prev_off.src"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goNext()" onmouseover="document.next.src=next_on.src" onmouseout="document.next.src=next_off.src"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
+                <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="onGoPreviousMouseOver();" onmouseout="document.previous.src=prev_off.src"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
+                <td style="width:31px;"><a href="javascript:goNext()" onmouseover="onGoNextMouseOver();" onmouseout="document.next.src=next_off.src"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
                 <!-- <td style="width:31px;"><a href="javascript:void(0)" onmouseover="show_over();" onmouseout="show_out();" onmousedown="show_down();" ondblclick="change_delay();"><img src="show_slide.gif" width="31" height="31" border="0" title="Start/Stop slideshow - DoubleClick to change speed" name="show" alt=""></a></td> -->
              </tr>
 		   </table>
