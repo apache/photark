@@ -22,9 +22,17 @@
 @import "../dijit/themes/tundra/form/Button.css";
 @import "../dojox/form/resources/FileInput.css"; 
 
-body, html { 
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
 	font-family:Verdana,helvetica,arial,sans-serif; 
 	font-size:90%; 
+}
+
+#borderContainerTwo {
+	width: 100%;
+	height: 100%;
 }
 
 .top {
