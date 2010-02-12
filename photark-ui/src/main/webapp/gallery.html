@@ -73,7 +73,6 @@
 
 		for(i=0; i< galleryAlbums.length; i++)
 		{
-			console.log("galleryAlbums[i].name:"+galleryAlbums[i].name);
 			gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
 		}
 	}
@@ -104,7 +103,7 @@
 			
 				var albumName = galleryAlbums[i].name;
 				var img = document.createElement("img");
-				img.src = "gallery/" + albumName + "/" + albumCovers[i];
+				img.src = window.location.href + "ImageDisplayer/"+ albumName +"/" + albumCovers[i];
 				var img_html = "<img src=" + img.src + " class=\"slideImage\" height=25% width=25% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
 				var html = "<a href=\"javascript:initializeAlbum('" + albumName + "')\">" + img_html + "</a>";
 				column.innerHTML = html;
@@ -164,10 +163,10 @@
 	        document.getElementById("albumImage").width=this.width;
 	        document.getElementById("albumImage").height=this.height;
 	    }
-	    img.src = "gallery/" + albumName + "/" + albumItems[albumPos];
+	    img.src = window.location.href + "ImageDisplayer/"+ this.albumName +"/" + albumItems[albumPos];
 	    return false;
 	}
-
+	
 	function goNext() {
 		if(albumPos < albumItems.length - 1) {
 			albumPos++;
