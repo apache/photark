@@ -20,15 +20,12 @@
 package org.apache.photark.upload;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,7 +43,6 @@ public class PhotoUploadServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
-	private String galleryDir = "gallery/";
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		doPost(request, response);
@@ -59,9 +55,6 @@ public class PhotoUploadServlet extends HttpServlet
 		if (!isMultipartContent) {
 			return;
 		}
-		
-		ServletContext context = request.getSession().getServletContext();
-		String realPath = context.getRealPath("");
 
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
@@ -90,20 +83,13 @@ public class PhotoUploadServlet extends HttpServlet
 				if(!isFormField)
 				{	
 					String fileName = fileItem.getName();
-					String albumDir = realPath + File.separator + galleryDir + albumName;
-					
-					if(!isAlbumDirExits(albumDir)){
-						File f = new File(albumDir);
-						f.mkdir();
-					}
 					
 					InputStream inStream = fileItem.getInputStream();
 					
-					FileUploader uploader = new FileUploader(albumDir);
-					List<String> picsList = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
+					FileUploader uploader = new FileUploader();
+					List<Picture> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
 					
-					for(String pic :picsList){
-						Picture picture = new Picture(pic, new Date());
+					for(Picture picture :pictures){
 						addPictureToAlbum(albumName, picture);
 					}
 					sb.append("file=uploaded/" + fileName);
@@ -122,14 +108,6 @@ public class PhotoUploadServlet extends HttpServlet
 			System.out.println("Error: " + e.getMessage());
 			e.printStackTrace();
 		}
-	}
-	
-	private boolean isAlbumDirExits(String albumFolderPath){
-		File albumFolder = new File(albumFolderPath);
-		if(albumFolder.exists() && albumFolder.isDirectory()){
-			return true;
-		}
-		return false;
 	}
 	
 	

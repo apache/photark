@@ -20,6 +20,7 @@
 package org.apache.photark.services.album.jcr;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -81,12 +82,11 @@ public class AlbumImpl implements Album {
                     		  if(!albumNode.hasNode(image))
                     		  {
                     			  Node picNode=albumNode.addNode(image);
-                    			  InputStream inFile = getClass().getClassLoader().getResourceAsStream(getLocation()+image);
-                    			//  picNode.setProperty("image", inFile );
+                    			  String imagePath = albumURL.getPath() + image;
+                    			  InputStream imageContent = new FileInputStream(new File(imagePath));
+                    			  picNode.setProperty("imageContent", imageContent );
                     			  picNode.setProperty("name", image);
                     			  picNode.setProperty("location", image);
-                    			  //image = getLocation() + image;
-                    			  //pictures.add(image);
                     		  }
                     	  }
                       }
@@ -183,6 +183,8 @@ public class AlbumImpl implements Album {
 			Node root = session.getRootNode();
 			Node albumNode = root.getNode(name);
 			Node picNode = albumNode.addNode(picture.getName());
+			picture.getInputStream();
+			picNode.setProperty("imageContent", picture.getInputStream());
 			picNode.setProperty("name", picture.getName());
 			picNode.setProperty("location", picture.getName());
 			session.save();

@@ -19,53 +19,38 @@
 
 package org.apache.photark.upload;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.commons.io.IOUtils;
+import org.apache.photark.Picture;
 
 public class FileUploader {
 	
 	private String entryTypes [] = {".jpg",".jpeg",".png",".gif"}; 
 	
-	private String albumDir;
-	
-	public FileUploader(String albumDir){
-		this.albumDir = albumDir;
+	public FileUploader(){
 	}
 	
 	
-	public List<String> uploadFile(InputStream inStream, String fileName) throws IOException{
+	public List<Picture> uploadFile(InputStream inStream, String fileName) throws IOException{
 		
-		List<String> pictures = new ArrayList<String>();
+		List<Picture> pictures = new ArrayList<Picture>();
 		
 		if(isArchive(inStream)){
-			ArchiveFileExtractor archiveFileExtractor = new ArchiveFileExtractor(albumDir, entryTypes);
+			ArchiveFileExtractor archiveFileExtractor = new ArchiveFileExtractor(entryTypes);
 			pictures = archiveFileExtractor.extractArchive(inStream);
 		}
 		else{
 			// this is a picture file and not the archive file
-			uploadPicToAlbumDir(albumDir, fileName, inStream);
-			pictures.add(fileName);
+			Picture picture = new Picture(fileName, new Date(), inStream);
+			pictures.add(picture);
 		}
-		IOUtils.closeQuietly(inStream);
 		return pictures;
-	}
-	
-	
-	private void uploadPicToAlbumDir(String albumDir, String fileName ,InputStream inStream) throws IOException
-	{
-		String uploadPath = albumDir +  File.separator + fileName;
-		File file = new File(uploadPath);
-		FileOutputStream outStream = new FileOutputStream(file);
-		IOUtils.copy(inStream, outStream);
-		IOUtils.closeQuietly(outStream);
 	}
 
 	
