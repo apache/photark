@@ -31,4 +31,11 @@
    		</service>
     </component>
     
+    <component name="ImageDisplayer">
+		<implementation.java class="org.apache.photark.services.ImageDisplayerImpl"/>
+		<service name="ImageDisplayer">
+			<tuscany:binding.http uri="/ImageDisplayer"/>
+		</service>    	  	
+	</component>
+    
 </composite>
