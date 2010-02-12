@@ -19,6 +19,7 @@
 
 package org.apache.photark;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -30,12 +31,20 @@ public class Picture {
 	private String name;
 	private String description;
 	private Date creationDate;
+	private InputStream inStream;
+	
 	private List<Properties> imageProperties;
 	
 	public Picture(String name, Date createDate){
 		this.name = name;
 		this.creationDate = createDate;
 	}
+	
+	public Picture(String name, Date createDate, InputStream inStream){
+		this(name, createDate);
+		this.inStream = inStream;
+	}
+	
 	
 	public String getName(){
 		return name;
@@ -44,4 +53,9 @@ public class Picture {
 	public Date getCreationDate(){
 		return creationDate;
 	}
+	
+	public InputStream getInputStream(){
+		return inStream;
+	}
+	
 }
