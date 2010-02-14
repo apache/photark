@@ -59,8 +59,13 @@ public class AlbumImpl implements Album {
         this.name = name;
     }
 
+    /**
+     * Initialize the gallery service
+     *   - During initialization, check for local images and create a JCR album 
+     *     which is usefull for sample gallery shiped in the sample application.
+     */
     @Init
-    public void init() {
+    public synchronized void init() {
         System.out.println(">>> Initializing JCR Album");
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
@@ -131,7 +136,7 @@ public class AlbumImpl implements Album {
         this.location = location;
     }
 
-    public synchronized String[] getPictures() {
+    public String[] getPictures() {
         if (!initialized) {
             init();
         }
