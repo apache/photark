@@ -30,27 +30,26 @@ import javax.jcr.SimpleCredentials;
 import org.apache.jackrabbit.core.TransientRepository;
 
 public class JCRSession {
-	
-	private static Session session;
-	
-	private static void initSession(){
-		try {
-			Repository repository = new TransientRepository();
-			session = repository.login(new SimpleCredentials("username",
-					"password".toCharArray()));
-		} catch (LoginException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public synchronized static Session getSession(){
-		if(session == null){
-			initSession();
-		}
-		return session;
-	}
+
+    private static Session session;
+
+    private static void initSession() {
+        try {
+            Repository repository = new TransientRepository();
+            session = repository.login(new SimpleCredentials("username", "password".toCharArray()));
+        } catch (LoginException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized static Session getSession() {
+        if (session == null) {
+            initSession();
+        }
+        return session;
+    }
 }

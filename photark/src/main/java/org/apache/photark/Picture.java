@@ -28,34 +28,33 @@ import java.util.Properties;
  * Model representing an album image
  */
 public class Picture {
-	private String name;
-	private String description;
-	private Date creationDate;
-	private InputStream inStream;
-	
-	private List<Properties> imageProperties;
-	
-	public Picture(String name, Date createDate){
-		this.name = name;
-		this.creationDate = createDate;
-	}
-	
-	public Picture(String name, Date createDate, InputStream inStream){
-		this(name, createDate);
-		this.inStream = inStream;
-	}
-	
-	
-	public String getName(){
-		return name;
-	}
-	
-	public Date getCreationDate(){
-		return creationDate;
-	}
-	
-	public InputStream getInputStream(){
-		return inStream;
-	}
-	
+    private String name;
+    private String description;
+    private Date creationDate;
+    private InputStream inStream;
+
+    private List<Properties> imageProperties;
+
+    public Picture(String name, Date createDate) {
+        this.name = name;
+        this.creationDate = createDate;
+    }
+
+    public Picture(String name, Date createDate, InputStream inStream) {
+        this(name, createDate);
+        this.inStream = inStream;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public InputStream getInputStream() {
+        return inStream;
+    }
+
 }

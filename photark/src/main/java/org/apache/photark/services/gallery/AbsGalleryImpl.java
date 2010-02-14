@@ -22,93 +22,91 @@ package org.apache.photark.services.gallery;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
 import org.oasisopen.sca.annotation.Property;
 
 public abstract class AbsGalleryImpl implements Gallery {
-	
-	protected String name;
-	private String location;
-	protected boolean initialized;
-	protected List<Album> albums = new ArrayList<Album>();
 
-	public AbsGalleryImpl() {
+    protected String name;
+    private String location;
+    protected boolean initialized;
+    protected List<Album> albums = new ArrayList<Album>();
 
-	}
+    public AbsGalleryImpl() {
 
-	public AbsGalleryImpl(String name) {
-		this.name = name;
-	}
+    }
 
-	public abstract void init(); 
+    public AbsGalleryImpl(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public abstract void init();
 
-	@Property
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void addAlbum(Album album) {
+    @Property
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	}
+    public void addAlbum(Album album) {
 
-	public Album[] getAlbums() {
-		if(! initialized) {
-			init();
-		}
+    }
 
-		Album[] albumArray = new Album[albums.size()];
-		albums.toArray(albumArray);
-		return albumArray;
-	}
+    public Album[] getAlbums() {
+        if (!initialized) {
+            init();
+        }
 
-	public String getAlbumCover(String albumName) {
-		Album albumLookup = getAlbum(albumName);
-		
-		if (albumLookup != null) {
-			String [] pictures  = albumLookup.getPictures();
-			// this check is to avoid Exception
-			if(pictures.length > 0){
-				return albumLookup.getPictures()[0];
-			}
-			else{
-				System.out.println("No Album Cover Picture found for album:"+albumName);
-				return null;
-			}
-		} else {
-			//FIXME: return proper not found exception
-			return null;             
-		}
-	}
+        Album[] albumArray = new Album[albums.size()];
+        albums.toArray(albumArray);
+        return albumArray;
+    }
 
-	public String[] getAlbumPictures(String albumName) {
-		Album albumLookup = getAlbum(albumName);
+    public String getAlbumCover(String albumName) {
+        Album albumLookup = getAlbum(albumName);
 
-		if (albumLookup != null) {
-			return albumLookup.getPictures();
-		} else {
-			//FIXME: return proper not found exception
-			return new String[]{};             
-		}
-	}
+        if (albumLookup != null) {
+            String[] pictures = albumLookup.getPictures();
+            // this check is to avoid Exception
+            if (pictures.length > 0) {
+                return albumLookup.getPictures()[0];
+            } else {
+                System.out.println("No Album Cover Picture found for album:" + albumName);
+                return null;
+            }
+        } else {
+            // FIXME: return proper not found exception
+            return null;
+        }
+    }
 
-	private Album getAlbum(String albumName) {
-		Album albumLookup = null;
-		for(Album album : albums) {
-			if(album.getName().equalsIgnoreCase(albumName)) {
-				albumLookup = album;
-				break;
-			}
-		}
+    public String[] getAlbumPictures(String albumName) {
+        Album albumLookup = getAlbum(albumName);
 
-		return albumLookup;
-	}
+        if (albumLookup != null) {
+            return albumLookup.getPictures();
+        } else {
+            // FIXME: return proper not found exception
+            return new String[] {};
+        }
+    }
 
-	private String getLocation() {
-		return location;
-	}
+    private Album getAlbum(String albumName) {
+        Album albumLookup = null;
+        for (Album album : albums) {
+            if (album.getName().equalsIgnoreCase(albumName)) {
+                albumLookup = album;
+                break;
+            }
+        }
+
+        return albumLookup;
+    }
+
+    private String getLocation() {
+        return location;
+    }
 }

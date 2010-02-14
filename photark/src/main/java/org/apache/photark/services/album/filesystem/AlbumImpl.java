@@ -91,10 +91,10 @@ public class AlbumImpl implements Album {
     }
     
     public void addPicture(Picture picture){
-    	
+    	throw new UnsupportedOperationException("Not implemented");
     }
     
     public void deletePicture(Picture picture){
-    	
+        throw new UnsupportedOperationException("Not implemented");
     }
 }

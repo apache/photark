@@ -39,85 +39,80 @@ import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.jcr.AlbumImpl;
 
-public class PhotoUploadServlet extends HttpServlet
-{
-	private static final long serialVersionUID = 1L;
-	public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		doPost(request, response);
-	}
+public class PhotoUploadServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.setContentType("text/html");
-		
-		boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
-		if (!isMultipartContent) {
-			return;
-		}
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        doPost(request, response);
+    }
 
-		FileItemFactory factory = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
-		
-		try {
-			List<FileItem> fields = upload.parseRequest(request);
-			System.out.println("Number of fields: " + fields.size());
-			Iterator<FileItem> it = fields.iterator();
-			
-			if (!it.hasNext()) {
-				System.out.println("No fields found");
-				return;
-			}
-			
-			String albumName = "";
-			StringBuffer sb = new StringBuffer();
-			while (it.hasNext()) {
-				FileItem fileItem = it.next();
-				
-				if(fileItem.getFieldName().equalsIgnoreCase("albumname")){
-					albumName = fileItem.getString();
-				}
-				boolean isFormField = fileItem.isFormField();				 
-				
-				if(!isFormField)
-				{	
-					String fileName = fileItem.getName();
-					
-					InputStream inStream = fileItem.getInputStream();
-					
-					FileUploader uploader = new FileUploader();
-					List<Picture> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
-					
-					for(Picture picture :pictures){
-						addPictureToAlbum(albumName, picture);
-					}
-					sb.append("file=uploaded/" + fileName);
-					sb.append(",name="+fileName);
-					sb.append(",error=Not recognized file type");
-				}
-			}
-			PrintWriter out = response.getWriter();
-			out.write(sb.toString());
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
 
-		} catch (FileUploadException e) {
-			System.out.println("Error: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-	
-	/**
-	 * 
-	 * @param albumName String
-	 * @param picture Picture
-	 */
-	private void addPictureToAlbum(String albumName, Picture picture){
-		Album album = new AlbumImpl(albumName);
-		album.addPicture(picture);
-	}
+        boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
+        if (!isMultipartContent) {
+            return;
+        }
+
+        FileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
+
+        try {
+            List<FileItem> fields = upload.parseRequest(request);
+            System.out.println("Number of fields: " + fields.size());
+            Iterator<FileItem> it = fields.iterator();
+
+            if (!it.hasNext()) {
+                System.out.println("No fields found");
+                return;
+            }
+
+            String albumName = "";
+            StringBuffer sb = new StringBuffer();
+            while (it.hasNext()) {
+                FileItem fileItem = it.next();
+
+                if (fileItem.getFieldName().equalsIgnoreCase("albumname")) {
+                    albumName = fileItem.getString();
+                }
+                boolean isFormField = fileItem.isFormField();
+
+                if (!isFormField) {
+                    String fileName = fileItem.getName();
+
+                    InputStream inStream = fileItem.getInputStream();
+
+                    FileUploader uploader = new FileUploader();
+                    List<Picture> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
+
+                    for (Picture picture : pictures) {
+                        addPictureToAlbum(albumName, picture);
+                    }
+                    sb.append("file=uploaded/" + fileName);
+                    sb.append(",name=" + fileName);
+                    sb.append(",error=Not recognized file type");
+                }
+            }
+            PrintWriter out = response.getWriter();
+            out.write(sb.toString());
+
+        } catch (FileUploadException e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param albumName String
+     * @param picture Picture
+     */
+    private void addPictureToAlbum(String albumName, Picture picture) {
+        Album album = new AlbumImpl(albumName);
+        album.addPicture(picture);
+    }
 }
