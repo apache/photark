@@ -33,54 +33,54 @@ import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.oasisopen.sca.annotation.Init;
 
 public class ImageDisplayerImpl implements ImageDisplayer {
-	private Session session = JCRSession.getSession();
+    private Session session = JCRSession.getSession();
 
-	@Init
-	public void init() {
-	}
+    @Init
+    public void init() {
+    }
 
-	public ImageDisplayerImpl() {
-	}
+    public ImageDisplayerImpl() {
+    }
 
-	public InputStream get(String key) throws NotFoundException {
-		String sub = StringUtils.substringAfter(key, "splayer/");
-		String stringArray[] = StringUtils.split(sub, "/");
-		String albumName = stringArray[0];
-		InputStream inStream = null;
-		try {
-			Node root = session.getRootNode();
-			Node albumNode = root.getNode(albumName);
-			String image = stringArray[1];
-			Node picNode = albumNode.getNode(image);
-			inStream = picNode.getProperty("imageContent").getStream();
+    public InputStream get(String key) throws NotFoundException {
+        String sub = StringUtils.substringAfter(key, "splayer/");
+        String stringArray[] = StringUtils.split(sub, "/");
+        String albumName = stringArray[0];
+        InputStream inStream = null;
+        try {
+            Node root = session.getRootNode();
+            Node albumNode = root.getNode(albumName);
+            String image = stringArray[1];
+            Node picNode = albumNode.getNode(image);
+            inStream = picNode.getProperty("imageContent").getStream();
 
-		} catch (PathNotFoundException e) {
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}
-		return inStream;
-	}
+        } catch (PathNotFoundException e) {
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+        return inStream;
+    }
 
-	public Entry<String, InputStream>[] getAll() {
-		return null;
-	}
+    public Entry<String, InputStream>[] getAll() {
+        return null;
+    }
 
-	public void delete(String key) {
+    public void delete(String key) {
 
-	}
+    }
 
-	public void put(String key, InputStream inputStream) {
+    public void put(String key, InputStream inputStream) {
 
-	}
+    }
 
-	public String post(String key, InputStream inputStream) {
-		System.out.println("insdie post:" + key);
+    public String post(String key, InputStream inputStream) {
+        System.out.println("insdie post:" + key);
 
-		return key;
-	}
+        return key;
+    }
 
-	public Entry<String, InputStream>[] query(String queryString) {
-		return null;
-	}
+    public Entry<String, InputStream>[] query(String queryString) {
+        return null;
+    }
 }
