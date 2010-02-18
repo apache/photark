@@ -84,22 +84,11 @@
 			selectAlbum.options.length=0;
 			selectAlbum.options[selectAlbum.options.length] =  new Option("New Album", "New Album", true, false);
 	        for(var pos = 0; pos<albums.length; pos++) {	
-				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos], albums[pos], false, false);
+				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos].name, albums[pos].name, false, false);
 			}
 		});
 	}
-
-	function doUpload() {
-		console.log("doUpload");
-		var selected = dojo.byId("selectAlbum").value;
-		if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
-			alert("Photo Upload can not be started.Select Album before upload");
-		} else if(selected == "New Album") {
-			uploader.upload(dojo.byId("newAlbumName").value);
-		} else {
-			uploader.upload({selectAlbum:selected});
-		}
-	}
+	
 </script>
 </head>
 

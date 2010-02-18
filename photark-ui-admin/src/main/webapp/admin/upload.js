@@ -60,6 +60,21 @@ dojo.addOnLoad( function(){
 			deferredUploading:false
 		},fileUploaderConfig), "btnUploader");
 		
+		
+		doUpload = function(){
+			console.log("doUpload");
+			var selected = dojo.byId("selectAlbum").value;
+			console.log("selected:"+selected);
+			if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
+				alert("Photo Upload can not be started.Select Album before upload");
+			} else if(selected == "New Album") {
+				uploader.upload({albumname:dojo.byId("newAlbumName").value});
+			} else {
+				uploader.upload({albumname:selected});
+			}
+			dojo.byId("newAlbumName").value ="";
+		}
+		
 		/*
 		uploader.attr("disabled", dojo.byId("fGroup").value=="");
 		dojo.connect(dojo.byId("fGroup"), "keyup", function(){
