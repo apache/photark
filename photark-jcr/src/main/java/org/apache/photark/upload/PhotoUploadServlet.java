@@ -38,6 +38,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.photark.Picture;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.jcr.AlbumImpl;
+import org.apache.photark.services.gallery.Gallery;
+import org.apache.photark.services.gallery.jcr.GalleryImpl;
 
 public class PhotoUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -78,10 +80,10 @@ public class PhotoUploadServlet extends HttpServlet {
                     albumName = fileItem.getString();
                 }
                 boolean isFormField = fileItem.isFormField();
-
+                
                 if (!isFormField) {
                     String fileName = fileItem.getName();
-
+                    System.out.println("fileName:"+fileName);
                     InputStream inStream = fileItem.getInputStream();
 
                     FileUploader uploader = new FileUploader();
@@ -112,6 +114,8 @@ public class PhotoUploadServlet extends HttpServlet {
      * @param picture Picture
      */
     private void addPictureToAlbum(String albumName, Picture picture) {
+    	Gallery gallery = new GalleryImpl();
+    	gallery.addAlbum(albumName);
         Album album = new AlbumImpl(albumName);
         album.addPicture(picture);
     }
