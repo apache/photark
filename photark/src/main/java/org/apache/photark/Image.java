@@ -19,31 +19,39 @@
 
 package org.apache.photark;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
+
+import org.apache.photark.util.ImageMetadataScanner;
 
 /**
  * Model representing an album image
  */
 public class Image {
-    private String name;
+    private String imageName;
     private Date datePosted;
     private InputStream imageStream;
 
-    private List<Properties> imageProperties;
+    private List<ImageMetadata> imageAttributes;
 
     /**
      * Constructor
-     * @param name Image name
+     * @param imageFile a File representing the image
      * @param datePosted Date when image is being added
      */
-    public Image(String name, Date datePosted) {
-        this.name = name;
+    public Image(File imageFile, Date datePosted) {
+        this.imageName = imageFile.getName();
         this.datePosted = datePosted;
+        try {
+            this.imageStream = new FileInputStream(imageFile);
+        } catch(Exception fnf) {
+            fnf.printStackTrace();
+        }
     }
-
+    
     /**
      * Constructor
      * @param name Image name
@@ -51,7 +59,8 @@ public class Image {
      * @param imageStream Image stream content
      */
     public Image(String name, Date datePosted, InputStream imageStream) {
-        this(name, datePosted);
+        this.imageName = name;
+        this.datePosted = datePosted;
         this.imageStream = imageStream;
     }
 
@@ -60,7 +69,7 @@ public class Image {
      * @return image file name
      */
     public String getName() {
-        return name;
+        return imageName;
     }
 
     /**
@@ -77,6 +86,17 @@ public class Image {
      */
     public InputStream getImageAsStream() {
         return imageStream;
+    }
+    
+    /**
+     * Return image metadata retrieved from EFIX properties
+     * @return list of image metadata attributes
+     */
+    public List<ImageMetadata> getImageMetadata() {
+        if(imageAttributes == null) {
+            imageAttributes = ImageMetadataScanner.scanImageMetadata(imageName, imageStream);
+        }
+        return imageAttributes;
     }
 
 }
