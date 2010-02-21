@@ -27,7 +27,7 @@ import java.util.Properties;
 /**
  * Model representing an album image
  */
-public class Picture {
+public class Image {
     private String name;
     private String description;
     private Date creationDate;
@@ -35,12 +35,12 @@ public class Picture {
 
     private List<Properties> imageProperties;
 
-    public Picture(String name, Date createDate) {
+    public Image(String name, Date createDate) {
         this.name = name;
         this.creationDate = createDate;
     }
 
-    public Picture(String name, Date createDate, InputStream inStream) {
+    public Image(String name, Date createDate, InputStream inStream) {
         this(name, createDate);
         this.inStream = inStream;
     }

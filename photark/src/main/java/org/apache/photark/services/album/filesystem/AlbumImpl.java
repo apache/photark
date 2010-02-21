@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Init;
@@ -90,11 +90,11 @@ public class AlbumImpl implements Album {
         return pictureArray;
     }
     
-    public void addPicture(Picture picture){
+    public void addPicture(Image picture){
     	throw new UnsupportedOperationException("Not implemented");
     }
     
-    public void deletePicture(Picture picture){
+    public void deletePicture(Image picture){
         throw new UnsupportedOperationException("Not implemented");
     }
 }

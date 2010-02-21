@@ -35,7 +35,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.jcr.AlbumImpl;
 import org.apache.photark.services.gallery.Gallery;
@@ -87,9 +87,9 @@ public class PhotoUploadServlet extends HttpServlet {
                     InputStream inStream = fileItem.getInputStream();
 
                     FileUploader uploader = new FileUploader();
-                    List<Picture> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
+                    List<Image> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
 
-                    for (Picture picture : pictures) {
+                    for (Image picture : pictures) {
                         addPictureToAlbum(albumName, picture);
                     }
                     sb.append("file=uploaded/" + fileName);
@@ -113,10 +113,10 @@ public class PhotoUploadServlet extends HttpServlet {
      * @param albumName String
      * @param picture Picture
      */
-    private void addPictureToAlbum(String albumName, Picture picture) {
+    private void addPictureToAlbum(String albumName, Image image) {
     	Gallery gallery = new GalleryImpl();
     	gallery.addAlbum(albumName);
         Album album = new AlbumImpl(albumName);
-        album.addPicture(picture);
+        album.addPicture(image);
     }
 }

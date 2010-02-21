@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 
 public class FileUploader {
 
@@ -36,16 +36,16 @@ public class FileUploader {
     public FileUploader() {
     }
 
-    public List<Picture> uploadFile(InputStream inStream, String fileName) throws IOException {
+    public List<Image> uploadFile(InputStream inStream, String fileName) throws IOException {
 
-        List<Picture> pictures = new ArrayList<Picture>();
+        List<Image> pictures = new ArrayList<Image>();
 
         if (isArchive(inStream)) {
             ArchiveFileExtractor archiveFileExtractor = new ArchiveFileExtractor(entryTypes);
             pictures = archiveFileExtractor.extractArchive(inStream);
         } else {
             // this is a picture file and not the archive file
-            Picture picture = new Picture(fileName, new Date(), inStream);
+            Image picture = new Image(fileName, new Date(), inStream);
             pictures.add(picture);
         }
         return pictures;

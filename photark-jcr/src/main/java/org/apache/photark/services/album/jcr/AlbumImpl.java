@@ -33,7 +33,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
 import org.apache.photark.services.gallery.jcr.JCRSession;
@@ -181,7 +181,7 @@ public class AlbumImpl implements Album {
 
     }
 
-    public void addPicture(Picture picture) {
+    public void addPicture(Image picture) {
         try {
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
@@ -196,7 +196,7 @@ public class AlbumImpl implements Album {
         }
     }
 
-    public void deletePicture(Picture picture) {
+    public void deletePicture(Image picture) {
         try {
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);

@@ -31,7 +31,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.io.IOUtils;
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 
 public class ArchiveFileExtractor {
     private String entryTypes[];
@@ -40,9 +40,9 @@ public class ArchiveFileExtractor {
         this.entryTypes = entryTypes;
     }
 
-    public List<Picture> extractArchive(InputStream inStream) {
+    public List<Image> extractArchive(InputStream inStream) {
         ArchiveStreamFactory streamFactory = new ArchiveStreamFactory();
-        List<Picture> pictures = new ArrayList<Picture>();
+        List<Image> pictures = new ArrayList<Image>();
         try {
             ArchiveInputStream archiveInputStream = streamFactory.createArchiveInputStream(inStream);
             ArchiveEntry entry = null;
@@ -50,7 +50,7 @@ public class ArchiveFileExtractor {
                 if (!entry.isDirectory() && isEntryTypeAllowd(entry)) {
                     byte buf[] = IOUtils.toByteArray(archiveInputStream);
                     InputStream inputStream = new ByteArrayInputStream(buf);
-                    Picture picture = new Picture(entry.getName(), new Date(), inputStream);
+                    Image picture = new Image(entry.getName(), new Date(), inputStream);
                     pictures.add(picture);
                 }
             }

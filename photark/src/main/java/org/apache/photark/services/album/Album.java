@@ -19,7 +19,7 @@
 
 package org.apache.photark.services.album;
 
-import org.apache.photark.Picture;
+import org.apache.photark.Image;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
@@ -35,7 +35,7 @@ public interface Album {
     
     String[] getPictures();
     
-    void addPicture(Picture picture);
+    void addPicture(Image picture);
     
-    void deletePicture(Picture picture);
+    void deletePicture(Image picture);
 }
