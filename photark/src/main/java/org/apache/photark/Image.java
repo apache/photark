@@ -29,32 +29,54 @@ import java.util.Properties;
  */
 public class Image {
     private String name;
-    private String description;
-    private Date creationDate;
-    private InputStream inStream;
+    private Date datePosted;
+    private InputStream imageStream;
 
     private List<Properties> imageProperties;
 
-    public Image(String name, Date createDate) {
+    /**
+     * Constructor
+     * @param name Image name
+     * @param datePosted Date when image is being added
+     */
+    public Image(String name, Date datePosted) {
         this.name = name;
-        this.creationDate = createDate;
+        this.datePosted = datePosted;
     }
 
-    public Image(String name, Date createDate, InputStream inStream) {
-        this(name, createDate);
-        this.inStream = inStream;
+    /**
+     * Constructor
+     * @param name Image name
+     * @param datePosted Date when image is being added
+     * @param imageStream Image stream content
+     */
+    public Image(String name, Date datePosted, InputStream imageStream) {
+        this(name, datePosted);
+        this.imageStream = imageStream;
     }
 
+    /**
+     * Get image file name
+     * @return image file name
+     */
     public String getName() {
         return name;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    /**
+     * Get date when image was posted
+     * @return date posted
+     */
+    public Date getDatePosted() {
+        return datePosted;
     }
 
-    public InputStream getInputStream() {
-        return inStream;
+    /**
+     * Return image content as stream
+     * @return image stream
+     */
+    public InputStream getImageAsStream() {
+        return imageStream;
     }
 
 }

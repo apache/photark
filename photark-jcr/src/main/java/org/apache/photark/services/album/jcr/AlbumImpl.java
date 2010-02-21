@@ -186,8 +186,8 @@ public class AlbumImpl implements Album {
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
             Node picNode = albumNode.addNode(picture.getName());
-            picture.getInputStream();
-            picNode.setProperty("imageContent", picture.getInputStream());
+            picture.getImageAsStream();
+            picNode.setProperty("imageContent", picture.getImageAsStream());
             picNode.setProperty("name", picture.getName());
             picNode.setProperty("location", picture.getName());
             session.save();
