@@ -89,7 +89,7 @@ public class Image {
     }
     
     /**
-     * Return image metadata retrieved from EFIX properties
+     * Return image metadata retrieved from EXIF properties
      * @return list of image metadata attributes
      */
     public List<ImageMetadata> getImageMetadata() {

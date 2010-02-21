@@ -86,7 +86,7 @@ public class ImageMetadataScanner {
     }
 
     /**
-     * Check if an eFix attribute is available and ad that to the metadata attribute list
+     * Check if an EXIF attribute is available and ad that to the metadata attribute list
      * @param metadataAttributes
      * @param jpegMetadata
      * @param tagInfo
@@ -101,10 +101,10 @@ public class ImageMetadataScanner {
     }
 
     /**
-     * Return Efix information wrapped into a ImageMetadata
-     * @param jpegMetadata Collection of the efix metadatas
+     * Return EXIF information wrapped into a ImageMetadata
+     * @param jpegMetadata Collection of the EXIF metadatas
      * @param tagInfo the specific tagInfo being retrieved
-     * @return the eFix information wrapped into a ImageMetadata
+     * @return the EXIF information wrapped into a ImageMetadata
      * @throws ImageReadException
      * @throws IOException
      */

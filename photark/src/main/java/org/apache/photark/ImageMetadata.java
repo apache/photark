@@ -22,7 +22,7 @@ package org.apache.photark;
 import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
 
 /**
- * Represent a EFIX Metatada attribute/value from 
+ * Represent a EXIF Metatada attribute/value from 
  * It implements the ExifTagConstants from Sanselan to leverage it's sxit field contants
  */
 public class ImageMetadata implements ExifTagConstants {
@@ -39,7 +39,7 @@ public class ImageMetadata implements ExifTagConstants {
     }
     
     /**
-     * Return EFIX Metadata attribute name
+     * Return EXIF Metadata attribute name
      * @return
      */
     public String getKey() {
@@ -47,7 +47,7 @@ public class ImageMetadata implements ExifTagConstants {
     }
     
     /**
-     * Set EFIX Metadata attribute name
+     * Set EXIF Metadata attribute name
      * @param key
      */
     public void setKey(String key) {
@@ -55,7 +55,7 @@ public class ImageMetadata implements ExifTagConstants {
     }
     
     /**
-     * Get EFIX Metadata attribute value
+     * Get EXIF Metadata attribute value
      * @return
      */
     public String getValue() {
@@ -63,7 +63,7 @@ public class ImageMetadata implements ExifTagConstants {
     }
     
     /**
-     * Set EFIX Metadata attribute value
+     * Set EXIF Metadata attribute value
      * @param value
      */
     public void setValue(String value) {
