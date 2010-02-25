@@ -56,6 +56,7 @@
 	dojo.require("dojo.rpc.JsonService");
 
 	var gallery = new dojo.rpc.JsonService("/photark/Gallery?smd");
+    var loadSelected = false;
 	
 	function createAlbum(){
 		var albumLabel = newAlbumForm.attr('value');
@@ -69,10 +70,15 @@
 		gallery.addAlbum(albumName);
 		dojo.byId('albumCreated').innerHTML = "Album Successfully Created:" + albumName;
 		dojo.byId('albumName').value = "";
+		loadSelected = true;
 	}
 		
 		
 	function populateSelect(){
+	    if (loadSelected) {
+	        return;
+	    }
+
 		gallery.getAlbums().addCallback( function(albums, exception) {
 			if(exception) {
 				alert(exception.msg);
@@ -86,6 +92,8 @@
 	        for(var pos = 0; pos<albums.length; pos++) {	
 				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos].name, albums[pos].name, false, false);
 			}
+
+	        loadSelected = true;
 		});
 	}
 	
