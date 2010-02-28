@@ -41,8 +41,13 @@ import org.apache.photark.services.album.jcr.AlbumImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.apache.photark.services.gallery.jcr.GalleryImpl;
 
+/**
+ * Servlet responsible for receiving image uploads
+ * Album name is passed with the post, and should be created in case of new album 
+ */
 public class PhotoUploadServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = -7842318322982743234L;
     public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,7 +81,7 @@ public class PhotoUploadServlet extends HttpServlet {
             while (it.hasNext()) {
                 FileItem fileItem = it.next();
 
-                if (fileItem.getFieldName().equalsIgnoreCase("albumname")) {
+                if (fileItem.getFieldName().equalsIgnoreCase("albumName")) {
                     albumName = fileItem.getString();
                 }
                 boolean isFormField = fileItem.isFormField();
