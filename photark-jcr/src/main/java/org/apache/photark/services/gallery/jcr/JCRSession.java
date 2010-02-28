@@ -52,4 +52,14 @@ public class JCRSession {
         }
         return session;
     }
+    
+    public void releaseSession() {
+        if(session != null) {
+            session.logout();
+        }
+    }
+    
+    public void destroy() {
+        releaseSession();
+    }
 }
