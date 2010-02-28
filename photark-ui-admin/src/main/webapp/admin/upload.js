@@ -63,35 +63,24 @@ dojo.addOnLoad( function(){
 		
 		doUpload = function(){
 			console.log("doUpload");
-			var selected = dojo.byId("selectAlbum").value;
+			var selectAlbum = dojo.byId("selectAlbum");
+			var selected = selectAlbum.value;
 			console.log("selected:"+selected);
 			if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
 				alert("Photo Upload can not be started.Select Album before upload");
 			} else if(selected == "New Album") {
-				uploader.upload({albumname:dojo.byId("newAlbumName").value});
+				var albumName = dojo.byId("newAlbumName").value;
+				//add new album to list of albums
+				selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
+				//upload the files
+				uploader.upload({albumName:albumName});
 			} else {
-				uploader.upload({albumname:selected});
+				//upload files to existent album
+				uploader.upload({albumName:selected});
 			}
 			dojo.byId("newAlbumName").value ="";
+			
 		}
-		
-		/*
-		uploader.attr("disabled", dojo.byId("fGroup").value=="");
-		dojo.connect(dojo.byId("fGroup"), "keyup", function(){
-			uploader.attr("disabled", dojo.byId("fGroup").value=="");
-		});
-		dojo.connect(dijit.byId("fSubmit"), "onClick", function(){
-			uploader.submit(dojo.byId("formF"));
-		});
-		dojo.connect(f, "onChange", function(dataArray){
-			console.log("onChange.data:", dataArray);
-		});
-		dojo.connect(f, "onComplete", function(dataArray){
-			dojo.forEach(dataArray, function(d){
-				addThumb(d, "fThumbs");
-			});
-		});
-		*/
 	}
 
 });

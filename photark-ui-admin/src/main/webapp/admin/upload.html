@@ -56,29 +56,8 @@
 	dojo.require("dojo.rpc.JsonService");
 
 	var gallery = new dojo.rpc.JsonService("/photark/Gallery?smd");
-    var loadSelected = false;
-	
-	function createAlbum(){
-		var albumLabel = newAlbumForm.attr('value');
-		console.log("albumLabel:"+albumLabel);	
-		var albumName;
-		for(var key in albumLabel){
-			albumName = albumLabel[key];
-			console.log("albumName:"+albumName);
-		}
-		console.log("albumName:"+albumName);
-		gallery.addAlbum(albumName);
-		dojo.byId('albumCreated').innerHTML = "Album Successfully Created:" + albumName;
-		dojo.byId('albumName').value = "";
-		loadSelected = true;
-	}
-		
-		
+					
 	function populateSelect(){
-	    if (loadSelected) {
-	        return;
-	    }
-
 		gallery.getAlbums().addCallback( function(albums, exception) {
 			if(exception) {
 				alert(exception.msg);
@@ -93,17 +72,17 @@
 				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos].name, albums[pos].name, false, false);
 			}
 
-	        loadSelected = true;
 		});
 	}
-	
+
+	dojo.addOnLoad( function() { populateSelect(); });
 </script>
 </head>
 
 <body>
 
 	<label>Select Album:</label>
-	<select  id="selectAlbum" name="selectAlbum" autoComplete="true" onfocus="populateSelect()"/>
+	<select  id="selectAlbum" name="selectAlbum" autoComplete="true"/>
 	
 	</br>
 	
