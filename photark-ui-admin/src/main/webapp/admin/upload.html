@@ -23,7 +23,7 @@
 <script type="text/javascript" src="../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
 <script type="text/javascript" src="upload.js" charset="utf-8"></script>
 
-<link href="admin.css" rel="stylesheet">
+<link href="upload.css" rel="stylesheet">
 
 <style type="text/css">
 	.uploadBtn{
@@ -80,27 +80,31 @@
 </head>
 
 <body>
-
-	<label>Select Album:</label>
-	<select  id="selectAlbum" name="selectAlbum" autoComplete="true"/>
-	
-	</br>
-	
-	<div id="divNewAlbum">
-		<label>New Album:</label>
-		<input id="newAlbumName" name="newAlbumName">
-    </div>
-
-	</br>
-	</br>    
-    </br>
-    
-
-    <div id="btnUploader" class="uploadBtn btn">Select Files</div>
-
-	<label>Files:</label>
-	<div id="files" class="field"></div>
-
-    <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">Upload</div>	
+    <div id="newAlbum">
+	  <fieldset id="newAlbumDetails">
+		  <legend>Album Details</legend>
+		  <ol>
+			  <li>
+				  <label for="selectAlbum">Select Album:</label>
+				  <select  id="selectAlbum" name="selectAlbum" autoComplete="true"/>
+				  <label>New Album:</label>
+				  <input type="text" class="text" name="newAlbumName" id="newAlbumName">
+			  </li>
+			  <li>
+				  <label for="albumDescription">Album Description</label>
+				  <textarea cols="25" rows="5" class="textarea" name="albumDescription" id="albumDescription"/>
+				  </textarea>
+			  </li>
+              <li>
+                 <label>Files:</label>
+                 <div id="files" class="field"></div>
+              </li>
+              <li>
+                  <div id="btnUploader" class="uploadBtn btn">Select Files</div>
+                  <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">Upload</div>	
+              </li>
+		  </ol>
+	  </fieldset>
+	</div>
 </body>
 </html>
