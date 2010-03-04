@@ -103,7 +103,7 @@
 			
 				var albumName = galleryAlbums[i].name;
 				var img = document.createElement("img");
-				img.src = window.location.href + "ImageDisplayer/"+ albumName +"/" + albumCovers[i];
+				img.src = window.location.href + "gallery/"+ albumName +"/" + albumCovers[i];
 				var img_html = "<img src=" + img.src + " class=\"slideImage\" height=25% width=25% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
 				var html = "<a href=\"javascript:initializeAlbum('" + albumName + "')\">" + img_html + "</a>";
 				column.innerHTML = html;
@@ -163,7 +163,7 @@
 	        document.getElementById("albumImage").width=this.width;
 	        document.getElementById("albumImage").height=this.height;
 	    }
-	    img.src = window.location.href + "ImageDisplayer/"+ this.albumName +"/" + albumItems[albumPos];
+	    img.src = window.location.href + "gallery/"+ this.albumName +"/" + albumItems[albumPos];
 	    return false;
 	}
 	

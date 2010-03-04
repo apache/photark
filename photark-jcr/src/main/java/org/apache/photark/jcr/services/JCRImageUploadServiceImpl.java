@@ -17,41 +17,60 @@
  * under the License.
  */
 
-package org.apache.photark.upload;
+package org.apache.photark.jcr.services;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.photark.Image;
+import org.apache.photark.jcr.util.ArchiveFileExtractor;
+import org.apache.photark.services.ImageUploadService;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.jcr.AlbumImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.apache.photark.services.gallery.jcr.GalleryImpl;
+import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Scope;
 
 /**
  * Servlet responsible for receiving image uploads
  * Album name is passed with the post, and should be created in case of new album 
  */
-public class PhotoUploadServlet extends HttpServlet {
+@Scope("COMPOSITE")
+public class JCRImageUploadServiceImpl extends HttpServlet implements ImageUploadService {
+    private static final Logger logger = Logger.getLogger(JCRImageUploadServiceImpl.class.getName());
 
     private static final long serialVersionUID = -7842318322982743234L;
     public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doPost(request, response);
+    
+    private String supportedImageTypes[] = {".jpg", ".jpeg", ".png", ".gif"};
+    
+    private ServletFileUpload upload;
+    
+    /**
+     * Initialize the component.
+     */
+    @Init
+    public void initialize() throws IOException {
+        upload = new ServletFileUpload(new DiskFileItemFactory());
+        upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -62,24 +81,25 @@ public class PhotoUploadServlet extends HttpServlet {
             return;
         }
 
-        FileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
-
         try {
-            List<FileItem> fields = upload.parseRequest(request);
-            System.out.println("Number of fields: " + fields.size());
-            Iterator<FileItem> it = fields.iterator();
+            List<FileItem> fields = (List<FileItem>) upload.parseRequest(request);
+            if(logger.isLoggable(Level.INFO)) {
+                logger.log(Level.INFO, "Number of fields: " + fields.size());
+            }
+            
+            Iterator<FileItem> fileItems = fields.iterator();
 
-            if (!it.hasNext()) {
-                System.out.println("No fields found");
+            if (!fileItems.hasNext()) {
+                if(logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO, "No fields found");
+                }
                 return;
             }
 
             String albumName = "";
             StringBuffer sb = new StringBuffer();
-            while (it.hasNext()) {
-                FileItem fileItem = it.next();
+            while (fileItems.hasNext()) {
+                FileItem fileItem = fileItems.next();
 
                 if (fileItem.getFieldName().equalsIgnoreCase("albumName")) {
                     albumName = fileItem.getString();
@@ -88,18 +108,29 @@ public class PhotoUploadServlet extends HttpServlet {
                 
                 if (!isFormField) {
                     String fileName = fileItem.getName();
-                    System.out.println("fileName:"+fileName);
-                    InputStream inStream = fileItem.getInputStream();
+                    
+                    if(logger.isLoggable(Level.INFO)) {
+                        logger.log(Level.INFO, "fileName:"+fileName);
+                    }
 
-                    FileUploader uploader = new FileUploader();
-                    List<Image> pictures = uploader.uploadFile(new BufferedInputStream(inStream), fileName);
+                    InputStream inStream = fileItem.getInputStream();
+                    List<Image> pictures = new ArrayList<Image>();
+
+                    if (isArchive(inStream)) {
+                        ArchiveFileExtractor archiveFileExtractor = new ArchiveFileExtractor(supportedImageTypes);
+                        pictures = archiveFileExtractor.extractArchive(inStream);
+                    } else {
+                        // this is a picture file and not the archive file
+                        Image picture = new Image(fileName, new Date(), inStream);
+                        pictures.add(picture);
+                    }
 
                     for (Image picture : pictures) {
                         addPictureToAlbum(albumName, picture);
                     }
                     sb.append("file=uploaded/" + fileName);
                     sb.append(",name=" + fileName);
-                    sb.append(",error=Not recognized file type");
+                    //sb.append(",error=Not recognized file type");
                 }
             }
             PrintWriter out = response.getWriter();
@@ -123,5 +154,22 @@ public class PhotoUploadServlet extends HttpServlet {
     	gallery.addAlbum(albumName);
         Album album = new AlbumImpl(albumName);
         album.addPicture(image);
+    }
+    
+    /**
+     * Test whether this stream is of archive or not
+     * 
+     * @param inStream InputStream
+     * @return boolean
+     */
+    private static boolean isArchive(InputStream inStream) {
+        ArchiveStreamFactory streamFactory = new ArchiveStreamFactory();
+        try {
+            streamFactory.createArchiveInputStream(inStream);
+            return true;
+        } catch (ArchiveException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

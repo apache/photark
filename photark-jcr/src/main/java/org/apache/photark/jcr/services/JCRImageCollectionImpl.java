@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.photark.services;
+package org.apache.photark.jcr.services;
 
 import java.io.InputStream;
 
@@ -25,25 +25,41 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.servlet.Servlet;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.photark.services.ImageCollection;
 import org.apache.photark.services.gallery.jcr.JCRSession;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
+import org.oasisopen.sca.annotation.Destroy;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.Service;
 
-public class ImageDisplayerImpl implements ImageDisplayer {
+/**
+ * JCR based implementation of the Image collection component 
+ * Used to retrieve image files from the JCR repository
+ */
+@Scope("COMPOSITE")
+@Service(ImageCollection.class)
+public class JCRImageCollectionImpl implements ImageCollection {
     private Session session = JCRSession.getSession();
 
     @Init
     public void init() {
     }
+    
+    @Destroy
+    public void destroy() {    
+    }
 
-    public ImageDisplayerImpl() {
+    public JCRImageCollectionImpl() {
+        
     }
 
     public InputStream get(String key) throws NotFoundException {
-        String sub = StringUtils.substringAfter(key, "splayer/");
+        String sub = StringUtils.substringAfter(key, "gallery/");
         String stringArray[] = StringUtils.split(sub, "/");
         String albumName = stringArray[0];
         InputStream inStream = null;

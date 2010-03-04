@@ -27,14 +27,14 @@
    		<property name="name">gallery</property>
    		<service name="Gallery">
    			<interface.java interface="org.apache.photark.services.gallery.Gallery"/>
-   			<tuscany:binding.jsonrpc uri="/Gallery"/>
+   			<tuscany:binding.jsonrpc uri="/GalleryService"/>
    		</service>
     </component>
     
-    <component name="ImageDisplayer">
-		<implementation.java class="org.apache.photark.services.ImageDisplayerImpl"/>
-		<service name="ImageDisplayer">
-			<tuscany:binding.http uri="/ImageDisplayer"/>
+    <component name="ImageServiceComponent">
+		<implementation.java class="org.apache.photark.jcr.services.JCRImageCollectionImpl"/>
+		<service name="ImageCollection">
+			<tuscany:binding.http uri="/gallery"/>
 		</service>    	  	
 	</component>
     

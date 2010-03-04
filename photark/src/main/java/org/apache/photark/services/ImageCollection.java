@@ -24,7 +24,10 @@ import java.io.InputStream;
 import org.apache.tuscany.sca.data.collection.Collection;
 import org.oasisopen.sca.annotation.Remotable;
 
+/**
+ * Image collection component
+ */
 @Remotable
-public interface ImageDisplayer extends Collection<String, InputStream> {
+public interface ImageCollection extends Collection<String, InputStream> {
 
 }

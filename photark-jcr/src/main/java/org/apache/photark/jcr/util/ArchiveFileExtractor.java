@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.upload;
+package org.apache.photark.jcr.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
