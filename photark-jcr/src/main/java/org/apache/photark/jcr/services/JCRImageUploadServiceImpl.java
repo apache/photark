@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,20 +43,21 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.photark.Image;
 import org.apache.photark.jcr.util.ArchiveFileExtractor;
-import org.apache.photark.services.ImageUploadService;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.jcr.AlbumImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.apache.photark.services.gallery.jcr.GalleryImpl;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.Service;
 
 /**
  * Servlet responsible for receiving image uploads
  * Album name is passed with the post, and should be created in case of new album 
  */
+@Service(Servlet.class)
 @Scope("COMPOSITE")
-public class JCRImageUploadServiceImpl extends HttpServlet implements ImageUploadService {
+public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*ImageUploadService*/ {
     private static final Logger logger = Logger.getLogger(JCRImageUploadServiceImpl.class.getName());
 
     private static final long serialVersionUID = -7842318322982743234L;
@@ -73,6 +76,16 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements ImageUploa
         upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        
+        PrintWriter out = response.getWriter();
+        out.write("<html><body><h1>Photark Upload Service</h1></body></html>");
+    }
+
+
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
 

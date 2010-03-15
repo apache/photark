@@ -25,7 +25,6 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.servlet.Servlet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.photark.services.ImageCollection;

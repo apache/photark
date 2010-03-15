@@ -39,7 +39,7 @@ dojo.addOnLoad( function(){
 		hoverClass:"uploadHover",
 		activeClass:"uploadPress",
 		disabledClass:"uploadDisabled",
-		uploadUrl:"Upload",
+		uploadUrl:"upload",
 		fileMask:[
 			["Jpeg File", 	       "*.jpg;*.jpeg"],
 			["GIF File", 	       "*.gif"],

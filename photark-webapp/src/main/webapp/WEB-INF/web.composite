@@ -22,6 +22,7 @@
 		targetNamespace="http://org.apache.photoark"
 		name="photo-gallery-jcr">
   
+    <!-- Facade component for Gallery -->
     <component name="Gallery">
    		<implementation.java class="org.apache.photark.services.gallery.jcr.GalleryImpl"/>
    		<property name="name">gallery</property>
@@ -31,6 +32,7 @@
    		</service>
     </component>
     
+    <!-- Component responsible for providing REST access to images -->
     <component name="ImageServiceComponent">
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageCollectionImpl"/>
 		<service name="ImageCollection">
@@ -38,4 +40,11 @@
 		</service>    	  	
 	</component>
     
+    <!-- Component responsible for providing upload support for gallery/album -->
+    <component name="ImageUploadServiceComponent">
+		<implementation.java class="org.apache.photark.jcr.services.JCRImageUploadServiceImpl"/>
+		<service name="ImageUploadService">
+			<tuscany:binding.http uri="/admin/upload"/>
+		</service>    	  	
+	</component>    
 </composite>
