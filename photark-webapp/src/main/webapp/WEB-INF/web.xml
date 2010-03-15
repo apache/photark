@@ -41,6 +41,11 @@
 		<welcome-file>gallery.html</welcome-file>
 	</welcome-file-list>
 
+    <security-role>
+	    <description>Administrator</description>
+	    <role-name>photark-admin</role-name>
+	</security-role>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Areas with authentication required</web-resource-name>
@@ -54,6 +59,6 @@
 
 	<login-config>
 		<auth-method>BASIC</auth-method>
-		<realm-name>ldap-realm</realm-name>
+		<realm-name>photark-admin-realm</realm-name>
 	</login-config>
 </web-app>
