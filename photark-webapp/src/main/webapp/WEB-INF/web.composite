@@ -43,7 +43,7 @@
     <!-- Component responsible for providing upload support for gallery/album -->
     <component name="ImageUploadServiceComponent">
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageUploadServiceImpl"/>
-		<service name="ImageUploadService">
+		<service name="Servlet">
 			<tuscany:binding.http uri="/admin/upload"/>
 		</service>    	  	
 	</component>    

@@ -19,6 +19,7 @@
 
 package org.apache.photark.jcr.services;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -126,7 +127,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
                         logger.log(Level.INFO, "fileName:"+fileName);
                     }
 
-                    InputStream inStream = fileItem.getInputStream();
+                    InputStream inStream = new BufferedInputStream(fileItem.getInputStream());
                     List<Image> pictures = new ArrayList<Image>();
 
                     if (isArchive(inStream)) {
