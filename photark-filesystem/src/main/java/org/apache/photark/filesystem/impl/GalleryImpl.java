@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.photark.services.gallery.filesystem;
+package org.apache.photark.filesystem.impl;
 
 import java.io.File;
 import java.net.URL;
@@ -60,7 +60,7 @@ public class GalleryImpl extends AbsGalleryImpl implements Gallery {
 					for(File albumFile : albums) {
 						if(! albumFile.getName().startsWith(".")) {
 							if(albumFile.isDirectory() && albumFile.exists()) {
-								Album newAlbum = new org.apache.photark.services.album.filesystem.AlbumImpl();
+								Album newAlbum = new org.apache.photark.filesystem.impl.AlbumImpl();
 								newAlbum.setName(albumFile.getName());
 								newAlbum.setLocation(albumFile.getPath());
 								this.albums.add(newAlbum);

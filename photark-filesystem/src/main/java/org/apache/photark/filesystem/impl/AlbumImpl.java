@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.services.album.filesystem;
+package org.apache.photark.filesystem.impl;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -168,6 +168,7 @@
             </activation>
             <modules>
                 <module>photark</module>
+                <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>

@@ -17,10 +17,11 @@
  * under the License.    
  */
 
-package org.apache.photark.services.gallery.filesystem;
+package org.apache.photark.filesystem.impl;
 
 import junit.framework.Assert;
 
+import org.apache.photark.filesystem.impl.GalleryImpl;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.Gallery;
 import org.junit.BeforeClass;
