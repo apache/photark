@@ -82,9 +82,21 @@ dojo.addOnLoad( function(){
 				//upload files to existent album
 				uploader.upload({albumName:selected});
 			}
-			dojo.byId("newAlbumName").value ="";
+			//dojo.byId("newAlbumName").value ="";
 			
 		}
+		
+		dojo.connect(uploader, "onComplete", function(dataArray){
+			dojo.byId("newAlbumName").value ="";
+		});
+
+		dojo.connect(uploader, "onError", function(err){
+			if(err && err.text) {
+				console.error("Error uploading files:" + err.text);
+				//alert("Error uploading files:" + err.text);
+			}
+		});
+		
 	}
 
 });
