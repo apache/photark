@@ -70,10 +70,14 @@ dojo.addOnLoad( function(){
 				alert("Photo Upload can not be started.Select Album before upload");
 			} else if(selected == "New Album") {
 				var albumName = dojo.byId("newAlbumName").value;
-				//add new album to list of albums
-				selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
-				//upload the files
-				uploader.upload({albumName:albumName});
+				if( albumName == null || (albumName != null && albumName == "" && albumName.length == 0)) {
+					alert("Photo Upload can not be started.Enter the new album name");
+				} else {
+					//add new album to list of albums
+					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
+					//upload the files
+					uploader.upload({albumName:albumName});
+				}
 			} else {
 				//upload files to existent album
 				uploader.upload({albumName:selected});
