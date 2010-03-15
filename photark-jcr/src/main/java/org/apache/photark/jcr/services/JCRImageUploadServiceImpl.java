@@ -43,12 +43,12 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.photark.Image;
+import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.jcr.util.ArchiveFileExtractor;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.jcr.AlbumImpl;
 import org.apache.photark.services.gallery.Gallery;
-import org.apache.photark.services.gallery.jcr.GalleryImpl;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -66,7 +66,11 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
     
     private String supportedImageTypes[] = {".jpg", ".jpeg", ".png", ".gif"};
     
+    private JCRRepositoryManager repositoryManager;
+    
     private ServletFileUpload upload;
+    
+    private Gallery gallery;
     
     /**
      * Initialize the component.
@@ -77,6 +81,20 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
         upload.setSizeMax(MAX_UPLOAD_ZIP_IN_MEGS * 1024 * 1024);
     }
 
+    public JCRImageUploadServiceImpl() {
+
+    }
+    
+    @Reference(name="repositoryManager")
+    protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
+        this.repositoryManager = repositoryManager;
+    }
+
+    @Reference(name="gallery")
+    protected void setGallery(Gallery gallery) {
+        this.gallery = gallery;
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -85,7 +103,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
         out.write("<html><body><h1>Photark Upload Service</h1></body></html>");
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
@@ -151,11 +169,11 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
             out.write(sb.toString());
 
         } catch (FileUploadException e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            logger.info("Error uploading file : " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error uploading file : " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            logger.info("Error uploading file : " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error uploading file : " + e.getMessage());
         }
     }
 
@@ -164,9 +182,8 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
      * @param picture Picture
      */
     private void addPictureToAlbum(String albumName, Image image) {
-    	Gallery gallery = new GalleryImpl();
     	gallery.addAlbum(albumName);
-        Album album = new AlbumImpl(albumName);
+        Album album = new JCRAlbumImpl(repositoryManager, albumName);
         album.addPicture(image);
     }
     
@@ -182,7 +199,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
             streamFactory.createArchiveInputStream(inStream);
             return true;
         } catch (ArchiveException e) {
-            e.printStackTrace();
+            logger.info("File is not an archive");
         }
         return false;
     }

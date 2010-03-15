@@ -24,12 +24,14 @@
   
     <!-- Facade component for Gallery -->
     <component name="Gallery">
-   		<implementation.java class="org.apache.photark.services.gallery.jcr.GalleryImpl"/>
+   		<implementation.java class="org.apache.photark.jcr.services.JCRGalleryImpl"/>
    		<property name="name">gallery</property>
    		<service name="Gallery">
    			<interface.java interface="org.apache.photark.services.gallery.Gallery"/>
+   			<binding.sca name="local"/>
    			<tuscany:binding.jsonrpc uri="/GalleryService"/>
    		</service>
+   		<reference name="repositoryManager" target="RepositoryManager"/>
     </component>
     
     <!-- Component responsible for providing REST access to images -->
@@ -37,7 +39,8 @@
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageCollectionImpl"/>
 		<service name="ImageCollection">
 			<tuscany:binding.http uri="/gallery"/>
-		</service>    	  	
+		</service>
+		<reference name="repositoryManager" target="RepositoryManager"/>
 	</component>
     
     <!-- Component responsible for providing upload support for gallery/album -->
@@ -45,6 +48,15 @@
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageUploadServiceImpl"/>
 		<service name="Servlet">
 			<tuscany:binding.http uri="/admin/upload"/>
-		</service>    	  	
-	</component>    
+		</service>
+		<reference name="repositoryManager" target="RepositoryManager"/>
+		<reference name="gallery" target="Gallery">
+			<binding.sca name="local"/>
+		</reference>  	  	
+	</component>
+	
+    <!-- Component responsible for providing JCR Management Support -->
+    <component name="RepositoryManager">
+		<implementation.java class="org.apache.photark.jcr.JCRRepositoryManager"/>
+	</component> 	    
 </composite>

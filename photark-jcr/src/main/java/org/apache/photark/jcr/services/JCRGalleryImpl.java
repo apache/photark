@@ -17,35 +17,47 @@
  * under the License.
  */
 
-package org.apache.photark.services.gallery.jcr;
+package org.apache.photark.jcr.services;
 
 import java.io.File;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.jcr.AlbumImpl;
-import org.apache.photark.services.gallery.AbsGalleryImpl;
+import org.apache.photark.services.gallery.BaseGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Reference;
+import org.oasisopen.sca.annotation.Scope;
 
-public class GalleryImpl extends AbsGalleryImpl implements Gallery {
+@Scope("COMPOSITE")
+public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
+    private static final Logger logger = Logger.getLogger(JCRGalleryImpl.class.getName());
+    
+    private JCRRepositoryManager repositoryManager;
 
-    public GalleryImpl() {
+    public JCRGalleryImpl() {
 
     }
+    
+    @Reference(name="repositoryManager")
+    protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
+        this.repositoryManager = repositoryManager;
+    }
 
-    public GalleryImpl(String name) {
+    public JCRGalleryImpl(String name) {
         super(name);
     }
 
     @Init
     public void init() {
-        System.out.println(">>> Initializing JCR Gallery");
+        logger.info("Initializing JCR Gallery");
         try {
             URL galleryURL = this.getClass().getClassLoader().getResource(name);
             if (galleryURL == null) {
@@ -60,9 +72,9 @@ public class GalleryImpl extends AbsGalleryImpl implements Gallery {
                     for (File albumFile : albums) {
                         if (!albumFile.getName().startsWith(".")) {
                             if (albumFile.isDirectory() && albumFile.exists()) {
-                                Album newAlbum = AlbumImpl.createAlbum(albumFile.getName());
+                                Album newAlbum = JCRAlbumImpl.createAlbum(repositoryManager, albumFile.getName());
                                 newAlbum.setName(albumFile.getName());
-                                ((AlbumImpl)newAlbum).setGallery(name);
+                                ((JCRAlbumImpl)newAlbum).setGallery(name);
                                 this.albums.add(newAlbum);
                             }
                         }
@@ -74,13 +86,13 @@ public class GalleryImpl extends AbsGalleryImpl implements Gallery {
             // FIXME: ignore for now
             e.printStackTrace();
         }
-
+        
         initialized = true;
     }
-
+    
     private void getAlbumsFromJcrRepository() {
         try {
-            Session session = JCRSession.getSession();
+            Session session = repositoryManager.getSession();
             Node rootNode = session.getRootNode();
             NodeIterator albumNodes = rootNode.getNodes();
             while (albumNodes.hasNext()) {
@@ -89,29 +101,38 @@ public class GalleryImpl extends AbsGalleryImpl implements Gallery {
                     continue;
                 }
                 String albumName = albumNode.getName();
-                Album album = AlbumImpl.createAlbum(albumName);
+                Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);
                 if (!albums.contains(album)) {
                     albums.add(album);
                 }
             }
         } catch (RepositoryException e) {
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
     }
 
     public void addAlbum(String albumName) {
-        Session session = JCRSession.getSession();
         try {
+            Session session = repositoryManager.getSession();
             Node rootNode = session.getRootNode();
             if (rootNode.hasNode(albumName)) {
-                System.out.println("This album is already in gallery");
+                logger.info("This album is already in gallery");
                 return;
             }
             // add album to the root
             rootNode.addNode(albumName);
             session.save();
+            // add album to the list of albums
+            Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);
+            if (!albums.contains(album)) {
+                albums.add(album);
+            }
         } catch (RepositoryException e) {
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
     }
 }

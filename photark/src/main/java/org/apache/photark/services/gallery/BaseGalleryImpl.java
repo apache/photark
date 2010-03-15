@@ -21,22 +21,24 @@ package org.apache.photark.services.gallery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.photark.services.album.Album;
 import org.oasisopen.sca.annotation.Property;
 
-public abstract class AbsGalleryImpl implements Gallery {
-
+public abstract class BaseGalleryImpl {
+    private static final Logger logger = Logger.getLogger(BaseGalleryImpl.class.getName());
+    
     protected String name;
     private String location;
     protected boolean initialized;
     protected List<Album> albums = new ArrayList<Album>();
 
-    public AbsGalleryImpl() {
+    public BaseGalleryImpl() {
 
     }
 
-    public AbsGalleryImpl(String name) {
+    public BaseGalleryImpl(String name) {
         this.name = name;
     }
 
@@ -51,9 +53,9 @@ public abstract class AbsGalleryImpl implements Gallery {
         this.name = name;
     }
 
-    public void addAlbum(Album album) {
-
-    }
+    //public void addAlbum(Album album) {
+    //
+    //}
 
     public Album[] getAlbums() {
         if (!initialized) {
@@ -74,7 +76,7 @@ public abstract class AbsGalleryImpl implements Gallery {
             if (pictures.length > 0) {
                 return albumLookup.getPictures()[0];
             } else {
-                System.out.println("No Album Cover Picture found for album:" + albumName);
+                logger.info("No Album Cover Picture found for album:" + albumName);
                 return null;
             }
         } else {

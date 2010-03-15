@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.services.album.jcr;
+package org.apache.photark.jcr.services;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -34,28 +35,33 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.photark.Image;
+import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
-import org.apache.photark.services.gallery.jcr.JCRSession;
+import org.oasisopen.sca.annotation.Destroy;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
-public class AlbumImpl implements Album {
+public class JCRAlbumImpl implements Album {
+    private static final Logger logger = Logger.getLogger(JCRAlbumImpl.class.getName());
+    
+    private JCRRepositoryManager repositoryManager;
+    
     private String gallery;
     private String name;
     private String location;
-    private Session session = JCRSession.getSession();
     private boolean initialized;
     private static Map<String, Album> albums = new HashMap<String, Album>();
 
-    public synchronized static Album createAlbum(String name) {
+    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name) {
         if (!albums.containsKey(name)) {
-            albums.put(name, new AlbumImpl(name));
+            albums.put(name, new JCRAlbumImpl(repositoryManager,name));
         }
         return albums.get(name);
     }
 
-    public AlbumImpl(String name) {
+    public JCRAlbumImpl(JCRRepositoryManager repositoryManager, String name) {
+        this.repositoryManager = repositoryManager;
         this.name = name;
     }
 
@@ -66,14 +72,15 @@ public class AlbumImpl implements Album {
      */
     @Init
     public synchronized void init() {
-        System.out.println(">>> Initializing JCR Album");
+        logger.info("Initializing JCR Album");
         try {
             URL albumURL = this.getClass().getClassLoader().getResource(getLocation());
             if (albumURL == null) {
                 String loc = "../../" + getLocation();
                 albumURL = this.getClass().getClassLoader().getResource(loc);
             }
-
+            
+            Session session = repositoryManager.getSession();
             if (albumURL != null) {
                 try {
                     File album = new File(albumURL.toURI());
@@ -103,8 +110,15 @@ public class AlbumImpl implements Album {
         } catch (Exception e) {
             // FIXME: ignore for now
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
         initialized = true;
+    }
+    
+    @Destroy
+    public void destroy() {
+        //repositoryManager.releaseSession();
     }
 
     @Property
@@ -132,7 +146,7 @@ public class AlbumImpl implements Album {
     }
 
     public void setLocation(String location) {
-        System.out.println("inside setLocation:location:" + location);
+        logger.info("inside setLocation:location:" + location);
         this.location = location;
     }
 
@@ -142,6 +156,7 @@ public class AlbumImpl implements Album {
         }
         List<String> pictures = new ArrayList<String>();
         try {
+            Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
             NodeIterator nodes = albumNode.getNodes();
@@ -155,6 +170,8 @@ public class AlbumImpl implements Album {
         } catch (Exception e) {
             // FIXME: ignore for now
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
 
         String[] pictureArray = new String[pictures.size()];
@@ -164,6 +181,7 @@ public class AlbumImpl implements Album {
 
     public void removeNodes() {
         try {
+            Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             NodeIterator nodes = root.getNodes();
             while (nodes.hasNext()) {
@@ -177,12 +195,15 @@ public class AlbumImpl implements Album {
         } catch (Exception e) {
             // FIXME: ignore for now
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
 
     }
 
     public void addPicture(Image picture) {
         try {
+            Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
             Node picNode = albumNode.addNode(picture.getName());
@@ -193,11 +214,14 @@ public class AlbumImpl implements Album {
             session.save();
         } catch (RepositoryException e) {
             e.printStackTrace();
+        }  finally {
+            //repositoryManager.releaseSession();
         }
     }
 
     public void deletePicture(Image picture) {
         try {
+            Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
             Node picNode = albumNode.addNode(picture.getName());
@@ -205,6 +229,8 @@ public class AlbumImpl implements Album {
             session.save();
         } catch (RepositoryException e) {
             e.printStackTrace();
+        }  finally {
+            //repositoryManager.releaseSession();
         }
     }
 
@@ -217,10 +243,12 @@ public class AlbumImpl implements Album {
      * @throws RepositoryException
      */
     private Node getAlbumNode(String name) throws RepositoryException {
+        Session session = repositoryManager.getSession();
         Node root = session.getRootNode();
-        if (root.hasNode(name))
+        if (root.hasNode(name)) {
             return root.getNode(name);
-        else
+        } else {
             return root.addNode(name);
+        }
     }
 }

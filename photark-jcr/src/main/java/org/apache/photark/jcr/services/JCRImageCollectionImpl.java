@@ -19,7 +19,9 @@
 
 package org.apache.photark.jcr.services;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -27,12 +29,13 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.ImageCollection;
-import org.apache.photark.services.gallery.jcr.JCRSession;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.oasisopen.sca.annotation.Destroy;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -43,18 +46,33 @@ import org.oasisopen.sca.annotation.Service;
 @Scope("COMPOSITE")
 @Service(ImageCollection.class)
 public class JCRImageCollectionImpl implements ImageCollection {
-    private Session session = JCRSession.getSession();
-
-    @Init
-    public void init() {
-    }
+    private static final Logger logger = Logger.getLogger(JCRImageCollectionImpl.class.getName());
     
-    @Destroy
-    public void destroy() {    
-    }
+    private JCRRepositoryManager repositoryManager;
 
     public JCRImageCollectionImpl() {
         
+    }
+    
+    @Reference(name="repositoryManager")
+    protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
+        this.repositoryManager = repositoryManager;
+    }
+
+    
+    @Init
+    public void init() {
+        try {
+            repositoryManager = new JCRRepositoryManager();
+        } catch (IOException e) {
+            // FIXME: ignore for now
+            e.printStackTrace();
+        }
+    }
+    
+    @Destroy
+    public void destroy() {
+        //repositoryManager.releaseSession();
     }
 
     public InputStream get(String key) throws NotFoundException {
@@ -63,6 +81,7 @@ public class JCRImageCollectionImpl implements ImageCollection {
         String albumName = stringArray[0];
         InputStream inStream = null;
         try {
+            Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             Node albumNode = root.getNode(albumName);
             String image = stringArray[1];
@@ -73,6 +92,8 @@ public class JCRImageCollectionImpl implements ImageCollection {
             e.printStackTrace();
         } catch (RepositoryException e) {
             e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
         }
         return inStream;
     }
@@ -90,7 +111,7 @@ public class JCRImageCollectionImpl implements ImageCollection {
     }
 
     public String post(String key, InputStream inputStream) {
-        System.out.println("insdie post:" + key);
+        logger.info("insdie post:" + key);
 
         return key;
     }
