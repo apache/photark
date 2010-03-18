@@ -58,5 +58,6 @@
     <!-- Component responsible for providing JCR Management Support -->
     <component name="RepositoryManager">
 		<implementation.java class="org.apache.photark.jcr.JCRRepositoryManager"/>
+		<property name="repositoryHome">photark</property>
 	</component> 	    
 </composite>

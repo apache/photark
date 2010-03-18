@@ -19,6 +19,7 @@
 
 package org.apache.photark.jcr;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import org.apache.jackrabbit.core.TransientRepository;
 import org.oasisopen.sca.annotation.Destroy;
 import org.oasisopen.sca.annotation.EagerInit;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Property;
 import org.oasisopen.sca.annotation.Scope;
 
 /**
@@ -44,6 +46,11 @@ import org.oasisopen.sca.annotation.Scope;
 public class JCRRepositoryManager {
     private static final Logger logger = Logger.getLogger(JCRRepositoryManager.class.getName());
     
+    /**Default Name of the repository home directory */
+    private final String REPO_HOME_DEFAULT = "photark";
+    
+    @Property(name="repositoryHome", required=true)
+    private String repositoryHome;
     /** JCR Repository **/
     private static Repository repository;
     /** JCR Repository Session **/
@@ -56,6 +63,20 @@ public class JCRRepositoryManager {
     @Init
     public void init() {
        initializeRepository();
+    }
+    
+    @Property
+    public void setRepositoryHome(String repositoryHome){
+    	if(repositoryHome != null && (!repositoryHome.isEmpty())){
+    		this.repositoryHome = repositoryHome;
+    	}else{
+    		logger.log(Level.WARNING,"Setting Default Repository Home:" + REPO_HOME_DEFAULT);
+    		this.repositoryHome = REPO_HOME_DEFAULT;
+    	}
+    }
+
+    public String getRepositoryHome(){
+    	return repositoryHome;
     }
     
     @Destroy
@@ -87,7 +108,7 @@ public class JCRRepositoryManager {
         logger.fine("Initializing JCR repository");
         try {
             if( repository == null) {
-                repository = new TransientRepository();
+                repository = new TransientRepository(new File(repositoryHome));
             }
             session = repository.login(new SimpleCredentials("photarkUser", "passwordDoesNotMatter".toCharArray()));                
         } catch (Exception e) {
