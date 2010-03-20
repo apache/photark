@@ -24,6 +24,7 @@
 <script type="text/javascript" src="../constants.js"></script>
 <script type="text/javascript" src="upload.js" charset="utf-8"></script>
 
+<link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css">
 <link href="upload.css" rel="stylesheet">
 
 <style type="text/css">
@@ -52,6 +53,10 @@
 	}
 </style>
 
+<style type="text/css">
+    #progressDiv,#progressBar { font-family:helvetica,arial,sans-serif; font-size:90%;z-index: 1000; }
+</style>
+
 <script type="text/javascript">
 	//gallery json-rpc service
 	dojo.require("dojo.rpc.JsonService");
@@ -77,6 +82,7 @@
 	}
 
 	dojo.addOnLoad( function() { populateSelect(); });
+	
 </script>
 </head>
 
@@ -99,9 +105,15 @@
               <li>
                  <label>Files:</label>
                  <div id="files" class="field"></div>
+                
               </li>
               <li>
-                  <div id="btnUploader" class="uploadBtn btn">Select Files</div>
+               	<div id="progressDiv" class="tundra" > 
+                	<div id="progressBar" dojoType="dijit.ProgressBar" style="width:300px;display:none;" jsId="jsProgress"></div> 
+               	</div>
+              </li>
+              <li>
+                  <div id="btnUploader" class="uploadBtn btn" >Select Files</div>
                   <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">Upload</div>	
               </li>
 		  </ol>

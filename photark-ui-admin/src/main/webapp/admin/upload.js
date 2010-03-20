@@ -20,6 +20,8 @@
 dojo.require("dojox.form.FileUploader");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.ProgressBar");
+dojo.require("dojo.parser");
+
 
 //using this early for the forceNoFlash test:
 dojo.require("dojox.embed.Flash");
@@ -31,9 +33,21 @@ var passthrough = function(msg){
 	}
 };
 
+var displayProgress = function (){
+	//to show its loading..
+	jsProgress.update({indeterminate:true});
+	dojo.byId("progressBar").style.display="";
+};
+
+var setProgressbar = function(currentVal,totalVal){
+    jsProgress.update({
+      maximum: totalVal, 
+      progress: currentVal,
+      indeterminate:false
+    });
+};
 
 dojo.addOnLoad( function(){
-
 	var fileUploaderConfig = {
 		isDebug:false,
 		hoverClass:"uploadHover",
@@ -63,6 +77,7 @@ dojo.addOnLoad( function(){
 		
 		doUpload = function(){
 			console.log("doUpload");
+			displayProgress();
 			var selectAlbum = dojo.byId("selectAlbum");
 			var selected = selectAlbum.value;
 			console.log("selected:"+selected);
@@ -76,21 +91,49 @@ dojo.addOnLoad( function(){
 					//add new album to list of albums
 					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
 					//upload the files
+					setProgressbar(0,1);
 					uploader.upload({albumName:albumName});
 				}
 			} else {
 				//upload files to existent album
+				setProgressbar(0,1);
 				uploader.upload({albumName:selected});
 			}
 			//dojo.byId("newAlbumName").value ="";
-			
 		}
 		
 		dojo.connect(uploader, "onComplete", function(dataArray){
+			console.log("onComplete");
+			setProgressbar(1,1);
 			dojo.byId("newAlbumName").value ="";
 		});
-
+		
+		dojo.connect(uploader, "onProgress", function(dataArray){
+			var uploadedPercent=0;
+			var totalPercent=0;
+			for(var i=0;i<dataArray.length;i++){
+				uploadedPercent+=dataArray[i].bytesLoaded;
+				totalPercent+=dataArray[i].bytesTotal;
+			}
+			console.log("onProgress:"+uploadedPercent+"/"+totalPercent);
+			setProgressbar((uploadedPercent/totalPercent),1.01011);
+			//dojo.byId("newAlbumName").value ="";
+		});
+		
+		dojo.connect(uploader, "onChange", function(dataArray){
+			//hiding the progress bar
+			dojo.byId("progressBar").style.display="none";
+		});
+		
 		dojo.connect(uploader, "onError", function(err){
+			var uploadedPercent=0;
+			var totalPercent=0;
+			for(var i=0;i<dataArray.length;i++){
+				uploadedPercent+=dataArray[i].bytesLoaded;
+				totalPercent+=dataArray[i].bytesTotal;
+			}
+			console.log("onProgress:"+uploadedPercent+"/"+totalPercent);
+			setProgressbar((uploadedPercent/totalPercent),1.01011);
 			if(err && err.text) {
 				console.error("Error uploading files:" + err.text);
 				//alert("Error uploading files:" + err.text);
