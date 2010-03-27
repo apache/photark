@@ -33,6 +33,12 @@
     next_on  = new Image(31,31); next_on.src = "next_on.gif";
     prev_off = new Image(31,31); prev_off.src = "prev.gif";
     prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
+    slide_before_start  = new Image(31,31); slide_before_start.src = "slide_before_start.gif";
+    slide_pause  = new Image(31,31); slide_pause.src = "slide_pause.gif";
+    show_slide  = new Image(31,31); show_slide.src = "show_slide.gif";
+    show_slide_on  = new Image(31,31); show_slide_on.src = "show_slide_on.gif";
+    show_slide_slow  = new Image(31,31); show_slide_slow.src = "show_slide_slow.gif";
+    show_slide_slow_on  = new Image(31,31); show_slide_slow_on.src = "show_slide_slow_on.gif";
  
     var gallery;
 	var galleryName;
@@ -42,6 +48,8 @@
 	var albumItems;
 	var albumPos = 0;
     var pos = 0;
+    var slideShowSpeed=0;
+    var timer;
 	
 	dojo.addOnLoad(function() {
 		dojo.require("dojo.rpc.JsonService");
@@ -210,7 +218,58 @@
 			document.next.src=next_on.src;
 		}
 	}
-
+	
+	function goSlideShow(){		
+		if(slideShowSpeed==0){
+			slideShowSpeed=1;
+			clearTimeout(timer);
+			startTimer(5000);
+		}else if(slideShowSpeed==1) {
+			slideShowSpeed=2;
+			clearTimeout(timer);
+			startTimer(2000);
+		}else{
+			slideShowSpeed=0;
+			clearTimeout(timer);
+		}
+	}
+	
+	function beforeClick(){
+			clearTimeout(timer);
+			slideShowSpeed=0;
+			document.show.src=slide_before_start.src;			
+	}
+	
+	function onSlideShow(){
+		if(slideShowSpeed==0){
+			document.show.src=show_slide_slow_on.src;
+		}else if(slideShowSpeed==1){
+			document.show.src=show_slide_on.src;
+		}else{
+			document.show.src=slide_pause.src;
+		}
+	}
+	
+	function offSlideShow(){
+		if(slideShowSpeed==0){
+			document.show.src=slide_before_start.src;
+		}else if(slideShowSpeed==1){
+			document.show.src=show_slide_slow.src;
+		}else{
+			document.show.src=show_slide.src;
+		}
+	}
+	
+	function startTimer(time){
+		if(albumPos < albumItems.length - 1) {
+			albumPos++;
+		}else{
+			albumPos=1;
+		}
+		showImage(albumPos);
+		timer=setTimeout("startTimer("+time+")",time);
+	}
+	
 </script>
 
 </head>
@@ -236,10 +295,10 @@
      	   <!-- Navigation Header -->
 		   <table style="width:100%;" cellspacing="0" cellpadding="0" border="0">
              <tr>
-             	<td style="width:31px;"><a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="onGoPreviousMouseOver();" onmouseout="document.previous.src=prev_off.src"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goNext()" onmouseover="onGoNextMouseOver();" onmouseout="document.next.src=next_off.src"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
-                <!-- <td style="width:31px;"><a href="javascript:void(0)" onmouseover="show_over();" onmouseout="show_out();" onmousedown="show_down();" ondblclick="change_delay();"><img src="show_slide.gif" width="31" height="31" border="0" title="Start/Stop slideshow - DoubleClick to change speed" name="show" alt=""></a></td> -->
+             	<td style="width:31px;"><a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src" onmousedown="beforeClick();"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td>
+                <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="onGoPreviousMouseOver();" onmouseout="document.previous.src=prev_off.src" onmousedown="beforeClick();"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
+                <td style="width:31px;"><a href="javascript:goNext()" onmouseover="onGoNextMouseOver();" onmouseout="document.next.src=next_off.src" onmousedown="beforeClick();"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
+                <td style="width:31px;"><a href="javascript:goSlideShow()" onmouseover="onSlideShow();" onmouseout="offSlideShow();"><img src="slide_before_start.gif" width="31" height="31" border="0" title="Start(Slow)/Fast/Stop slideshow" name="show" alt=""></a></td> 
              </tr>
 		   </table>
 		</td>
