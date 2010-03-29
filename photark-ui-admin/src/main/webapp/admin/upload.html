@@ -82,7 +82,7 @@
 	}
 	
 	// only shows the new album field when "new album" is selected from the dropdown
-	function manageAlubFields(){
+	function manageAlbumFields(){
 		var selectAlbum = dojo.byId("selectAlbum");
 		var selected = selectAlbum.value;
 		if(selected == "New Album") {
@@ -115,7 +115,7 @@
 		  <ol>
 			  <li>
 				  <label for="selectAlbum">Select Album:</label>
-				  <select  id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlubFields();"/>
+				  <select  id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlbumFields();"/>
 				  <label>New Album:</label>
 				  <input type="text" class="text" name="newAlbumName" id="newAlbumName">
 			  </li>
