@@ -83,6 +83,14 @@ public class AlbumAgregator implements Album {
         throw new UnsupportedOperationException();
     }
     
+    public String getDescription(){
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setDescription(String description){
+        throw new UnsupportedOperationException();
+    }
+    
     public String getLocation() {
         throw new UnsupportedOperationException();
     }

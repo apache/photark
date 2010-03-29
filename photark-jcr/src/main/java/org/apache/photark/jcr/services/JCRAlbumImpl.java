@@ -53,9 +53,9 @@ public class JCRAlbumImpl implements Album {
     private boolean initialized;
     private static Map<String, Album> albums = new HashMap<String, Album>();
 
-    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name) {
+    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name ) {
         if (!albums.containsKey(name)) {
-            albums.put(name, new JCRAlbumImpl(repositoryManager,name));
+            albums.put(name, new JCRAlbumImpl(repositoryManager,name ));
         }
         return albums.get(name);
     }
@@ -65,7 +65,7 @@ public class JCRAlbumImpl implements Album {
         this.name = name;
     }
 
-    /**
+	/**
      * Initialize the gallery service
      *   - During initialization, check for local images and create a JCR album 
      *     which is usefull for sample gallery shiped in the sample application.
@@ -135,6 +135,41 @@ public class JCRAlbumImpl implements Album {
     public void setName(String name) {
         this.name = name;
         this.location = null;
+    }
+    
+    public String getDescription() {
+    	String description="";
+    	if (!initialized) {
+            init();
+        }
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode();
+            Node albumNode = root.getNode(name);
+            description =albumNode.getProperty("description").getString();
+        } catch (Exception e) {
+            // FIXME: ignore for now
+            e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
+        }
+        return description;
+    }
+
+    @Property
+    public void setDescription(String description) {
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode();
+            Node albumNode = root.getNode(name);
+            albumNode.setProperty("description", description);
+            session.save();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }  finally {
+            //repositoryManager.releaseSession();
+        }
+    
     }
 
     public String getLocation() {

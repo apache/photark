@@ -33,7 +33,7 @@ import org.oasisopen.sca.annotation.Property;
 public class AlbumImpl implements Album {
     private String name;
     private String location;
-    
+    private String description;    
     private boolean initialized;
     private List<String> pictures = new ArrayList<String>();
 
@@ -97,4 +97,12 @@ public class AlbumImpl implements Album {
     public void deletePicture(Image picture){
         throw new UnsupportedOperationException("Not implemented");
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description=description;
+	}
 }

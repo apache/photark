@@ -80,6 +80,7 @@ dojo.addOnLoad( function(){
 			displayProgress();
 			var selectAlbum = dojo.byId("selectAlbum");
 			var selected = selectAlbum.value;
+			var albumDescription= dojo.byId("albumDescription").value;
 			console.log("selected:"+selected);
 			if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
 				alert("Photo Upload can not be started.Select Album before upload");
@@ -92,12 +93,12 @@ dojo.addOnLoad( function(){
 					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
 					//upload the files
 					setProgressbar(0,1);
-					uploader.upload({albumName:albumName});
+					uploader.upload({albumName:albumName, albumDescription:albumDescription});
 				}
 			} else {
 				//upload files to existent album
 				setProgressbar(0,1);
-				uploader.upload({albumName:selected});
+				uploader.upload({albumName:selected,albumDescription:albumDescription});
 			}
 			//dojo.byId("newAlbumName").value ="";
 		}

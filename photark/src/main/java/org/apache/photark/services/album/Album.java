@@ -29,6 +29,10 @@ public interface Album {
     
     void setName(String name);
     
+    String getDescription();
+    
+    void setDescription(String description);
+    
     String getLocation();
     
     void setLocation(String location);

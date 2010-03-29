@@ -129,13 +129,18 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
             }
 
             String albumName = "";
+            String albumDescription= "";
             StringBuffer sb = new StringBuffer();
             while (fileItems.hasNext()) {
                 FileItem fileItem = fileItems.next();
-
                 if (fileItem.getFieldName().equalsIgnoreCase("albumName")) {
                     albumName = fileItem.getString();
                 }
+                
+                if (fileItem.getFieldName().equalsIgnoreCase("albumDescription")) {
+                	albumDescription = fileItem.getString();
+                }
+               
                 boolean isFormField = fileItem.isFormField();
                 
                 if (!isFormField) {
@@ -144,6 +149,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
                     if(logger.isLoggable(Level.INFO)) {
                         logger.log(Level.INFO, "fileName:"+fileName);
                     }
+                    
 
                     InputStream inStream = new BufferedInputStream(fileItem.getInputStream());
                     List<Image> pictures = new ArrayList<Image>();
@@ -158,7 +164,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
                     }
 
                     for (Image picture : pictures) {
-                        addPictureToAlbum(albumName, picture);
+                        addPictureToAlbum(albumName,albumDescription, picture);
                     }
                     sb.append("file=uploaded/" + fileName);
                     sb.append(",name=" + fileName);
@@ -181,10 +187,11 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
      * @param albumName String
      * @param picture Picture
      */
-    private void addPictureToAlbum(String albumName, Image image) {
+    private void addPictureToAlbum(String albumName,String albumDescription, Image image) {
     	gallery.addAlbum(albumName);
         Album album = new JCRAlbumImpl(repositoryManager, albumName);
         album.addPicture(image);
+        album.setDescription(albumDescription);
     }
     
     /**
