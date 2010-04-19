@@ -81,4 +81,8 @@ public class GalleryImpl extends BaseGalleryImpl implements Gallery {
     public void addAlbum(String albumName){
 
     }
+
+	public void deleteAlbum(String albumName) {
+		
+	}
 }

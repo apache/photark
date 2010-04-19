@@ -30,6 +30,8 @@ public interface Gallery {
     
     void addAlbum(String albumName);
     
+    void deleteAlbum(String albumName);
+    
     Album[] getAlbums();
     
     String getAlbumCover(String albumName);

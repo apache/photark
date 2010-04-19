@@ -68,7 +68,7 @@
 			}
 			gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
 		} catch(exception) {
-			alert(e);
+			alert(exception);
 		}
 	}
 	
@@ -112,7 +112,7 @@
 				var albumName = galleryAlbums[i].name;
 				var img = document.createElement("img");
 				img.src = window.location.href + "gallery/"+ albumName +"/" + albumCovers[i];
-				var img_html = "<img src=" + img.src + " class=\"slideImage\" height=85% width=85% ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
+				var img_html = "<img src=" + img.src + " class=\"slideImage\" width=180px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
 				var html = "<a href=\"javascript:initializeAlbum('" + albumName + "')\">" + img_html + "</a>";
 				column.innerHTML = html;
 				

@@ -27,40 +27,40 @@ import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 
 public class AlbumAgregator implements Album {
-    private static String NAME = "Aggregated Album";
-    
-    private List<String> pictures = new ArrayList<String>();
-    
-    @Reference(required=false)
-    protected Album album;
-    
-    @Reference(required=false)
-    protected org.apache.tuscany.sca.binding.atom.collection.Collection albumFeed;
-    
-    /* FIXME: GData support not available in Tuscany 2.x
+	private static String NAME = "Aggregated Album";
+
+	private List<String> pictures = new ArrayList<String>();
+
+	@Reference(required=false)
+	protected Album album;
+
+	@Reference(required=false)
+	protected org.apache.tuscany.sca.binding.atom.collection.Collection albumFeed;
+
+	/* FIXME: GData support not available in Tuscany 2.x
     @Reference(required=false)
     protected org.apache.tuscany.sca.binding.gdata.collection.Collection albumPicassa;
-    */
-    
-    @Init
-    public void init() {
-        if(album != null) {
-            for(String picture : album.getPictures()) {
-                pictures.add(picture);
-            }            
-        }
-        
-        if (albumFeed != null) {
-        	try {
-        		for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
-        			String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
-        			pictures.add(feedImageLink);
-        		}
-        	}catch (Exception e) {
-        		//log exception, warn user that album xxx was not processed (not found)
-        	}
-        }
-        /* FIXME: GData support not available in Tuscany 2.x 
+	 */
+
+	@Init
+	public void init() {
+		if(album != null) {
+			for(String picture : album.getPictures()) {
+				pictures.add(picture);
+			}            
+		}
+
+		if (albumFeed != null) {
+			try {
+				for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
+					String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
+					pictures.add(feedImageLink);
+				}
+			}catch (Exception e) {
+				//log exception, warn user that album xxx was not processed (not found)
+			}
+		}
+		/* FIXME: GData support not available in Tuscany 2.x 
         if( albumPicassa != null) {
         	try {
         		for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
@@ -71,46 +71,50 @@ public class AlbumAgregator implements Album {
         		//log exception, warn user that album xxx was not processed (not found)
         	}
         }
-        */
-        
-    }
-    
-    public String getName() {
-        return NAME;
-    }
-    
-    public void setName(String name) {
-        throw new UnsupportedOperationException();
-    }
-    
-    public String getDescription(){
-        throw new UnsupportedOperationException();
-    }
-    
-    public void setDescription(String description){
-        throw new UnsupportedOperationException();
-    }
-    
-    public String getLocation() {
-        throw new UnsupportedOperationException();
-    }
-    
-    public void setLocation(String location) {
-        throw new UnsupportedOperationException();
-    }
-    
-    public String[] getPictures() {
-        String[] pictureArray = new String[pictures.size()];
-        pictures.toArray(pictureArray);
-        return pictureArray;
-    }
+		 */
 
-    
-    public void addPicture(Image picture){
-    	
-    }
-    
-    public void deletePicture(Image picture){
-    	
-    }
+	}
+
+	public String getName() {
+		return NAME;
+	}
+
+	public void setName(String name) {
+		throw new UnsupportedOperationException();
+	}
+
+	public String getDescription(){
+		throw new UnsupportedOperationException();
+	}
+
+	public void setDescription(String description){
+		throw new UnsupportedOperationException();
+	}
+
+	public String getLocation() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setLocation(String location) {
+		throw new UnsupportedOperationException();
+	}
+
+	public String[] getPictures() {
+		String[] pictureArray = new String[pictures.size()];
+		pictures.toArray(pictureArray);
+		return pictureArray;
+	}
+
+
+	public void addPicture(Image picture){
+
+	}
+
+	public void deletePicture(Image picture){
+
+	}
+
+	public void deletePicture(String picture){
+
+	}
 }

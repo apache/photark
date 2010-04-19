@@ -135,4 +135,29 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
             //repositoryManager.releaseSession();
         }
     }
+
+	public void deleteAlbum(String albumName) {
+		try {
+			Session session = repositoryManager.getSession();
+			Node root = session.getRootNode();
+			if(root.hasNode(albumName)){
+				Node albumNode = root.getNode(albumName);
+				 Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);
+				if (albums.contains(album)) {
+                    albums.remove(album);
+                }
+				albumNode.remove();
+				session.save();
+				//init();
+				logger.info("album " + albumName + " deleted");
+			}else{
+				logger.info("album " + albumName + " not found");
+			}    	            
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}  finally {
+			//repositoryManager.releaseSession();
+		}
+		
+	}
 }

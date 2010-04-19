@@ -54,7 +54,7 @@
 
  #newAlbum {
  	clear: both;
-    width: 80%;
+    width: 905px;
     background-color: #F2EFE9;
  }
  
@@ -72,7 +72,7 @@
  fieldset {
 	/*float: left;*/
 	clear: both;
-	width: 80%;
+	/*width: 80%;*/
     length: 
 	/*margin: 0 0 -1em 0;*/
 	/*padding: 0 0 1em 0;*/
@@ -93,4 +93,11 @@
 	padding-bottom: 1em;
 	list-style:none;
  }
+ 
+ #adminGallery{
+	width: 905px;
+	background-color:#F2EFE9;
+	border-bottom: 2px solid #BFBAB0;
+	padding-top: 40px;
+}
 

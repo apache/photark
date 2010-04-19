@@ -78,16 +78,23 @@ dojo.addOnLoad( function(){
 		doUpload = function(){
 			console.log("doUpload");
 			displayProgress();
+			var files= dojo.byId("files").childElementCount;
 			var selectAlbum = dojo.byId("selectAlbum");
 			var selected = selectAlbum.value;
+			albumName=selected;
 			var albumDescription= dojo.byId("albumDescription").value;
 			console.log("selected:"+selected);
-			if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
+			if(files == 0) {//to stop upload when on files are selected
+				alert("Photo Upload can not be started. Select picture(s) before upload");
+				dojo.byId("progressBar").style.display="none"; 
+			} else if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
 				alert("Photo Upload can not be started.Select Album before upload");
+				dojo.byId("progressBar").style.display="none"; 
 			} else if(selected == "New Album") {
-				var albumName = dojo.byId("newAlbumName").value;
+				albumName = dojo.byId("newAlbumName").value;
 				if( albumName == null || (albumName != null && albumName == "" && albumName.length == 0)) {
 					alert("Photo Upload can not be started.Enter the new album name");
+					dojo.byId("progressBar").style.display="none"; 
 				} else {
 					//add new album to list of albums
 					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
@@ -107,6 +114,7 @@ dojo.addOnLoad( function(){
 			console.log("onComplete");
 			setProgressbar(1,1);
 			dojo.byId("newAlbumName").value ="";
+			reloadAdminGallery();
 		});
 		
 		dojo.connect(uploader, "onProgress", function(dataArray){

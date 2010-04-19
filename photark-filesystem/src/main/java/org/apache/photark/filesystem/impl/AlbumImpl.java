@@ -31,72 +31,76 @@ import org.oasisopen.sca.annotation.Property;
 
 
 public class AlbumImpl implements Album {
-    private String name;
-    private String location;
-    private String description;    
-    private boolean initialized;
-    private List<String> pictures = new ArrayList<String>();
+	private String name;
+	private String location;
+	private String description;    
+	private boolean initialized;
+	private List<String> pictures = new ArrayList<String>();
 
-    @Init
-    public void init() {
-        try {
-            /*
+	@Init
+	public void init() {
+		try {
+			/*
             URL albumURL = this.getClass().getClassLoader().getResource(name);
             if(albumURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 albumURL = this.getClass().getClassLoader().getResource("../../" + getLocation());
             }*/
 
-            if(location != null) {
-                File album = new File(location);
-                if (album.isDirectory() && album.exists()) {
-                    String[] listPictures = album.list(new ImageFilter(".jpg"));
-                    for(String image : listPictures) {
-                        pictures.add(image);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // FIXME: ignore for now
-            e.printStackTrace();
-        }
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    @Property
-    public void setName(String name) {
-        this.name = name;
-        this.location = null;
-    }
+			if(location != null) {
+				File album = new File(location);
+				if (album.isDirectory() && album.exists()) {
+					String[] listPictures = album.list(new ImageFilter(".jpg"));
+					for(String image : listPictures) {
+						pictures.add(image);
+					}
+				}
+			}
+		} catch (Exception e) {
+			// FIXME: ignore for now
+			e.printStackTrace();
+		}
+	}
 
-    public String getLocation() {
-        return location;
-    }
-    
-    @Property
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
-    public String[] getPictures() {
-        if( ! initialized) {
-            init();
-        }
-        String[] pictureArray = new String[pictures.size()];
-        pictures.toArray(pictureArray);
-        return pictureArray;
-    }
-    
-    public void addPicture(Image picture){
-    	throw new UnsupportedOperationException("Not implemented");
-    }
-    
-    public void deletePicture(Image picture){
-        throw new UnsupportedOperationException("Not implemented");
-    }
+	public String getName() {
+		return name;
+	}
+
+	@Property
+	public void setName(String name) {
+		this.name = name;
+		this.location = null;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	@Property
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String[] getPictures() {
+		if( ! initialized) {
+			init();
+		}
+		String[] pictureArray = new String[pictures.size()];
+		pictures.toArray(pictureArray);
+		return pictureArray;
+	}
+
+	public void addPicture(Image picture){
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	public void deletePicture(Image picture){
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	public void deletePicture(String picture){
+		throw new UnsupportedOperationException("Not implemented");
+	}
 
 	public String getDescription() {
 		return description;
