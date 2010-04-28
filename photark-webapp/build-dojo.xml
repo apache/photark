@@ -19,7 +19,7 @@
 -->
 <project name="DojoZipInstaller">
 
-    <property name="dojo.version" value="1.3.2"/>
+    <property name="dojo.version" value="1.4.2"/>
 	<property name="dojo.zip" value="${localRepository}/org/dojotoolkit/dojo/${dojo.version}/dojo-${dojo.version}.zip"/>
     <property name="unpack.location" value="${basedir}/target/${artifactId}"/>
 
