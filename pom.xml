@@ -23,6 +23,10 @@
         <artifactId>apache</artifactId>
         <version>4</version>
     </parent>
+
+    <!-- ====================================================================== -->
+    <!-- Project description and basic configuration                            -->
+    <!-- ====================================================================== -->
     <groupId>org.apache.photark</groupId>
     <artifactId>photark-parent</artifactId>
     <version>1.0-incubating-SNAPSHOT</version>
@@ -88,10 +92,13 @@
         <tuscany.version>2.0-M4</tuscany.version>
      </properties>
     
+    
+
+    <!-- ====================================================================== -->
+    <!-- Maven Repositories                                                     -->
+    <!-- ====================================================================== -->    
     <repositories>
-        <!--
-            The central Maven repository and Apache SNAPSHOT repository are inherited from the parent POM
-        -->
+        <!-- NOTE: The central Maven repository and Apache SNAPSHOT repository are inherited from the parent POM -->
 
         <!-- Apache Incubator repository for artifacts released by Incubator projects -->
         <repository>
@@ -105,8 +112,11 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
     </repositories>
+    
+    <!-- ====================================================================== -->
+    <!-- Maven Plugin-Repositories                                              -->
+    <!-- ====================================================================== -->    
     <pluginRepositories>
         <!-- Apache Incubator repository for artifacts released by Incubator projects -->
         <pluginRepository>
@@ -145,10 +155,11 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <!-- ====================================================================== -->
+    <!-- Distribution Management configuration                                  -->
+    <!-- ====================================================================== -->
     <distributionManagement>
-        <!--
-            Whilst in incubation, released project artifacts are deployed to the incubator repository 
-        -->
+        <!-- Whilst in incubation, released project artifacts are deployed to the incubator repository -->
         <repository>
             <id>apache.incubator</id>
             <name>Apache Incubator Repository</name>
@@ -161,7 +172,11 @@
         </snapshotRepository>
     </distributionManagement>
 
+
     <profiles>
+        <!-- ====================================================================== -->
+        <!-- Default profile                                                        -->
+        <!-- ====================================================================== -->
         <profile>
             <id>default</id>
             <activation>
@@ -178,18 +193,30 @@
             </modules>
         </profile>
         
-        <!-- 
-             profile for verifying licenses, etc
-             usage:
-                mvn rat:check
-        -->
+        <!-- ====================================================================== -->
+        <!-- Profile to build release distribution                                  -->
+        <!-- ====================================================================== -->
         <profile>
-            <!--                        
-                Apache License check plugin. Run manually with:
-                    mvn rat:check
-                Or add it to the verify phase with:
-                    mvn verify -Prat
-            -->  
+            <id>distribution</id>
+            <modules>
+                <module>distribution</module>
+                <module>photark</module>
+                <module>photark-filesystem</module>                
+                <module>photark-jcr</module>
+                <module>photark-ui</module>
+                <module>photark-ui-admin</module>
+                <module>photark-appengine-webapp</module>                
+                <module>photark-webapp</module>
+            </modules>
+        </profile>
+
+
+        <!-- ====================================================================== -->
+        <!-- Profile to run Apache License check plugin                             -->
+        <!-- usage:                                                                 -->
+        <!--    mvn rat:check                                                       -->
+        <!-- ====================================================================== -->
+        <profile>
             <id>rat</id>
             <build>
                 <plugins>
@@ -236,7 +263,9 @@
             </build>
         </profile>
 
-        <!-- profile for verifying source code correctness -->
+        <!-- ====================================================================== -->
+        <!-- Profile for verifying source code correctness                          -->
+        <!-- ====================================================================== -->
         <profile>
             <id>sourcecheck</id>
             <build>
@@ -264,6 +293,9 @@
         </profile>
     </profiles>
 
+    <!-- ====================================================================== -->
+    <!-- General build configuration                                            -->
+    <!-- ====================================================================== -->
     <build>
         <defaultGoal>install</defaultGoal>
 
