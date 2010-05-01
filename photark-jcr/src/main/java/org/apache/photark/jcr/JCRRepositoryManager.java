@@ -67,7 +67,7 @@ public class JCRRepositoryManager {
     
     @Property
     public void setRepositoryHome(String repositoryHome){
-    	if(repositoryHome != null && (!repositoryHome.isEmpty())){
+    	if(repositoryHome != null && !repositoryHome.equals("")){
     		this.repositoryHome = repositoryHome;
     	}else{
     		logger.log(Level.WARNING,"Setting Default Repository Home:" + REPO_HOME_DEFAULT);
