@@ -34,44 +34,54 @@ public class AlbumAgregator implements Album {
 	@Reference(required=false)
 	protected Album album;
 
+	/* FIXME: Not currently in use... */
+	/*
 	@Reference(required=false)
 	protected org.apache.tuscany.sca.binding.atom.collection.Collection albumFeed;
+	*/
 
-	/* FIXME: GData support not available in Tuscany 2.x
-    @Reference(required=false)
-    protected org.apache.tuscany.sca.binding.gdata.collection.Collection albumPicassa;
+	/* FIXME: GData support not available in Tuscany 2.x */
+	/*
+        @Reference(required=false)
+        protected org.apache.tuscany.sca.binding.gdata.collection.Collection albumPicassa;
 	 */
 
 	@Init
 	public void init() {
-		if(album != null) {
-			for(String picture : album.getPictures()) {
-				pictures.add(picture);
-			}            
-		}
+	    if(album != null) {
+	        for(String picture : album.getPictures()) {
+	            pictures.add(picture);
+	        }            
+	    }
 
-		if (albumFeed != null) {
-			try {
-				for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
-					String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
-					pictures.add(feedImageLink);
-				}
-			}catch (Exception e) {
-				//log exception, warn user that album xxx was not processed (not found)
-			}
-		}
-		/* FIXME: GData support not available in Tuscany 2.x 
-        if( albumPicassa != null) {
-        	try {
-        		for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
-        			String feedImageLink = picassaPicture.getLink(Link.Rel.MEDIA_EDIT, null).getHref();
-        			pictures.add(feedImageLink);
-        		}    
-        	}catch (Exception e) {
-        		//log exception, warn user that album xxx was not processed (not found)
-        	}
-        }
-		 */
+	    /* FIXME: Not currently in use... */
+	    /*
+	    if (albumFeed != null) {
+	        try {
+	            for(org.apache.abdera.model.Entry feedPicture : albumFeed.getFeed().getEntries()) {
+	                String feedImageLink = feedPicture.getEnclosureLinkResolvedHref().toString();
+	                pictures.add(feedImageLink);
+	            }
+	        }catch (Exception e) {
+	            //log exception, warn user that album xxx was not processed (not found)
+	        }
+	    }
+	    */
+
+	    /* FIXME: GData support not available in Tuscany 2.x*/ 
+	    /*
+	    if( albumPicassa != null) {
+	        try {
+	            for(com.google.gdata.data.Entry picassaPicture : albumPicassa.getFeed().getEntries()) {
+	                String feedImageLink = picassaPicture.getLink(Link.Rel.MEDIA_EDIT, null).getHref();
+	                pictures.add(feedImageLink);
+	            }    
+	        }catch (Exception e) {
+	            //log exception, warn user that album xxx was not processed (not found)
+	        }
+	    }
+	    */
+
 
 	}
 
