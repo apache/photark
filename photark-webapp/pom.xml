@@ -60,37 +60,52 @@
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>
 			<version>${tuscany.version}</version>
-
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-data-api</artifactId>
 			<version>${tuscany.version}</version>
-
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-implementation-java-runtime</artifactId>
 			<version>${tuscany.version}</version>
-
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cglib</groupId>
+					<artifactId>cglib</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
 			<version>${tuscany.version}</version>
-
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.ws.commons.axiom</groupId>
+					<artifactId>axiom-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ws.commons.axiom</groupId>
+					<artifactId>axiom-impl</artifactId>
+				</exclusion>
+			</exclusions>			
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-binding-http-runtime</artifactId>
 			<version>${tuscany.version}</version>
-
 			<scope>runtime</scope>
 		</dependency>
 		
@@ -117,7 +132,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.3</version>
+			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
 
