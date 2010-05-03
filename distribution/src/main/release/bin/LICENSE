@@ -244,6 +244,7 @@ The following components come under Apache Software License 2.0
  json-rpc-1.0.jar
  log4j-1.2.14.jar
  lucene-core-2.4.1.jar
+ nekohtml-1.9.7.jar
  poi-3.2-FINAL.jar
  poi-scratchpad-3.2-FINAL.jar
  sanselan-0.97-incubator.jar
