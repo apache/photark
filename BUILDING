@@ -1,5 +1,5 @@
-Building the Apache PhotArk 0.1 February 2009 Release source distribution
-=======================================================================================
+Building the Apache PhotArk M2
+==============================
 
 Initial Setup
 -------------
@@ -52,4 +52,14 @@ Building the distributions
 
    This will build the binary and source distribution with .zip and .gz 
    formats in the distribution/target directory.
+   
 
+Testing UI
+-----------
+1) Change to the photark-ui-test
+2) Deploy the photark.war in Tomcat
+3) Start Tomcat
+2 Run
+
+	$>mvn -Dtest=*TestBrowser test
+	This will run only the htmlunit test cases.

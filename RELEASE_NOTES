@@ -1,43 +1,45 @@
-Apache PhotArk 0.1 February 2009 Release Notes
-============================================================
+Apache Photark M2 Release Notes.
 
-Apache PhotArk will be a complete open source photo gallery 
-application including a content repository for the images, 
-a display piece, an access control layer, and upload capabilities. 
-The idea is to have a rigid design for the content repository 
-with a very flexible display piece. The images in the content
-repository will be protected with granular access control.
-
-
-See the CHANGES file for a detailed list of the features in this release.
-
-Support
--------
-
-For more information on Apache PhotArk visit the website at:
-
-    http://incubator.apache.org/photark
+1. Overview
  
-Any issues with this release can be reported to Apache PhotArk
-using the mailing lists or in the JIRA issue tracker.
+Apache Photark M2 is second Milestone release and fixes over 15 JIRA issues reported by users and the community.
 
-    Mailing list archives:
+2. Installation Prerequisites 
 
-       http://mail-archives.apache.org/mod_mbox/incubator-photark-user/
-       http://mail-archives.apache.org/mod_mbox/incubator-photark-dev/
+Before installing Apache Photark, make sure the following products,
+with the specified versions, are installed on your system:
 
-    Jira:
+    * Java 5 Development Kit
+    * Maven 2.0.7 or higher
 
-       http://issues.apache.org/jira/browse/PHOTARK
 
-To join the project's mailing lists follow the instructions at:
+3. Specific issues, features, and improvements fixed in this version
 
-    http://incubator.apache.org/photark/mail-lists.html
+Release Notes - Photark - Version M2
 
-Apache PhotArk welcomes your help. Any contribution, including code,
-testing, improving the documentation, or bug reporting is always
-appreciated. 
 
-Thank you for using Apache PhotArk!
+** Bug
+    * [PHOTARK-10] - Small issues with album navigation UI.
+    * [PHOTARK-15] - Add RAT profile to build and correct any license issues in current trunk code
+    * [PHOTARK-21] - Repeatedly call populateSelect method in upload.html
+    * [PHOTARK-30] - JDK1.5 compatibility not preserved
+    * [PHOTARK-31] - TopNavigator on the PhotArk website is broken and is pointing to a different project website
 
-- The PhotArk Team.
+** Improvement
+    * [PHOTARK-6]  - Simplify PhotArk UI to use a well known JavaScript Framework.
+    * [PHOTARK-7]  - Move to Latest Tuscany Release
+    * [PHOTARK-9]  - JCR support for photark-webpp
+    * [PHOTARK-12] - Image content should be saved and read from in JCR Repository.
+    * [PHOTARK-13] - rest style uris.
+    * [PHOTARK-23] - Progress Bar support during image upload.
+    * [PHOTARK-25] - auho hide newAlbumNameField in the admin panel.
+
+** New Feature
+    * [PHOTARK-1]  - Provide Administration UI to allow user to create new album.
+    * [PHOTARK-5]  - Add support for deploying PhotArk WebApp to Google AppEngine.
+    * [PHOTARK-11] - simple ui that allow you to create a new album and upload images to it.
+    * [PHOTARK-17] - Provide support for reading image EXIF metadata
+    * [PHOTARK-24] - slide show to PhotArk gallery.
+    * [PHOTARK-26] - Revamp Admin UI to support delete,edit and update albums and pictures.
+    
+    

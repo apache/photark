@@ -1,19 +1,38 @@
-Apache PhotArk 0.1 February 2009 Readme
-============================================================
-
-Welcome to the PhotArk 1.4 release. 
-
-See the RELEASE_NOTES file for information specific to this release.
-
-In the binary release see the INSTALL file for information on how to 
-install the release.
-
-In the source distribution see the BUILDING file for information on
-building the source code.
+Welcome to Apache Photark
+==========================
+Apache PhotArk will be a complete open source photo gallery 
+application including a content repository for the images, 
+a display piece, an access control layer, and upload capabilities. 
+The idea is to have a rigid design for the content repository 
+with a very flexible display piece. The images in the content
+repository will be protected with granular access control.
 
 
+Getting Started
+===============
 
+For an Apache Photark source distribution, please read BUILDING for 
+instructions on building Apache Photark. 
 
+For an Apache Photark binary distribution, please read RELEASE_NOTES
+for installation instructions and list of supported and unsupported 
+features.
 
+Alternatively, you can also find out how to get started here:
+http://incubator.apache.org/photark/photark-developer-guide.html
 
+If you need more help try talking to us on our mailing lists:
+http://incubator.apache.org/photark/photark-mailing-lists.html
+ 
+If you find any issues with Photark, please submit reports with JIRA here:
+https://issues.apache.org/jira/browse/PHOTARK
 
+We welcome contributions, and encourage you to get involved in the Photark
+community. If you'd like to learn more about how you can contribute, please
+see:
+http://incubator.apache.org/photark/photark-getting-involved.html
+
+Thank you for using Photark!
+
+The Apache Photark Team
+http://incubator.apache.org/photark
