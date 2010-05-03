@@ -40,6 +40,14 @@
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-jcr</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
+			<!-- 
+			<exclusions>
+				<exclusion>
+					<artifactId>jackrabbit-text-extractors</artifactId>
+					<groupId>org.apache.jackrabbit</groupId>
+				</exclusion>
+			</exclusions>
+			-->
 		</dependency>
 
 		<dependency>
@@ -59,7 +67,17 @@
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>
-			<version>${tuscany.version}</version>
+			<version>${tuscany.version}</version> 
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>				
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -72,7 +90,7 @@
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-implementation-java-runtime</artifactId>
 			<version>${tuscany.version}</version>
-			<scope>runtime</scope>
+			<scope>runtime</scope> 
 			<exclusions>
 				<exclusion>
 					<groupId>asm</groupId>
@@ -99,7 +117,15 @@
 					<groupId>org.apache.ws.commons.axiom</groupId>
 					<artifactId>axiom-impl</artifactId>
 				</exclusion>
-			</exclusions>			
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>				
+			</exclusions>
 		</dependency>
 		
 		<dependency>
@@ -115,19 +141,19 @@
 		   <version>1.4.2</version>
 		   <type>zip</type>
 		</dependency>   
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.3.0</version>
+			<version>1.5.3</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.3.0</version>
+			<version>1.5.3</version>
 		</dependency>		
-
+		 
 		<!-- marking dependency as provided to exclude from war file -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

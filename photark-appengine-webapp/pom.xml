@@ -47,14 +47,22 @@
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>
 			<version>${tuscany.version}</version>
-
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>				
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-data-api</artifactId>
 			<version>${tuscany.version}</version>
-
 		</dependency>
 
 		<dependency>
@@ -62,6 +70,16 @@
 			<artifactId>tuscany-implementation-java-runtime</artifactId>
 			<version>${tuscany.version}</version>
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cglib</groupId>
+					<artifactId>cglib</artifactId>
+				</exclusion>
+			</exclusions>			
 		</dependency>
 
 		<dependency>
@@ -77,6 +95,14 @@
 				<exclusion>
 					<groupId>org.apache.ws.commons.axiom</groupId>
 					<artifactId>axiom-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
