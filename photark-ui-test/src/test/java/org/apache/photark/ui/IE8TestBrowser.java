@@ -97,15 +97,15 @@ public class IE8TestBrowser {
 		//testing the loaded page
 		HtmlSelect select = page.getHtmlElementById("selectAlbum"); 
 		assertTrue(select.asText().contains("New Album"));
-		assertTrue(page.getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertTrue(page.getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
-		assertTrue(page.getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
 
-		assertFalse(page.getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertFalse(page.getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
-		assertFalse(page.getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
-		assertFalse(page.getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertFalse(page.getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
 
 		//selecting an album from drop down
 		HtmlOption option = select.getOption(1);
@@ -113,26 +113,26 @@ public class IE8TestBrowser {
 		Thread.sleep(3000);
 		//testing whether the expected changes has happened
 		assertTrue(select.asText().contains("boston"));
-		assertTrue(page.getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc"));
 		
-		assertTrue(page.getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertTrue(page.getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
 		
-		assertTrue(page.getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
-		assertTrue(page.getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
-		assertTrue(page.getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertFalse(page.getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
-		assertFalse(page.getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
 
 		//checking the changes by clicking the edit album description button
-		assertTrue(page.getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		page.getHtmlElementById("btnAlbumDesc").click();
+		assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+		page.<HtmlElement>getHtmlElementById("btnAlbumDesc").click();
 		assertTrue(page.getFocusedElement().getAttribute("id").contains("albumDescription"));
-		assertFalse(page.getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertFalse(page.getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		page.getHtmlElementById("cancelBtnAlbumDesc").click();
-		assertTrue(page.getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		assertTrue(page.getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+		assertFalse(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+		page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").click();
+		assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
 
 	}
 
