@@ -47,12 +47,6 @@
             <artifactId>photoark-gallery-webapp</artifactId>
             <version>1.0-incubating-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.photark</groupId>
-            <artifactId>photoark-gallery-webapp</artifactId>
-            <version>1.0-incubating-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>

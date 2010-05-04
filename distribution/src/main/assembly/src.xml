@@ -38,6 +38,10 @@
             <exclude>**/.*</exclude>
             <exclude>**/.*/**</exclude>
             <exclude>**/*.log</exclude>
+            <exclude>**/WEB-INF/lib</exclude>
+            <exclude>**/WEB-INF/lib/**/*</exclude>
+            <exclude>**/WEB-INF/classes</exclude>
+            <exclude>**/WEB-INF/classes/**/*</exclude>
             <exclude>**/target</exclude>
             <exclude>**/target/**/*</exclude>
             <exclude>**/work</exclude>
