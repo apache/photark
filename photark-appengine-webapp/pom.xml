@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.photark</groupId>
 		<artifactId>photark-parent</artifactId>
-		<version>1.0-incubating-SNAPSHOT</version>
+		<version>M2-incubating-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>photark-appengine-webapp</artifactId>
@@ -33,13 +33,13 @@
 		<dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark</artifactId>
-			<version>1.0-incubating-SNAPSHOT</version>
+			<version>M2-incubating-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-ui</artifactId>
-			<version>1.0-incubating-SNAPSHOT</version>
+			<version>M2-incubating-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
 
