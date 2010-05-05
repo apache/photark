@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.photark</groupId>
         <artifactId>photark-parent</artifactId>
-        <version>M2-incubating-SNAPSHOT</version>
+        <version>M2-incubating</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>photark-ui-admin</artifactId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.apache.photark</groupId>
             <artifactId>photark</artifactId>
-            <version>M2-incubating-SNAPSHOT</version>
+            <version>M2-incubating</version>
         </dependency>
 
         <dependency>
