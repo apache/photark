@@ -8,6 +8,17 @@ This product includes/uses XmlSchema developed at
 The Apache Software Foundation (http://ws.apache.org/commons/XmlSchema)
  Portions Copyright 2006 International Business Machines Corp.
 
+This product includes Apache Derby, which is based on source code originally
+developed at the International Business Machines Corporation.
+(C) Copyright 1997,2004 International Business Machines Corporation.
+All rights reserved.
+(C) Copyright IBM Corp. 2003.
+
+This software contains PDF reader functionality from the PDFBox, FontBox, and
+JempBox projects. Copyright (c) 2003-2005, www.pdfbox.org and www.fontbox.org.
+
+This software contains SLF4J libraries. Copyright (c) 2004-2008 QOS.ch
+
 This product includes/uses software, AOP alliance (http://aopalliance.sourceforge.net)
 License: Public Domain 
 
