@@ -149,6 +149,9 @@
             <id>codehaus-snapshot</id>
             <name>Codehaus Snapshot Repository</name>
             <url>http://snapshots.repository.codehaus.org</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -188,12 +191,11 @@
                 <module>photark-jcr</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
-                <module>photark-ui-test</module>
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>
             </modules>
         </profile>
-        
+
         <!-- ====================================================================== -->
         <!-- Profile to build release distribution                                  -->
         <!-- ====================================================================== -->
@@ -206,13 +208,28 @@
                 <module>photark-jcr</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
-                <module>photark-ui-test</module>                
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>
             </modules>
         </profile>
 
-
+        <!-- ====================================================================== -->
+        <!-- Profile to build integration-test with tomcat                          -->
+        <!-- ====================================================================== -->
+        <profile>
+            <id>integration</id>
+            <modules>
+                <module>distribution</module>
+                <module>photark</module>
+                <module>photark-filesystem</module>                
+                <module>photark-jcr</module>
+                <module>photark-ui</module>
+                <module>photark-ui-admin</module>
+                <module>photark-ui-test</module>                
+                <module>photark-appengine-webapp</module>                
+                <module>photark-webapp</module>
+            </modules>
+        </profile>
         <!-- ====================================================================== -->
         <!-- Profile to run Apache License check plugin                             -->
         <!-- usage:                                                                 -->

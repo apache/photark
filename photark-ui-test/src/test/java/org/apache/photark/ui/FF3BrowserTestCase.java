@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -44,7 +45,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 
 
-public class FF3TestBrowser {
+public class FF3BrowserTestCase {
 
 	public static WebClient webClient;
 
@@ -71,7 +72,8 @@ public class FF3TestBrowser {
 		//albums loaded
 		assertTrue( table.getRow(1).getCell(0).asText().contains("boston"));
 		//Gallery pictures loaded
-		assertTrue( table.getRow(3).getCell(0).asXml().contains("http://localhost:8080/photark/gallery/vegas/dsc00860.jpg")); 
+		assertTrue( table.getRow(3).getCell(0).asXml().contains("http://localhost:8080/photark/gallery/vegas/dsc00")); //Don't use a specific image
+		                                                                                                               //as we can get <> order in <> OS
 		
 		//clicking on an image
 		assertTrue(page.getElementById("albumImage").getAttribute("src").contains("space.gif"));
@@ -81,8 +83,8 @@ public class FF3TestBrowser {
 		
 		Thread.sleep(3000);
 		//checking whether there are images in the album
-		assertTrue( page2.getElementById("albumImage").getAttribute("src").contains("/photark/gallery/vegas/dsc00860.jpg"));
-
+		assertTrue( page2.getElementById("albumImage").getAttribute("src").contains("/photark/gallery/vegas/dsc00")); //Don't use a specific image
+                                                                                                                              //as we can get <> order in <> OS
 	}
 
 	@Test
@@ -90,7 +92,7 @@ public class FF3TestBrowser {
 		//passing credentials
 		final List collectedAlerts = new ArrayList();
 		webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
-		((DefaultCredentialsProvider) webClient.getCredentialsProvider()).addCredentials("admin", "password"); 
+		((DefaultCredentialsProvider) webClient.getCredentialsProvider()).addCredentials("photark-admin", "password"); 
 
 		final HtmlPage page = webClient.getPage("http://localhost:8080/photark/admin/upload.html");
 		Thread.sleep(3000);
