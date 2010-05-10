@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -47,96 +46,96 @@ import com.gargoylesoftware.htmlunit.html.HtmlTable;
 
 public class FF3BrowserTestCase {
 
-	public static WebClient webClient;
+    public static WebClient webClient;
 
-	@BeforeClass
-	public static void setUp(){
-		webClient = new WebClient(BrowserVersion.FIREFOX_3);
-	}
+    @BeforeClass
+    public static void setUp(){
+        webClient = new WebClient(BrowserVersion.FIREFOX_3);
+    }
 
-	@Test
-	public void testGallery() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
-		final HtmlPage page = webClient.getPage("http://localhost:8080/photark/");
-		final HtmlTable table = page.getHtmlElementById("tableGallery");
-		
-		//testing the static part of the gallery
-		final String pageAsXml = page.asXml();
-		assertTrue(pageAsXml.contains("<a href=\"javascript:displayGallery()\" onmouseover=\"document.index.src=index_on.src\" onmouseout=\"document.index.src=index_off.src\" onmousedown=\"beforeClick();\">"));
-		assertTrue(pageAsXml.contains("<body onload=\"initGallery()\">"));
-		final String pageAsText = page.asText();
-		assertTrue(pageAsText.contains("Apache PhotArk Gallery"));
-		
-		Thread.sleep(3000);
-		//testing the dynamic part of the gallery
-		
-		//albums loaded
-		assertTrue( table.getRow(1).getCell(0).asText().contains("boston"));
-		//Gallery pictures loaded
-		assertTrue( table.getRow(3).getCell(0).asXml().contains("http://localhost:8080/photark/gallery/vegas/dsc00")); //Don't use a specific image
-		                                                                                                               //as we can get <> order in <> OS
-		
-		//clicking on an image
-		assertTrue(page.getElementById("albumImage").getAttribute("src").contains("space.gif"));
-		DomNodeList<HtmlElement> ele= table.getRow(3).getCell(0).getElementsByTagName("a");
-		final HtmlAnchor anchor =(HtmlAnchor) ele.get(0);
-		final HtmlPage page2= anchor.click(); 
-		
-		Thread.sleep(3000);
-		//checking whether there are images in the album
-		assertTrue( page2.getElementById("albumImage").getAttribute("src").contains("/photark/gallery/vegas/dsc00")); //Don't use a specific image
-                                                                                                                              //as we can get <> order in <> OS
-	}
+    @Test
+    public void testGallery() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
+        final HtmlPage page = webClient.getPage("http://localhost:8080/photark/");
+        final HtmlTable table = page.getHtmlElementById("tableGallery");
 
-	@Test
-	public void testAdmin() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
-		//passing credentials
-		final List collectedAlerts = new ArrayList();
-		webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
-		((DefaultCredentialsProvider) webClient.getCredentialsProvider()).addCredentials("photark-admin", "password"); 
+        //testing the static part of the gallery
+        final String pageAsXml = page.asXml();
+        assertTrue(pageAsXml.contains("<a href=\"javascript:displayGallery()\" onmouseover=\"document.index.src=index_on.src\" onmouseout=\"document.index.src=index_off.src\" onmousedown=\"beforeClick();\">"));
+        assertTrue(pageAsXml.contains("<body onload=\"initGallery()\">"));
+        final String pageAsText = page.asText();
+        assertTrue(pageAsText.contains("Apache PhotArk Gallery"));
 
-		final HtmlPage page = webClient.getPage("http://localhost:8080/photark/admin/upload.html");
-		Thread.sleep(3000);
-		
-		//testing the loaded page
-		HtmlSelect select = page.getHtmlElementById("selectAlbum"); 
-		assertTrue(select.asText().contains("New Album"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+        Thread.sleep(3000);
+        //testing the dynamic part of the gallery
 
-		assertFalse(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
+        //albums loaded
+        assertTrue( table.getRow(1).getCell(0).asText().contains("boston"));
+        //Gallery pictures loaded
+        assertTrue( table.getRow(3).getCell(0).asXml().contains("http://localhost:8080/photark/gallery/vegas/dsc00")); //Don't use a specific image
+        //as we can get <> order in <> OS
 
-		//selecting an album from drop down
-		HtmlOption option = select.getOption(1);
-		option.click();
-		Thread.sleep(3000);
-		//testing whether the expected changes has happened
-		assertTrue(select.asText().contains("boston"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc"));
-		
-		assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
-		
-		assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+        //clicking on an image
+        assertTrue(page.getElementById("albumImage").getAttribute("src").contains("space.gif"));
+        DomNodeList<HtmlElement> ele= table.getRow(3).getCell(0).getElementsByTagName("a");
+        final HtmlAnchor anchor =(HtmlAnchor) ele.get(0);
+        final HtmlPage page2= anchor.click(); 
 
-		//checking the changes by clicking the edit album description button
-		assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		page.<HtmlElement>getHtmlElementById("btnAlbumDesc").click();
-		assertTrue(page.getFocusedElement().getAttribute("id").contains("albumDescription"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
-		assertFalse(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").click();
-		assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
-		assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+        Thread.sleep(3000);
+        //checking whether there are images in the album
+        assertTrue( page2.getElementById("albumImage").getAttribute("src").contains("/photark/gallery/vegas/dsc00")); //Don't use a specific image
+        //as we can get <> order in <> OS
+    }
 
-	}
-	
+    @Test
+    public void testAdmin() throws FailingHttpStatusCodeException, MalformedURLException, IOException, InterruptedException {
+        //passing credentials
+        final List collectedAlerts = new ArrayList();
+        webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
+        ((DefaultCredentialsProvider) webClient.getCredentialsProvider()).addCredentials("photark-admin", "password"); 
+
+        final HtmlPage page = webClient.getPage("http://localhost:8080/photark/admin/upload.html");
+        Thread.sleep(3000);
+
+        //testing the loaded page
+        HtmlSelect select = page.getHtmlElementById("selectAlbum"); 
+        assertTrue(select.asText().contains("New Album"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+
+        assertFalse(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
+
+        //selecting an album from drop down
+        HtmlOption option = select.getOption(1);
+        option.click();
+        Thread.sleep(3000);
+        //testing whether the expected changes has happened
+        assertTrue(select.asText().contains("boston"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("albumCover").asXml().contains("photark/gallery/boston/dsc"));
+
+        assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00376.jpg"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("adminTableGallery").asXml().contains("photark/gallery/boston/dsc00368.jpg"));
+
+        assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumLabel").getAttribute("style").contains("display: none;"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("newAlbumName").getAttribute("style").contains("display: none;"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("deleteAlbum").getAttribute("style").contains("display: none;"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("btnAlbumDesc").getAttribute("style").contains("display: none;"));
+
+        //checking the changes by clicking the edit album description button
+        assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+        page.<HtmlElement>getHtmlElementById("btnAlbumDesc").click();
+        assertTrue(page.getFocusedElement().getAttribute("id").contains("albumDescription"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+        assertFalse(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+        page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").click();
+        assertTrue(page.<HtmlElement>getHtmlElementById("albumDescription").getAttribute("readonly").contains("readonly"));
+        assertTrue(page.<HtmlElement>getHtmlElementById("cancelBtnAlbumDesc").getAttribute("style").contains("display: none;"));
+
+    }
+
 }
