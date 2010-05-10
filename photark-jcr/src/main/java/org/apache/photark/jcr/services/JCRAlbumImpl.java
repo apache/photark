@@ -146,11 +146,11 @@ public class JCRAlbumImpl implements Album {
             Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
             Node albumNode = root.getNode(name);
-            if(albumNode.hasProperty("description")){
+            if (albumNode.hasProperty("description")) {
                 description = albumNode.getProperty("description").getString();
-            }else{
+            } /*else {
                 logger.info("description of album " + name + " not found");
-            }
+            } */
 
         } catch (Exception e) {
             // FIXME: ignore for now
