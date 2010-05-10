@@ -29,8 +29,8 @@ public class ImageFilter implements FilenameFilter {
     String afn;
     public ImageFilter(String afn) { this.afn = afn; }
     public boolean accept(File dir, String name) {
-      // Strip path information:
-      String f = new File(name).getName();
-      return f.indexOf(afn) != -1;
+        // Strip path information:
+        String f = new File(name).getName();
+        return f.indexOf(afn) != -1;
     }
-  }
+}

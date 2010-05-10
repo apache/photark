@@ -25,23 +25,23 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface Album {
 
-	String getName();
+    String getName();
 
-	void setName(String name);
+    void setName(String name);
 
-	String getDescription();
+    String getDescription();
 
-	void setDescription(String description);
+    void setDescription(String description);
 
-	String getLocation();
+    String getLocation();
 
-	void setLocation(String location);
+    void setLocation(String location);
 
-	String[] getPictures();
+    String[] getPictures();
 
-	void addPicture(Image picture);
+    void addPicture(Image picture);
 
-	void deletePicture(String picture);
+    void deletePicture(String picture);
 
-	void deletePicture(Image picture);
+    void deletePicture(Image picture);
 }
