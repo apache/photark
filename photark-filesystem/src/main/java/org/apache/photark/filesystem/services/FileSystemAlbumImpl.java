@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.filesystem.impl;
+package org.apache.photark.filesystem.services;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,15 +29,14 @@ import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
-
-public class AlbumImpl implements Album {
+public class FileSystemAlbumImpl implements org.apache.photark.services.album.Album {
 	private String name;
 	private String location;
-	private String description;    
+	private String description;
 	private boolean initialized;
-	private List<String> pictures = new ArrayList<String>();
+	private java.util.List<String> pictures = new java.util.ArrayList<String>();
 
-	@Init
+	@org.oasisopen.sca.annotation.Init
 	public void init() {
 		try {
 			/*
@@ -48,9 +47,9 @@ public class AlbumImpl implements Album {
             }*/
 
 			if(location != null) {
-				File album = new File(location);
+				java.io.File album = new java.io.File(location);
 				if (album.isDirectory() && album.exists()) {
-					String[] listPictures = album.list(new ImageFilter(".jpg"));
+					String[] listPictures = album.list(new org.apache.photark.services.album.ImageFilter(".jpg"));
 					for(String image : listPictures) {
 						pictures.add(image);
 					}
@@ -66,7 +65,7 @@ public class AlbumImpl implements Album {
 		return name;
 	}
 
-	@Property
+	@org.oasisopen.sca.annotation.Property
 	public void setName(String name) {
 		this.name = name;
 		this.location = null;
@@ -76,7 +75,7 @@ public class AlbumImpl implements Album {
 		return location;
 	}
 
-	@Property
+	@org.oasisopen.sca.annotation.Property
 	public void setLocation(String location) {
 		this.location = location;
 	}
@@ -90,11 +89,11 @@ public class AlbumImpl implements Album {
 		return pictureArray;
 	}
 
-	public void addPicture(Image picture){
+	public void addPicture(org.apache.photark.Image picture){
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
-	public void deletePicture(Image picture){
+	public void deletePicture(org.apache.photark.Image picture){
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
@@ -110,3 +109,4 @@ public class AlbumImpl implements Album {
 		this.description=description;
 	}
 }
+
