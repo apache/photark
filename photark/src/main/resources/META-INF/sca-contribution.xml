@@ -20,7 +20,5 @@
 <contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200903"
               xmlns:photark="http://org.apache.photoark">
    <export.java package="org.apache.photark.services.album"/>
-   <export.java package="org.apache.photark.services.album.filesystem"/>
    <export.java package="org.apache.photark.services.gallery"/>
-   <export.java package="org.apache.photark.services.gallery.filesystem"/>
 </contribution>
