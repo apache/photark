@@ -25,10 +25,4 @@ if (! photark.constants) {
 	photark.constants = {};
 }
 
-photark.constants.contextRoot = "/photark/";
-photark.constants.adminContextRoot = "/photark/admin/";
-
-
-photark.constants.GalleryServiceEndpoint = photark.constants.contextRoot + "GalleryService?smd";
-
-photark.constants.UploadEndpoint = photark.constants.adminContextRoot + "upload";
+photark.constants.GalleryServiceEndpoint = "/Gallery?smd";

@@ -32,6 +32,7 @@
       CSS treatments. */
 	margin:0;
 	padding:0;
+	text-align:center;
  }
  
 
@@ -101,3 +102,32 @@
 	padding-top: 40px;
 }
 
+.uploadBtn{
+    border:1px solid #333333;
+    background:url(images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
+    font-size:14px;
+    width:201px;
+    height:30px;
+    vertical-align:middle; /* emulates a <button> if node is not */
+    text-align:center;
+}
+.uploadHover{
+    background-image:url(images/buttonHover.png);
+    cursor:pointer;
+    font-weight:bold;
+}
+.uploadPress{
+    background-image:url(images/buttonActive.png);
+}
+.uploadDisabled{
+    background-image:none;
+    background-color:#666;
+    color:#999;
+    border:1px solid #999;
+}
+
+#progressDiv,#progressBar {
+    font-family:helvetica,arial,sans-serif;
+    font-size:90%;
+    z-index: 1000;
+}

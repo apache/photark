@@ -18,306 +18,77 @@
 -->
 <html>
 <head>
-<title>Apache PhotArk - Photo Gallery</title>
+    <title>Apache PhotArk - Photo Gallery</title>
 
-<link href="styles.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
-<script type="text/javascript" src="constants.js"></script>
-<script type="text/javascript" src="dojo/dojo.js"></script>
-
-<script language="JavaScript">
-
-    index_off= new Image(31,31); index_off.src = "index.gif";
-    index_on = new Image(31,31); index_on.src = "index_on.gif";
-    next_off = new Image(31,31); next_off.src = "next.gif";
-    next_on  = new Image(31,31); next_on.src = "next_on.gif";
-    prev_off = new Image(31,31); prev_off.src = "prev.gif";
-    prev_on  = new Image(31,31); prev_on.src = "prev_on.gif";
-    slide_before_start  = new Image(31,31); slide_before_start.src = "slide_before_start.gif";
-    slide_pause  = new Image(31,31); slide_pause.src = "slide_pause.gif";
-    show_slide  = new Image(31,31); show_slide.src = "show_slide.gif";
-    show_slide_on  = new Image(31,31); show_slide_on.src = "show_slide_on.gif";
-    show_slide_slow  = new Image(31,31); show_slide_slow.src = "show_slide_slow.gif";
-    show_slide_slow_on  = new Image(31,31); show_slide_slow_on.src = "show_slide_slow_on.gif";
- 
-    var gallery;
-	var galleryName;
-	var galleryAlbums;
-	var albumCovers = new Array();
-	var albumName;
-	var albumItems;
-	var albumPos = 0;
-    var pos = 0;
-    var slideShowSpeed=0;
-    var timer;
-	
-	dojo.addOnLoad(function() {
-		dojo.require("dojo.rpc.JsonService");
-	    dojo.addOnLoad(initServices);
-	    dojo.addOnLoad(initGallery);
-	 });
-	 	 
-	function initServices(){
-		gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-	}
-	
-	function initGallery() {
-		try {
-			if( !gallery) {
-				gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-			}
-			gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
-		} catch(exception) {
-			alert(exception);
-		}
-	}
-	
-	function gallery_getAlbumsResponse(albums, exception) {
-		if(exception) {
-			alert(exception.msg);
-			return;
-		}
-		galleryAlbums = albums;
-
-		for(i=0; i< galleryAlbums.length; i++)
-		{
-			gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
-		}
-	}
-
-
-	function gallery_getAlbumCoverResponse(cover, exception) {
-		if(exception){
-			alert(exception.msg);
-			return;
-		}
-		albumCovers[pos] = cover;
-		pos += 1;
-		if(albumCovers.length == galleryAlbums.length) 
-		{
-			initializeGallery();
-			displayGallery();
-		}
-	}
-
-	function initializeGallery() {
-		var table=document.getElementById('tableGallery');
-		var lastRow = table.rows.length;
-		for (i = 0; i < galleryAlbums.length; i++) {
-			var row = table.insertRow(lastRow++);
-			var column = row.insertCell(0);
-			
-			if (albumCovers[i] != null) {
-			
-				var albumName = galleryAlbums[i].name;
-				var img = document.createElement("img");
-				img.src = window.location.href + "gallery/"+ albumName +"/" + albumCovers[i];
-				var img_html = "<img src=" + img.src + " class=\"slideImage\" width=180px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
-				var html = "<a href=\"javascript:initializeAlbum('" + albumName + "')\">" + img_html + "</a>";
-				column.innerHTML = html;
-				
-				column = row.insertCell(1);
-				column.innerHTML = "<div style=\"width:500\">"+galleryAlbums[i].description+"</div>";
-				
-				row = table.insertRow(lastRow++);
-				column = row.insertCell(0)
-				column.innerHTML = albumName;
-			
-				row = table.insertRow(lastRow++);
-				column = row.insertCell(0)
-				column.innerHTML = "<img src=\"space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
-			}
-	   }
-	}
-
-	function displayGallery() {
-		setVisibility('gallery',true);
-		setVisibility('album',false);
-	}
-
-	function initializeAlbum(albumName) {
-		try {
-			this.albumName = albumName; 
-			gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse);
-		} catch(exception) {
-			alert(e);
-		}		
-	}
-
-	function gallery_getAlbumPicturesResponse(items, exception) {
-		if(exception) {
-			alert(exception.msg);
-			displayGallery();
-			return;
-		}
-		albumItems = items;
-		albumPos = 0;
-		showAlbum();
-	}
-
-	function showAlbum() {
-		if(albumItems.length > 0) {
-			showImage(albumPos);
-		}
-		displayAlbum();
-	}	
-	
-	function displayAlbum() {
-		setVisibility('gallery',false);
-		setVisibility('album',true);
-	}
-
-	function showImage(albumPos) {		
-	   	var img = document.createElement("img");
-		img.onload = function(evt) {
-			document.getElementById("albumImage").src = this.src;
-	        document.getElementById("albumImage").width=this.width;
-	        document.getElementById("albumImage").height=this.height;
-	    }
-	    img.src = window.location.href + "gallery/"+ this.albumName +"/" + albumItems[albumPos];
-	    return false;
-	}
-	
-	function goNext() {
-		if(albumPos < albumItems.length - 1) {
-			albumPos++;
-			showImage(albumPos);
-		}
-	}
-
-	function goPrevious() {
-		if(albumPos > 0) {
-			albumPos--;
-			showImage(albumPos);
-		}
-	}
-	
-	function setVisibility(divId, visible) {
-		//valid values { visible, hidden }
-		if (document.getElementById) {
-			var element = document.getElementById(divId)
-			if(visible) {
-				element.style.display = 'block';
-				element.style.visibility = 'visible';
-			} else {
-				element.style.display = 'none';
-				element.style.visibility = 'hidden';
-			}
-		}
-	} 
-	
-	function onGoPreviousMouseOver(){
-		if(albumPos == 0){
-			document.previous.src=prev_off.src;
-		}else{
-			document.previous.src=prev_on.src;
-		}
-	}
-	
-	function onGoNextMouseOver(){
-		if(albumPos == albumItems.length - 1){
-			document.next.src=next_off.src;
-		}else{
-			document.next.src=next_on.src;
-		}
-	}
-	
-	function goSlideShow(){		
-		if(slideShowSpeed==0){
-			slideShowSpeed=1;
-			clearTimeout(timer);
-			startTimer(5000);
-		}else if(slideShowSpeed==1) {
-			slideShowSpeed=2;
-			clearTimeout(timer);
-			startTimer(2000);
-		}else{
-			slideShowSpeed=0;
-			clearTimeout(timer);
-		}
-	}
-	
-	function beforeClick(){
-			clearTimeout(timer);
-			slideShowSpeed=0;
-			document.show.src=slide_before_start.src;			
-	}
-	
-	function onSlideShow(){
-		if(slideShowSpeed==0){
-			document.show.src=show_slide_slow_on.src;
-		}else if(slideShowSpeed==1){
-			document.show.src=show_slide_on.src;
-		}else{
-			document.show.src=slide_pause.src;
-		}
-	}
-	
-	function offSlideShow(){
-		if(slideShowSpeed==0){
-			document.show.src=slide_before_start.src;
-		}else if(slideShowSpeed==1){
-			document.show.src=show_slide_slow.src;
-		}else{
-			document.show.src=show_slide.src;
-		}
-	}
-	
-	function startTimer(time){
-		if(albumPos < albumItems.length - 1) {
-			albumPos++;
-		}else{
-			albumPos=1;
-		}
-		showImage(albumPos);
-		timer=setTimeout("startTimer("+time+")",time);
-	}
-	
-</script>
-
+    <script type="text/javascript" src="js/constants.js"></script>
+    <script type="text/javascript" src="dojo/dojo.js"></script>
+    <script type="text/javascript" src="js/gallery.js"></script>
 </head>
 
 <body onload="initGallery()">
-<br>
-<h1><center>Apache PhotArk Gallery</center></h1>
-<br>
-<br>
+    <div>
+        <h1>Apache PhotArk Gallery</h1>
+    </div>
+        
+    <br>
 
-<div id='gallery' style='display:none;visibility:hidden;'>
-     <center>
-     <table id='tableGallery' style='width:720px;' border='0' cellspacing='0' cellpadding='1'></table>
-     </center>
-</div>
-  
-<div id="album" style="display:none;visibility:hidden;">
-  <center>
+    <div id="gallery" style="display:none;visibility:hidden;">
+         <table id='tableGallery' style="margin-left:auto; margin-right:auto;width:720px;" border="0"
+                cellspacing="0" cellpadding="1">
+         </table>
+    </div>
 
-  <table style="height:54px;" cellspacing="0" cellpadding="0" border="0">
-     <tr>
-     	<td valign="middle">
-     	   <!-- Navigation Header -->
-		   <table style="width:100%;" cellspacing="0" cellpadding="0" border="0">
-             <tr>
-             	<td style="width:31px;"><a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src" onmouseout="document.index.src=index_off.src" onmousedown="beforeClick();"><img src="index.gif" width="31" height="31" border="0" title="Index page" name="index" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goPrevious()" onmouseover="onGoPreviousMouseOver();" onmouseout="document.previous.src=prev_off.src" onmousedown="beforeClick();"><img src="prev.gif" width="31" height="31" border="0" title="Previous image" name="previous" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goNext()" onmouseover="onGoNextMouseOver();" onmouseout="document.next.src=next_off.src" onmousedown="beforeClick();"><img src="next.gif" width="31" height="31" border="0" title="Next image" name="next" alt=""></a></td>
-                <td style="width:31px;"><a href="javascript:goSlideShow()" onmouseover="onSlideShow();" onmouseout="offSlideShow();"><img src="slide_before_start.gif" width="31" height="31" border="0" title="Start(Slow)/Fast/Stop slideshow" name="show" alt=""></a></td> 
-             </tr>
-		   </table>
-		</td>
-	</tr>
-  </table>
+    <div id="album" style="display:none;visibility:hidden;">
+      <table style="margin-left:auto; margin-right:auto; height:54px;" cellspacing="0" cellpadding="0" border="0">
+         <tr>
+            <td valign="middle">
+               <!-- Navigation Header -->
+               <table style="width:100%;" cellspacing="0" cellpadding="0" border="0">
+                 <tr>
+                    <td style="width:31px;">
+                        <a href="javascript:displayGallery()" onmouseover="document.index.src=index_on.src"
+                           onmouseout="document.index.src=index_off.src" onmousedown="beforeClick();">
+                            <img src="images/index.gif" width="31" height="31" border="0" title="Index page"
+                                 name="index" alt="" />
+                        </a>
+                    </td>
+                    <td style="width:31px;">
+                        <a href="javascript:goPrevious()" onmouseover="onGoPreviousMouseOver();"
+                           onmouseout="document.previous.src=prev_off.src" onmousedown="beforeClick();">
+                            <img src="images/prev.gif" width="31" height="31" border="0" title="Previous image"
+                                 name="previous" alt="" />
+                        </a>
+                    </td>
+                    <td style="width:31px;">
+                        <a href="javascript:goNext()" onmouseover="onGoNextMouseOver();"
+                           onmouseout="document.next.src=next_off.src" onmousedown="beforeClick();">
+                            <img src="images/next.gif" width="31" height="31" border="0" title="Next image"
+                                 name="next" alt="" />
+                        </a>
+                    </td>
+                    <td style="width:31px;">
+                        <a href="javascript:goSlideShow()" onmouseover="onSlideShow();" onmouseout="offSlideShow();">
+                            <img src="images/slide_before_start.gif" width="31" height="31" border="0"
+                                 title="Start(Slow)/Fast/Stop slideshow" name="show" alt=""/>
+                        </a>
+                    </td>
+                 </tr>
+               </table>
+            </td>
+        </tr>
+      </table>
 
-  <table style="width:720px;" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-     	<td align="center"> <!-- Image without original -->
-        <img id="albumImage" src="space.gif" class="slideImage" width="720" height="540" ondragstart="return false" onselectstart="return false" oncontextmenu="return false" galleryimg="no" usemap="#imagemap" alt="">
-		</td>
-    </tr>
-  </table>
-
-  </center>  
-</div>
+      <table style="margin-left:auto; margin-right:auto;width:720px;" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center"> <!-- Image without original -->
+                <img id="albumImage" src="images/space.gif" class="slideImage" width="720" height="540" ondragstart="return false"
+                     onselectstart="return false" oncontextmenu="return false" galleryimg="no" usemap="#imagemap" alt=""/>
+            </td>
+        </tr>
+      </table>
+    </div>
 
 </body>
 </html>

@@ -20,243 +20,30 @@
 <html>
 
 <head>
-<script type="text/javascript" src="../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
-<script type="text/javascript" src="../constants.js"></script>
-<script type="text/javascript" src="upload.js" charset="utf-8"></script>
-
-<link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css">
-<link href="upload.css" rel="stylesheet">
-
-<style type="text/css">
-	.uploadBtn{
-	    border:1px solid #333333;
-	    background:url(buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
-	    font-size:14px;
-	    width:201px;
-	    height:30px;
-	    vertical-align:middle; /* emulates a <button> if node is not */
-	    text-align:center;
-	}
-	.uploadHover{
-	    background-image:url(buttonHover.png);
-	    cursor:pointer;
-	    font-weight:bold;
-	}
-	.uploadPress{
-	    background-image:url(buttonActive.png);
-	}
-	.uploadDisabled{
-	    background-image:none;
-	    background-color:#666;
-	    color:#999;
-	    border:1px solid #999;
-	}
-</style>
-
-<style type="text/css">
-    #progressDiv,#progressBar { font-family:helvetica,arial,sans-serif; font-size:90%;z-index: 1000; }
-</style>
-
-<script type="text/javascript">
-	//gallery json-rpc service
-	dojo.require("dojo.rpc.JsonService");
-	dojo.require("dojo._base.xhr");
-	
-	var albumCover;
-	var albums;
-	var albumName="New Album";
-	var albumIndex;
-	var albumDescEditOn=false;
-	var albumDesc="";
-
-	var gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-	
-	function populateSelect(){
-		gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-		gallery.getAlbums().addCallback( function(albums, exception) {
-			if(exception) {
-				alert(exception.msg);
-				return;
-			}
-			this.albums=albums;
-			var selectAlbum = dojo.byId("selectAlbum");
-
-			selectAlbum.options.length=0;
-			selectAlbum.options[selectAlbum.options.length] =  new Option("New Album", "New Album", true, false);
-	        for(var pos = 0; pos<albums.length; pos++) {	
-				selectAlbum.options[selectAlbum.options.length] =  new Option(albums[pos].name, albums[pos].name, false, false);
-			}
-			dojo.byId("selectAlbum").value=albumName;
-			manageAlbumFields();
-
-		});
-	}
-	
-	//to set the album cover
-	function setAlbumCoverResponse(cover, exception) {
-		if(exception){
-			alert(exception.msg);
-			return;
-		}
-		document.getElementById('albumCoverDiv').innerHTML = "<table id='albumCover' style='width:200px;' border='0' cellspacing='0' cellpadding='1'></table>";
-		
-		var table=document.getElementById('albumCover');
-		var row = table.insertRow(0);
-		var column = row.insertCell(0);
-		if (cover != null) {
-			var img = document.createElement("img");
-			img.src = (window.location.href).replace("admin/upload.html","") + "gallery/"+ albumName +"/" + cover;
-			var img_html = "<img src=" + img.src + " class=\"slideImage\" width=200px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
-			var html = "<table border=\"0\" style=\"width:180px; text-align: center;\"><tr style=\"cellpadding:10\"><td><a>" + img_html + "</a></td></tr><tr><td>"+albumName+"</td></tr></table>";
-			column.innerHTML = html;
-		}
-	}
-		
-	function initializeAdminGallery() {
-		var table=document.getElementById('adminTableGallery');
-		var lastRow = table.rows.length;
-		for (var i = 0; i < albums[albumIndex].pictures.length;) {
-			var row = table.insertRow( Math.floor(i/4));
-		for (var j = 0; j < 4;j++) {
-				var column = row.insertCell(i%4);
-				if (albums[albumIndex].pictures[i] != null) {
-					var albumName = albums[albumIndex].name;
-					var img = document.createElement("img");
-					img.src = (window.location.href).replace("admin/upload.html","") + "gallery/"+ albumName +"/" + albums[albumIndex].pictures[i];
-					var img_html = "<img src=" + img.src + " class=\"slideImage\" width=200px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
-					var html = "<table border=\"0\" style=\"width:180px; text-align: center;\"><tr style=\"cellpadding:10\"><td colspan=\"2\"><a>" + img_html + "</a></td></tr><tr><td>"+albums[albumIndex].pictures[i]+"</td><td><a href=\"javascript:confirmDelete('"+albums[albumIndex].pictures[i]+"');\">Remove</a></td></tr></table>";
-					column.innerHTML = html;
-				}
-			i++;				
-			}
-	   		
-	   	}
-	}
-		
-	function manageAlbumFields(){
-		var selectAlbum = dojo.byId("selectAlbum");
-		albumName = selectAlbum.value;
-		document.getElementById('adminGallery').innerHTML = "<table id='adminTableGallery' style='width:720px;' border='0' cellspacing='0' cellpadding='1'></table>";
-		albumIndex=selectAlbum.selectedIndex-1;
-		cancelAlbumDesc();
-		dojo.byId("progressBar").style.display="none";
-
-		if(albumName == "New Album") {
-			document.getElementById('albumCoverDiv').innerHTML = "<table id='albumCover' style='width:200px;' border='0' cellspacing='0' cellpadding='1'></table>";
-			dojo.byId("newAlbumName").style.display = "";
-			dojo.byId("newAlbumLabel").style.display = "";
-			dojo.byId("btnAlbumDesc").style.display = "none";
-			dojo.byId("deleteAlbum").style.display = "none";
-			dojo.byId("albumDescriptionDiv").innerHTML="<textarea cols='20' rows='5' class='textarea' name='albumDescription' id='albumDescription'></textarea>";
-		}else{
-			dojo.byId("newAlbumName").style.display = "none";
-			dojo.byId("newAlbumLabel").style.display = "none";
-			dojo.byId("btnAlbumDesc").style.display = "";
-			dojo.byId("deleteAlbum").style.display = "";
-			gallery.getAlbums().addCallback( function(albums, exception) {
-				if(exception) {
-					alert(exception.msg);
-					return;
-				}
-				dojo.byId("albumDescription").value=albums[selectAlbum.selectedIndex-1].description;
-				gallery.getAlbumCover(albums[albumIndex].name).addCallback(setAlbumCoverResponse);
-				initializeAdminGallery();
-			});
-			dojo.byId("albumDescription").value=""; 
-		}
-	}
-	
-	//this method will delete the selected image from the current album
-	function addAlbumDesc(){
-		if(albumDescEditOn==false){
-			albumDescEditOn=true;
-			albumDesc=dojo.byId("albumDescription").value;
-			dojo.byId("albumDescriptionDiv").innerHTML="<textarea cols='20' rows='5' class='textarea' name='albumDescription' id='albumDescription'></textarea>";
-			dojo.byId("albumDescription").value=albumDesc;
-			dojo.byId("albumDescription").focus();
-			dojo.byId("btnAlbumDesc").innerHTML="Save album Description";
-			dojo.byId("cancelBtnAlbumDesc").style.display="";
-		}else{
-			var desc=dojo.byId("albumDescription").value;
-			cancelAlbumDesc();
-	
-			dojo.xhrPost({
-				url:"upload",
-				content:{albumName:albumName,addAlbumDesc:desc},
-				handleAs: "text",
-		        load: function(response, ioArgs){
-		        	reloadAdminGallery();
-				},
-		        error: function(response, ioArgs){
-		        console.error("Error in editing album description");
-		        }	
-			});
-		}
-	}
-	
-	//to cancel the editing of the albumDescription
-	function cancelAlbumDesc(){
-		dojo.byId("albumDescriptionDiv").innerHTML="<textarea cols='20' rows='5' class='textarea' name='albumDescription' id='albumDescription' readonly='readonly' style='background-color:#F4F2F2;'></textarea>";
-		dojo.byId("albumDescription").value=albumDesc;
-		dojo.byId("btnAlbumDesc").innerHTML="Edit album Description";
-		dojo.byId("cancelBtnAlbumDesc").style.display="none";
-		albumDescEditOn=false;
-	}	
-	
-	//this method will delete the selected image from the current album
-	function removeImage(imageName){
-		dojo.xhrDelete({
-			url:"upload",
-			content:{imageName:imageName,albumName:albumName},
-			handleAs: "text",
-	        load: function(response, ioArgs){
-	        	reloadAdminGallery();
-			},
-	        error: function(response, ioArgs){
-	        console.error("Error in deleting file");
-	        }	
-		});
-	}
-		
-	function reloadAdminGallery(){
-		gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-		populateSelect();
-	}
-	
-	//confirm before deletion
-	function confirmDelete(item ){
-	var r;
-		if(item==undefined){
-			r=confirm("Are you sure to delete the album "+albumName+"?");
-		}else{
-			r=confirm("Are you sure to delete the image "+item+"?");
-		}
-		if (r==true){
-			removeImage(item);
-  		}
-	}
-	
-	dojo.addOnLoad( function() { 
-		populateSelect();
-		
-	});
-	
-	
-</script>
+    <script type="text/javascript" src="../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
+    <script type="text/javascript" src="../js/constants.js"></script>
+    <script type="text/javascript" src="js/upload.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css" />
+    <link href="css/upload.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/admin.js" charset="utf-8"></script>
 </head>
 
 <body>
-	<center>
     <div id="newAlbum">
-	  <fieldset id="newAlbumDetails" style="text-align: left;">
+	  <fieldset id="newAlbumDetails" style="text-align:left;">
 		  <legend>Album Details</legend>
 		  <ol>
 			  <li>
-				  <label for="selectAlbum">Select Album:</label>
-				  <select  id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlbumFields();"></select>
-				  <label  id="newAlbumLabel">New Album:</label>
+				  <label id="selectAlbumLabel" for="selectAlbum">Select Album:</label>
+				  <select id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlbumFields();">
+                  </select>
+				  <label id="newAlbumLabel" for="newAlbumName" >
+                      New Album:
+                  </label>
 				  <input type="text" class="text" name="newAlbumName" id="newAlbumName">
-				  <button type="button" name="deleteAlbum" id="deleteAlbum"  onClick="confirmDelete(null);" >Delete Album</button>
+				  <button type="button" name="deleteAlbum" id="deleteAlbum" onClick="confirmDelete(null);">
+                      Delete Album
+                  </button>
 			  </li>
 			  <li>
 				  <table border="0">
@@ -276,8 +63,13 @@
   					<tr>
     					<td></td>
 					<td>
-						<div id="btnAlbumDesc" class="uploadBtn btn" onClick="addAlbumDesc();" style="float: right;" >Edit album Description</div>
-						<div id="cancelBtnAlbumDesc" class="uploadBtn btn" onClick="cancelAlbumDesc();" style="float: right;" >Cancel</div>
+						<div id="btnAlbumDesc" class="uploadBtn btn" onClick="addAlbumDesc();" style="float: right;">
+                            Edit album Description
+                        </div>
+						<div id="cancelBtnAlbumDesc" class="uploadBtn btn" onClick="cancelAlbumDesc();"
+                             style="float: right;" >
+                            Cancel
+                        </div>
 					</td>
   					</tr>
 				</table>
@@ -289,19 +81,23 @@
               </li>
               <li>
                	<div id="progressDiv" class="tundra" > 
-                	<div id="progressBar" dojoType="dijit.ProgressBar" style="width:300px;display:none;" jsId="jsProgress"></div> 
+                	<div id="progressBar" dojoType="dijit.ProgressBar" style="width:300px;display:none;"
+                         jsId="jsProgress">                    
+                    </div>
                	</div>
               </li>
               <li >
-               	<div id="btnUploader" class="uploadBtn btn" >Select Files</div>
-    		<div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">Upload</div>
+               	<div id="btnUploader" class="uploadBtn btn">
+                       Select Files
+                </div>
+    		    <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">
+                    Upload
+                </div>
               </li>
 		  </ol>
 	  </fieldset>
 	</div>
-	<div id='adminGallery'>
-   		
+	<div id="adminGallery">
     </div>
-	</center>
 </body>
 </html>
