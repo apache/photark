@@ -104,7 +104,7 @@
 
 .uploadBtn{
     border:1px solid #333333;
-    background:url(images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
+    background:url(../images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
     font-size:14px;
     width:201px;
     height:30px;
@@ -112,12 +112,12 @@
     text-align:center;
 }
 .uploadHover{
-    background-image:url(images/buttonHover.png);
+    background-image:url(../images/buttonHover.png);
     cursor:pointer;
     font-weight:bold;
 }
 .uploadPress{
-    background-image:url(images/buttonActive.png);
+    background-image:url(../images/buttonActive.png);
 }
 .uploadDisabled{
     background-image:none;
