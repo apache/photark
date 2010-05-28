@@ -59,5 +59,43 @@
     <component name="RepositoryManager">
 		<implementation.java class="org.apache.photark.jcr.JCRRepositoryManager"/>
 		<property name="repositoryHome">photark</property>
-	</component> 	    
+	</component> 	
+	
+	<!-- Component responsible for providing OpenID Authentication for PhotArk -->
+    <component name="OpenIdAuthenticationServiceComponent">
+		<implementation.java class="org.apache.photark.security.authentication.services.OpenIDAuthenticationServiceImpl"/>
+		<service name="Servlet">
+			<tuscany:binding.http uri="/home/authenticate"/>
+		</service>  	  	
+	</component> 
+	
+    <!-- Component responsible for providing FORM Authentication for PhotArk -->
+    <component name="FormAuthenticationServiceComponent">
+		<implementation.java class="org.apache.photark.security.authentication.services.FormAuthenticationServiceImpl"/>
+		<service name="Servlet">
+			<tuscany:binding.http uri="/admin/authenticate"/>
+		</service>  	  	
+	</component> 
+	
+	<!-- Component responsible for providing logging out from the active user-->
+    <component name="LogoutAuthenticationServiceComponent">
+		<implementation.java class="org.apache.photark.security.authentication.services.LogoutServiceImpl"/>
+		<service name="Servlet">
+			<tuscany:binding.http uri="/logout"/>
+		</service>  	  	
+	</component> 
+	
+    <!-- Component responsible for providing filter support for uploading -->
+    <!--<component name="UploadFilterAuthenticationServiceComponent">
+		<implementation.java class="org.apache.photark.security.authentication.AuthorizationFilter"/>
+		<service name="Filter">
+			<tuscany:binding.http uri="/admin/upload"/>
+		</service>  	  	
+		<property name="redirectPage">/home/authenticate</property>
+	</component> -->
+	
+	<!-- Component responsible for providing Access Management for gallery/album -->
+    <component name="AccessManager">
+		<implementation.java class="org.apache.photark.security.authorization.AccessManager"/>
+	</component>    
 </composite>

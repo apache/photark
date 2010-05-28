@@ -1,0 +1,70 @@
+  <!--
+    * Licensed to the Apache Software Foundation (ASF) under one
+    * or more contributor license agreements.  See the NOTICE file
+    * distributed with this work for additional information
+    * regarding copyright ownership.  The ASF licenses this file
+    * to you under the Apache License, Version 2.0 (the
+    * "License"); you may not use this file except in compliance
+    * with the License.  You may obtain a copy of the License at
+    *
+    *   http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing,
+    * software distributed under the License is distributed on an
+    * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    * KIND, either express or implied.  See the License for the
+    * specific language governing permissions and limitations
+    * under the License.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Login</title>
+
+ <script type="text/javascript" src="js/login.js"></script>
+
+<style type="text/css">
+    #container {
+      padding: 1em;      
+    }
+    
+    #container p {
+      font-size: 1.2em;
+      font-family: Tahoma,Verdana;
+    }
+    
+    #openid_identifier {
+      background-image: url(images/openid.ico);
+      background-position: 3px 2px;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0.2em 0.2em 0.2em 20px;
+      vertical-align: middle;
+      width: 400px;
+    }
+</style>
+</head>
+<body onload="initOpenIDPage();">
+<div id="container">
+  <div style="float:right;width:50%;font-size:0.8em;text-align:right;">
+     <div><span><a href="../">Gallery</a></span></div>
+  </div>
+  <div style="clear:both"></div>
+   <div style="color:red;font-size:1.4em">&nbsp; Your openid could not be resolved.</div>
+  <p>Login with your <span style="color:orange">openid</span></p>
+  <form method="POST">
+    <input id="openid_identifier" name="openid_identifier" type="text" size=80/>
+    <input class="btn" type="submit" value="send"/>
+  </form>
+  <br>
+   <div style="float:left;font-size:0.8em;text-align:left;">
+   <div id="provider_space" style="width:430px"></div>
+     
+  <!-- <p><span style="color:green;font-size:1em">https://www.google.com/accounts/o8/id</span><span> for google accounts</span></p>
+  <p>or enter <span style="color:green;font-size:1em">your_username@gmail.com</span></p> -->
+  </div>
+ 
+  </div>
+</body>
+</html>
+  

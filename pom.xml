@@ -90,7 +90,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <tuscany.version>2.0-M4</tuscany.version>
-     </properties>
+    </properties>
     
     
 
@@ -111,6 +111,11 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+           <id>dyuproject-repo</id>
+     	   <name>dyuproject-repo</name>      
+           <url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
         </repository>
     </repositories>
     
@@ -189,6 +194,7 @@
                 <module>photark</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-appengine-webapp</module>                
@@ -206,6 +212,7 @@
                 <module>photark</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-appengine-webapp</module>                
@@ -223,6 +230,7 @@
                 <module>photark</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-test</module>                
