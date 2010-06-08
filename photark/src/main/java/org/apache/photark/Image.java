@@ -32,10 +32,10 @@ public class Image {
     private String name;
     private String title;
     private Date datePosted;
-    
+
     private String url;
     private String urlThumb;
-    
+
     private List<ImageMetadata> imageAttributes = new ArrayList<ImageMetadata>();
 
     /**
@@ -46,7 +46,7 @@ public class Image {
     public Image() {
 
     }
-    
+
     /**
      * Constructor
      * @param name Image name
@@ -66,7 +66,7 @@ public class Image {
     public String getName() {
         return name;
     }
-    
+
     /**
      * Set image file name
      * @param name image file name
@@ -82,7 +82,7 @@ public class Image {
     public String getTitle() {
         return title;
     }
-    
+
     /**
      * Set image title
      * @param title image title
@@ -90,7 +90,7 @@ public class Image {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     /**
      * Get date when image was posted
      * @return date posted
@@ -98,7 +98,7 @@ public class Image {
     public Date getDatePosted() {
         return datePosted;
     }
-    
+
     /**
      * Get Image URL
      * @return the image URL
@@ -130,7 +130,7 @@ public class Image {
     public void setThumbnailLocation(String thumbnailLocation) {
         this.urlThumb = thumbnailLocation;
     }
-    
+
     /**
      * Return image metadata retrieved from EXIF properties
      * @return list of image metadata attributes

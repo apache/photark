@@ -21,6 +21,8 @@ package org.apache.photark.services.filesystem;
 
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import org.apache.tuscany.sca.node.Contribution;
 import org.apache.tuscany.sca.node.ContributionLocationHelper;
 import org.apache.tuscany.sca.node.Node;
@@ -63,10 +65,12 @@ public class FileSystemGalleryTestCase {
         WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL);
         WebResponse response = wc.getResource(request);
 
-        JSONObject json = new JSONObject(response.getText());
+        JSONObject jsonResponde = new JSONObject(response.getText());
+        
+        Assert.assertNotNull(jsonResponde);
         
         //for debug purposes
-        System.out.println(">>>" + json.toString());    
+        System.out.println(">>>" + jsonResponde.toString());    
     }
     
     

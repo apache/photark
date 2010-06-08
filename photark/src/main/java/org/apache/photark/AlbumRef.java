@@ -37,7 +37,7 @@ public class AlbumRef {
     public AlbumRef() {
 
     }
-    
+
     /**
      * Get Album name
      * @return the album name
@@ -53,7 +53,7 @@ public class AlbumRef {
     public void setName(String name) {
         this.albumName = name;
     }
-    
+
     /**
      * Get cover image reference
      * @return the cover image url reference
@@ -61,7 +61,7 @@ public class AlbumRef {
     public String getCoverImageRef() {
         return coverImageRef;
     }
-    
+
     /**
      * Set cover image reference
      * @param coverImageRef the cover image url reference
@@ -77,7 +77,7 @@ public class AlbumRef {
     public String getRef() {
         return albumRef;
     }
-    
+
     /**
      * Set album ref
      * @param albumRef album ref
@@ -85,7 +85,7 @@ public class AlbumRef {
     public void setRef(String albumRef) {
         this.albumRef = albumRef;
     }
-    
+
     /**
      * Utility method to create a AlbumRef from a Album
      * @param album
@@ -93,13 +93,13 @@ public class AlbumRef {
      */
     public static AlbumRef createAlbumRef(Album album) {
         AlbumRef albumRef = new AlbumRef();
-        
+
         albumRef.setName(album.getName());
         if(! album.getImages().isEmpty()) {
             albumRef.setCoverImageRef(album.getImages().get(0).getLocation());
         }
         albumRef.setRef(album.getLocation());
-        
+
         return albumRef;
     }
 }

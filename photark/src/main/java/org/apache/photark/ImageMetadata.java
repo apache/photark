@@ -30,14 +30,14 @@ import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
 public class ImageMetadata implements ExifTagConstants {
     private String key;
     private String value;
-    
+
     /**
      * Default constructor
      */
     public ImageMetadata() {
-        
+
     }
-    
+
     /**
      * Constructor that initializes name/value pair for metadata
      * @param key
@@ -47,7 +47,7 @@ public class ImageMetadata implements ExifTagConstants {
         this.key = key;
         this.value = value;
     }
-    
+
     /**
      * Return EXIF Metadata attribute name
      * @return
@@ -55,7 +55,7 @@ public class ImageMetadata implements ExifTagConstants {
     public String getKey() {
         return key;
     }
-    
+
     /**
      * Set EXIF Metadata attribute name
      * @param key
@@ -63,7 +63,7 @@ public class ImageMetadata implements ExifTagConstants {
     public void setKey(String key) {
         this.key = key;
     }
-    
+
     /**
      * Get EXIF Metadata attribute value
      * @return
@@ -71,7 +71,7 @@ public class ImageMetadata implements ExifTagConstants {
     public String getValue() {
         return value;
     }
-    
+
     /**
      * Set EXIF Metadata attribute value
      * @param value
