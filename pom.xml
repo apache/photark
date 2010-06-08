@@ -192,11 +192,12 @@
             </activation>
             <modules>
                 <module>photark</module>
+                <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
-				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
+                <module>photark-ui-security</module>
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>
             </modules>
@@ -210,11 +211,12 @@
             <modules>
                 <module>distribution</module>
                 <module>photark</module>
+                <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
-				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
+                <module>photark-ui-security</module>
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>
             </modules>
@@ -228,11 +230,12 @@
             <modules>
                 <module>distribution</module>
                 <module>photark</module>
+                <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
-				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
+                <module>photark-ui-security</module>
                 <module>photark-ui-test</module>                
                 <module>photark-appengine-webapp</module>                
                 <module>photark-webapp</module>

@@ -26,8 +26,8 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>photark-security</artifactId>
-	<packaging>war</packaging>
-	<name>Apache PhotArk Security</name>
+	<packaging>jar</packaging>
+	<name>Apache PhotArk Security Services</name>
 
 	<dependencies>
 		<dependency>
