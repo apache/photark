@@ -19,16 +19,47 @@
 
 package org.apache.photark.services;
 
-import java.io.InputStream;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import org.apache.tuscany.sca.data.collection.Collection;
+import org.apache.photark.Album;
+import org.apache.photark.AlbumList;
 import org.oasisopen.sca.annotation.Remotable;
 
 /**
- * Image collection component
+ * Gallery facade service
+ * 
  * @version $Rev$ $Date$
  */
 @Remotable
-public interface ImageCollection extends Collection<String, InputStream> {
+public interface GalleryService {
 
+    /**
+     * Retrieve a list of all Albums from the Gallery
+     * @return
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    AlbumList getAlbums();
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    Album getAlbum(@PathParam("id") String albumId);
+
+    @POST
+    void addAlbum(Album newAlbum);
+    
+    @PUT
+    void updateAlbum(Album album);
+    
+    @DELETE
+    void removeAlbum(String albumId);
+    
 }

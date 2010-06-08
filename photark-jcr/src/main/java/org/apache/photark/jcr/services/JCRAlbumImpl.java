@@ -35,9 +35,9 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.photark.Image;
+import org.apache.photark.filesystem.services.ImageFilter;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Destroy;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;

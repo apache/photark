@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.photark.Image;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
@@ -49,7 +48,7 @@ public class FileSystemAlbumImpl implements org.apache.photark.services.album.Al
 			if(location != null) {
 				java.io.File album = new java.io.File(location);
 				if (album.isDirectory() && album.exists()) {
-					String[] listPictures = album.list(new org.apache.photark.services.album.ImageFilter(".jpg"));
+					String[] listPictures = album.list(new org.apache.photark.services.filesystem.FileSystemImageFilter(".jpg"));
 					for(String image : listPictures) {
 						pictures.add(image);
 					}

@@ -23,6 +23,9 @@ import javax.servlet.Servlet;
 
 import org.oasisopen.sca.annotation.Remotable;
 
+/**
+ * @version $Rev$ $Date$
+ */
 @Remotable
 public interface ImageUploadService extends Servlet {
 

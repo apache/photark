@@ -24,15 +24,25 @@ import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
 /**
  * Represent a EXIF Metatada attribute/value from 
  * It implements the ExifTagConstants from Sanselan to leverage it's sxit field contants
+ * 
+ * @version $Rev$ $Date$
  */
 public class ImageMetadata implements ExifTagConstants {
     private String key;
     private String value;
     
+    /**
+     * Default constructor
+     */
     public ImageMetadata() {
         
     }
     
+    /**
+     * Constructor that initializes name/value pair for metadata
+     * @param key
+     * @param value
+     */
     public ImageMetadata(String key, String value) {
         this.key = key;
         this.value = value;

@@ -17,18 +17,20 @@
  * under the License.    
  */
 
-package org.apache.photark.services;
+package org.apache.photark.services.filesystem;
 
-import java.io.InputStream;
-
-import org.apache.tuscany.sca.data.collection.Collection;
-import org.oasisopen.sca.annotation.Remotable;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
- * Image collection component
- * @version $Rev$ $Date$
+ * Inner fileFilter class
  */
-@Remotable
-public interface ImageCollection extends Collection<String, InputStream> {
-
+public class FileSystemImageFilter implements FilenameFilter {
+    String afn;
+    public FileSystemImageFilter(String afn) { this.afn = afn; }
+    public boolean accept(File dir, String name) {
+        // Strip path information:
+        String f = new File(name).getName();
+        return f.indexOf(afn) != -1;
+    }
 }

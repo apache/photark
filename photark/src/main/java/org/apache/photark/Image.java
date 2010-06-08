@@ -19,37 +19,32 @@
 
 package org.apache.photark;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.photark.util.ImageMetadataScanner;
-
 /**
  * Model representing an album image
+ * 
+ * @version $Rev$ $Date$
  */
 public class Image {
-    private String imageName;
+    private String name;
+    private String title;
     private Date datePosted;
-    private InputStream imageStream;
-
-    private List<ImageMetadata> imageAttributes;
+    
+    private String url;
+    private String urlThumb;
+    
+    private List<ImageMetadata> imageAttributes = new ArrayList<ImageMetadata>();
 
     /**
      * Constructor
      * @param imageFile a File representing the image
      * @param datePosted Date when image is being added
      */
-    public Image(File imageFile, Date datePosted) {
-        this.imageName = imageFile.getName();
-        this.datePosted = datePosted;
-        try {
-            this.imageStream = new FileInputStream(imageFile);
-        } catch(Exception fnf) {
-            fnf.printStackTrace();
-        }
+    public Image() {
+
     }
     
     /**
@@ -58,10 +53,10 @@ public class Image {
      * @param datePosted Date when image is being added
      * @param imageStream Image stream content
      */
-    public Image(String name, Date datePosted, InputStream imageStream) {
-        this.imageName = name;
+    public Image(String name, String title, Date datePosted) {
+        this.name = name;
+        this.title = title;
         this.datePosted = datePosted;
-        this.imageStream = imageStream;
     }
 
     /**
@@ -69,9 +64,33 @@ public class Image {
      * @return image file name
      */
     public String getName() {
-        return imageName;
+        return name;
+    }
+    
+    /**
+     * Set image file name
+     * @param name image file name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
+    /**
+     * Get image title
+     * @return image title
+     */
+    public String getTitle() {
+        return title;
+    }
+    
+    /**
+     * Set image title
+     * @param title image title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
     /**
      * Get date when image was posted
      * @return date posted
@@ -79,13 +98,37 @@ public class Image {
     public Date getDatePosted() {
         return datePosted;
     }
+    
+    /**
+     * Get Image URL
+     * @return the image URL
+     */
+    public String getLocation() {
+        return url;
+    }
 
     /**
-     * Return image content as stream
-     * @return image stream
+     * Set Image URL
+     * @param url Image URL
      */
-    public InputStream getImageAsStream() {
-        return imageStream;
+    public void setLocation(String location) {
+        this.url = location;
+    }
+
+    /**
+     * Get URL for the thumbnail version of the image
+     * @return URL for the thumbnail
+     */
+    public String getThumbnailLocation() {
+        return urlThumb;
+    }
+
+    /**
+     * Set URL for the thumbnail version of the image
+     * @param urlThumb URL for the thumbnail
+     */
+    public void setThumbnailLocation(String thumbnailLocation) {
+        this.urlThumb = thumbnailLocation;
     }
     
     /**
@@ -93,9 +136,6 @@ public class Image {
      * @return list of image metadata attributes
      */
     public List<ImageMetadata> getImageMetadata() {
-        if(imageAttributes == null) {
-            imageAttributes = ImageMetadataScanner.scanImageMetadata(imageName, imageStream);
-        }
         return imageAttributes;
     }
 

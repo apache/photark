@@ -17,20 +17,27 @@
  * under the License.    
  */
 
-package org.apache.photark.services.album;
+package org.apache.photark;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Inner fileFilter class
+ * Aggregate a list of album references, 
+ * useful to produce the proper json/xml output
+ * for gallery set of albums, without the full
+ * details of the album model object itself
+ * 
+ * @version $Rev$ $Date$
  */
-public class ImageFilter implements FilenameFilter {
-    String afn;
-    public ImageFilter(String afn) { this.afn = afn; }
-    public boolean accept(File dir, String name) {
-        // Strip path information:
-        String f = new File(name).getName();
-        return f.indexOf(afn) != -1;
+public class AlbumList {
+    private List<AlbumRef> albumRefs = new ArrayList<AlbumRef>();
+
+    /**
+     * Retrieve a list of albums
+     * @return the list of album references
+     */
+    public List<AlbumRef> getAlbums() {
+        return this.albumRefs;
     }
 }

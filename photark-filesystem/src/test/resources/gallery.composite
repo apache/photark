@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,20 +16,19 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- */
-
-package org.apache.photark.services;
-
-import java.io.InputStream;
-
-import org.apache.tuscany.sca.data.collection.Collection;
-import org.oasisopen.sca.annotation.Remotable;
-
-/**
- * Image collection component
- * @version $Rev$ $Date$
- */
-@Remotable
-public interface ImageCollection extends Collection<String, InputStream> {
-
-}
+-->
+<composite	xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
+		targetNamespace="http://photark"
+		name="gallery">
+		
+	<component name="Gallery">
+		<implementation.java class="org.apache.photark.services.filesystem.FileSystemGallery"/>
+		<property name="galleryRoot">gallery-root</property> 
+		<service name="GalleryService">
+			<tuscany:binding.rest uri="http://localhost:8085/gallery">
+			    <tuscany:operationSelector.jaxrs />
+    		</tuscany:binding.rest>
+   		</service>	
+	</component>
+</composite>
