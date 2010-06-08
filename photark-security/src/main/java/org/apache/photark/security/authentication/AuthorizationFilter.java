@@ -31,11 +31,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.photark.security.authorization.AccessManager;
-import org.oasisopen.sca.annotation.Property;
-import org.oasisopen.sca.annotation.Scope;
-import org.oasisopen.sca.annotation.Service;
-
 /**
  * Authorization Filter. This will only allow authenticated user 
  * to access to upload.html and redirect others to OpenID authentication
@@ -85,8 +80,6 @@ public class AuthorizationFilter implements Filter {
 		
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 		HttpServletResponse httpResp = (HttpServletResponse) response;
-		
-		AccessManager am = new AccessManager();
 		
 		if ((String)httpReq.getSession().getAttribute("accessList") != null && !((String)httpReq.getSession().getAttribute("accessList")).equals("")) {
 			System.err.println( (String)httpReq.getSession().getAttribute("accessList") +" Accessing Admin page");

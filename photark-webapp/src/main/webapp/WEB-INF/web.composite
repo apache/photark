@@ -66,7 +66,10 @@
 		<implementation.java class="org.apache.photark.security.authentication.services.OpenIDAuthenticationServiceImpl"/>
 		<service name="Servlet">
 			<tuscany:binding.http uri="/home/authenticate"/>
-		</service>  	  	
+		</service>
+		<reference name="accessmanager" target="AccessManager">
+			<binding.sca name="local"/>
+		</reference> 	  	
 	</component> 
 	
     <!-- Component responsible for providing FORM Authentication for PhotArk -->
@@ -74,7 +77,10 @@
 		<implementation.java class="org.apache.photark.security.authentication.services.FormAuthenticationServiceImpl"/>
 		<service name="Servlet">
 			<tuscany:binding.http uri="/admin/authenticate"/>
-		</service>  	  	
+		</service> 
+		<reference name="accessmanager" target="AccessManager">
+			<binding.sca name="local"/>
+		</reference>	  	
 	</component> 
 	
 	<!-- Component responsible for providing logging out from the active user-->
@@ -85,17 +91,13 @@
 		</service>  	  	
 	</component> 
 	
-    <!-- Component responsible for providing filter support for uploading -->
-    <!--<component name="UploadFilterAuthenticationServiceComponent">
-		<implementation.java class="org.apache.photark.security.authentication.AuthorizationFilter"/>
-		<service name="Filter">
-			<tuscany:binding.http uri="/admin/upload"/>
-		</service>  	  	
-		<property name="redirectPage">/home/authenticate</property>
-	</component> -->
-	
 	<!-- Component responsible for providing Access Management for gallery/album -->
-    <component name="AccessManager">
-		<implementation.java class="org.apache.photark.security.authorization.AccessManager"/>
-	</component>    
+	<component name="AccessManager">
+   		<implementation.java class="org.apache.photark.jcr.security.authorization.JCRAccessManager"/>
+   		<service name="AccessManager">
+   			<interface.java interface="org.apache.photark.security.authorization.services.AccessManager"/>
+   			<binding.sca name="local"/>
+		</service>  
+   		<reference name="repositoryManager" target="RepositoryManager"/>
+    </component> 
 </composite>

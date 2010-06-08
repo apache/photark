@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.photark.security.authorization.AccessManager;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -40,8 +41,9 @@ import com.dyuproject.openid.RelyingParty;
  */
 @Service(Servlet.class)
 @Scope("COMPOSITE")
-public class FormAuthenticationServiceImpl extends HttpServlet {
+public class FormAuthenticationServiceImpl extends HttpServlet implements Servlet {
 
+	private AccessManager accessManager;
     /**
      * 
      */
@@ -60,7 +62,7 @@ public class FormAuthenticationServiceImpl extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
-	AccessManager am = new AccessManager();
+
 	
 	//check whether the Super Admin is authenticated
 	if (request.getUserPrincipal() != null) {
@@ -69,7 +71,7 @@ public class FormAuthenticationServiceImpl extends HttpServlet {
 	    RelyingParty.getInstance().invalidate(request, response);
 	    
 	    //Creating the accessList
-	    String accesList=am.creatAccessList("SuperAdmin");
+	    String accesList=accessManager.creatAccessList("SuperAdmin");
 	    request.getSession().setAttribute("accessList", accesList);
 	    System.err.println("Super Admin authenticated");
 
@@ -82,5 +84,10 @@ public class FormAuthenticationServiceImpl extends HttpServlet {
 	}
 
     }
-
+    
+    
+    @Reference(name="accessmanager")
+	protected void setAccessService(AccessManager accessManager) {
+		this.accessManager = accessManager;
+	}
 }

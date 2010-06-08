@@ -30,7 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.photark.security.authorization.AccessManager;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -49,10 +50,8 @@ import com.dyuproject.util.http.UrlEncodedParameterMap;
  */
 @Service(Servlet.class)
 @Scope("COMPOSITE")
-public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Servlet 
-{
-  
-    private static final long serialVersionUID = -5304887357860915253L;
+public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Servlet {
+	private  static AccessManager accessManager;
 
     static
     {
@@ -82,14 +81,12 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             public void onAuthenticate(OpenIdUser user, HttpServletRequest request)
             {
                 System.err.println("newly authenticated user: " + user.getIdentity());
-                
-            	AccessManager am= new AccessManager();
             	
             	//Invalidating the Super Admin user
             	request.getSession().invalidate();
             	//Creating the accessList for the newly authenticated user
         	    //Creating the accessList
-        	    String accesList=am.creatAccessList(user.getIdentity());
+        	    String accesList=accessManager.creatAccessList(user.getIdentity());
         	    request.getSession().setAttribute("accessList", accesList);
 
                 Map<String,String> sreg = SRegExtension.remove(user);
@@ -114,6 +111,11 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
     }
 
     RelyingParty _relyingParty = RelyingParty.getInstance();
+    
+    @Reference(name="accessmanager")
+    protected void setAccessService(AccessManager accessManager) {
+        this.accessManager = accessManager;
+    }
     
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
