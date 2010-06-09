@@ -19,11 +19,16 @@
 
 package org.apache.photark;
 
+import java.io.Serializable;
+
 /**
  * Summary info for Images
  * @version $Rev$ $Date$
  */
-public class ImageRef {
+public class ImageRef implements Serializable {
+
+    private static final long serialVersionUID = -3663988501067415961L;
+
     private String name;
     private String title;
 

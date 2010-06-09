@@ -17,31 +17,24 @@
  * under the License.    
  */
 
-package org.apache.photark;
+package org.apache.photark.services;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+public class PhotarkRuntimeException extends Throwable {
 
-/**
- * Aggregate a list of album references, 
- * useful to produce the proper json/xml output
- * for gallery set of albums, without the full
- * details of the album model object itself
- * 
- * @version $Rev$ $Date$
- */
-public class AlbumList implements Serializable {
+    private static final long serialVersionUID = -7709593429900166516L;
 
-    private static final long serialVersionUID = 2578709033197276816L;
+    public PhotarkRuntimeException() {
+    }
 
-    private List<AlbumRef> albumRefs = new ArrayList<AlbumRef>();
+    public PhotarkRuntimeException(String message) {
+        super(message);
+    }
 
-    /**
-     * Retrieve a list of albums
-     * @return the list of album references
-     */
-    public List<AlbumRef> getAlbums() {
-        return this.albumRefs;
+    public PhotarkRuntimeException(Throwable cause) {
+        super(cause);
+    }
+
+    public PhotarkRuntimeException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

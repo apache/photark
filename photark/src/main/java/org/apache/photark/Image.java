@@ -19,6 +19,7 @@
 
 package org.apache.photark;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,10 @@ import java.util.List;
  * 
  * @version $Rev$ $Date$
  */
-public class Image {
+public class Image implements Serializable {
+
+    private static final long serialVersionUID = -2607872190168102433L;
+
     private String name;
     private String title;
     private Date datePosted;

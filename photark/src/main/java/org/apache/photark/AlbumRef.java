@@ -19,6 +19,8 @@
 
 package org.apache.photark;
 
+import java.io.Serializable;
+
 /**
  * A Album Rerefence model object
  * Useful to provide summary set of album 
@@ -26,7 +28,10 @@ package org.apache.photark;
  * 
  * @version $Rev$ $Date$
  */
-public class AlbumRef {
+public class AlbumRef implements Serializable {
+
+    private static final long serialVersionUID = 5346908464708654247L;
+
     private String albumName;
     private String coverImageRef;
     private String albumRef;

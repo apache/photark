@@ -20,6 +20,7 @@
 package org.apache.photark.services.filesystem;
 
 import java.io.File;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import org.apache.photark.AlbumList;
 import org.apache.photark.AlbumRef;
 import org.apache.photark.Image;
 import org.apache.photark.services.GalleryService;
+import org.apache.photark.services.PhotarkRuntimeException;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
 
@@ -40,7 +42,10 @@ import org.oasisopen.sca.annotation.Property;
  * File system based gallery
  */
 public class FileSystemGallery implements GalleryService {    
-    private String galleryRoot; 
+    private String galleryRoot;
+    private URL galleryURL;
+    private File galleryDirectory;
+    
     private Map<String, Album> albums = new HashMap<String, Album>();
 
 
@@ -52,7 +57,7 @@ public class FileSystemGallery implements GalleryService {
     public void init() {
         try {
             
-            java.net.URL galleryURL = this.getClass().getClassLoader().getResource(galleryRoot);
+            galleryURL = this.getClass().getClassLoader().getResource(galleryRoot);
             if(galleryURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 galleryURL = this.getClass().getClassLoader().getResource("../../" + galleryRoot);
@@ -65,7 +70,7 @@ public class FileSystemGallery implements GalleryService {
 
             
             if(galleryRoot != null) {
-                java.io.File galleryDirectory = new java.io.File(galleryURL.toURI());
+                galleryDirectory = new java.io.File(galleryURL.toURI());
                 if (galleryDirectory.isDirectory() && galleryDirectory.exists()) {
                     java.io.File[] albumDirectoryList = galleryDirectory.listFiles();
                     for(java.io.File albumDirectory : albumDirectoryList) {
@@ -109,14 +114,21 @@ public class FileSystemGallery implements GalleryService {
         return albums.get(albumId);
     }
 
-    public void addAlbum(Album newAlbum) {
+    public void addAlbum(Album newAlbum) throws PhotarkRuntimeException {
         if(newAlbum.getName() == null || newAlbum.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
+        }
+        
+        if (galleryDirectory != null) {
+           File newAlbumDirectory = new File(galleryDirectory.getPath() + File.separator + newAlbum.getName());
+           if ( ! newAlbumDirectory.mkdir()) {
+               throw new PhotarkRuntimeException("Error creating new album directory '" + newAlbumDirectory.getPath() + "'" );
+           }
         }
         this.albums.put(newAlbum.getName(), newAlbum);
     }
 
-    public void updateAlbum(Album album) {
+    public void updateAlbum(Album album)  throws PhotarkRuntimeException {
         if(album.getName() == null || album.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
         }
@@ -124,20 +136,27 @@ public class FileSystemGallery implements GalleryService {
         if(! albums.containsKey(album.getName())) {
             throw new InvalidParameterException("Album '" + album.getName() + "' not found");
         }
-
+        
         albums.put(album.getName(), album);
     }
 
-    public void removeAlbum(String albumId) {
-        if(albumId == null || albumId.isEmpty()) {
+    public void removeAlbum(String albumName)  throws PhotarkRuntimeException {
+        if(albumName == null || albumName.isEmpty()) {
             throw new InvalidParameterException("Invalid/Empty album id");
         }
 
-        if(! albums.containsKey(albumId)) {
-            throw new InvalidParameterException("Album '" + albumId + "' not found");
+        if(! albums.containsKey(albumName)) {
+            throw new InvalidParameterException("Album '" + albumName + "' not found");
         }
 
-        albums.remove(albumId);
+        if (galleryDirectory != null) {
+            File newAlbumDirectory = new File(galleryDirectory.getPath() + File.separator + albumName);
+            if ( ! newAlbumDirectory.delete()) {
+                throw new PhotarkRuntimeException("Error removing album directory '" + albumName + "'" );
+            }
+         }
+        
+        albums.remove(albumName);
     }
     
     /**

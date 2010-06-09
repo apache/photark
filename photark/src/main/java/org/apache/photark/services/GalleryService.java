@@ -54,12 +54,12 @@ public interface GalleryService {
     Album getAlbum(@PathParam("id") String albumId);
 
     @POST
-    void addAlbum(Album newAlbum);
+    void addAlbum(Album newAlbum) throws PhotarkRuntimeException;
     
     @PUT
-    void updateAlbum(Album album);
+    void updateAlbum(Album album) throws PhotarkRuntimeException;
     
     @DELETE
-    void removeAlbum(String albumId);
+    void removeAlbum(String albumId) throws PhotarkRuntimeException;
     
 }

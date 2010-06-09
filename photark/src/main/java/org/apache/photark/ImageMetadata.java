@@ -19,6 +19,8 @@
 
 package org.apache.photark;
 
+import java.io.Serializable;
+
 import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
 
 /**
@@ -27,7 +29,10 @@ import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
  * 
  * @version $Rev$ $Date$
  */
-public class ImageMetadata implements ExifTagConstants {
+public class ImageMetadata implements ExifTagConstants, Serializable {
+
+    private static final long serialVersionUID = 3921637285554039788L;
+
     private String key;
     private String value;
 
