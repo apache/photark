@@ -112,10 +112,28 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
+        <!-- Apache SNAPSHOT repository for unreleased artifacts -->
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache SNAPSHOT Repository</name>
+            <url>http://repository.apache.org/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        
+        <!-- dyuproject project repository - for openID -->
         <repository>
            <id>dyuproject-repo</id>
      	   <name>dyuproject-repo</name>      
            <url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>           
         </repository>
     </repositories>
     
