@@ -24,10 +24,16 @@ import java.io.FilenameFilter;
 
 /**
  * Inner fileFilter class
+ * 
+ * @version $Rev$ $Date$
  */
 public class FileSystemImageFilter implements FilenameFilter {
     String afn;
-    public FileSystemImageFilter(String afn) { this.afn = afn; }
+
+    public FileSystemImageFilter(String afn) {
+        this.afn = afn;
+    }
+
     public boolean accept(File dir, String name) {
         // Strip path information:
         String f = new File(name).getName();

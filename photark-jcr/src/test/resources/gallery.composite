@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,31 +16,19 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.    
- */
-
-package org.apache.photark.services;
-
-/**
- * PhotArk Runtime Exception
- * 
- * @version $Rev$ $Date$
- */
-public class PhotarkRuntimeException extends RuntimeException {
-
-    private static final long serialVersionUID = -7709593429900166516L;
-
-    public PhotarkRuntimeException() {
-    }
-
-    public PhotarkRuntimeException(String message) {
-        super(message);
-    }
-
-    public PhotarkRuntimeException(Throwable cause) {
-        super(cause);
-    }
-
-    public PhotarkRuntimeException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
+-->
+<composite	xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
+		targetNamespace="http://org.apache.photoark"
+		name="gallery">
+		
+	<component name="Gallery">
+		<implementation.java class="org.apache.photark.services.jcr.JCRGallery"/>
+		<property name="galleryRoot">gallery-root</property> 
+		<service name="GalleryService">
+			<tuscany:binding.rest uri="http://localhost:8085/gallery">
+			    <tuscany:operationSelector.jaxrs />
+    		</tuscany:binding.rest>
+   		</service>	
+	</component>
+</composite>

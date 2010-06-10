@@ -29,8 +29,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.ImageCollection;
+import org.apache.photark.services.jcr.JCRRepositoryManager;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.oasisopen.sca.annotation.Destroy;

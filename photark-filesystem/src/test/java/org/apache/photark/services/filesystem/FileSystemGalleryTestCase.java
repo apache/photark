@@ -41,6 +41,11 @@ import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
 
+/**
+ * Verify various operations for the FileSystem Gallery
+ * 
+ * @version $Rev$ $Date$
+ */
 public class FileSystemGalleryTestCase {
     private static final String GALLERY_SERVICE_URL = "http://localhost:8085/gallery";
     

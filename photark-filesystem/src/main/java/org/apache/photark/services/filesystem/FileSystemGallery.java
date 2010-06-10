@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.ws.rs.PathParam;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.photark.Album;
 import org.apache.photark.AlbumList;
@@ -37,11 +37,17 @@ import org.apache.photark.services.GalleryService;
 import org.apache.photark.services.PhotarkRuntimeException;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
+import org.oasisopen.sca.annotation.Scope;
 
 /**
  * File system based gallery
+ * 
+ * @version $Rev$ $Date$
  */
-public class FileSystemGallery implements GalleryService {    
+@Scope("COMPOSITE")
+public class FileSystemGallery implements GalleryService {
+    private static final Logger logger = Logger.getLogger(FileSystemGallery.class.getName());
+                                                          
     private String galleryRoot;
     private URL galleryURL;
     private File galleryDirectory;
@@ -57,6 +63,10 @@ public class FileSystemGallery implements GalleryService {
     public void init() {
         try {
             
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine("Initializing FileSystem Gallery");
+            }
+
             galleryURL = this.getClass().getClassLoader().getResource(galleryRoot);
             if(galleryURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
@@ -68,8 +78,12 @@ public class FileSystemGallery implements GalleryService {
                 galleryURL = new java.net.URL("file://" + galleryDir);
             }
 
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine("FileSystem Gallery root " + galleryURL);
+            }
+
             
-            if(galleryRoot != null) {
+            if(galleryURL != null) {
                 galleryDirectory = new java.io.File(galleryURL.toURI());
                 if (galleryDirectory.isDirectory() && galleryDirectory.exists()) {
                     java.io.File[] albumDirectoryList = galleryDirectory.listFiles();
@@ -84,11 +98,9 @@ public class FileSystemGallery implements GalleryService {
                 }
             }
         } catch (Exception e) {
-            // FIXME: ignore for now
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error initializing FileSystem gallery: " + e.getMessage(), e);
         }
     }
-
 
     public AlbumList getAlbums() {
         AlbumList albumList = new AlbumList();
@@ -102,7 +114,7 @@ public class FileSystemGallery implements GalleryService {
         return albumList;
     }
 
-    public Album getAlbum(@PathParam("id") String albumId) {
+    public Album getAlbum(String albumId) {
         if(albumId == null || albumId.isEmpty()) {
             throw new InvalidParameterException("Invalid/Empty album id");
         }

@@ -28,10 +28,10 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.BaseGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
+import org.apache.photark.services.jcr.JCRRepositoryManager;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;

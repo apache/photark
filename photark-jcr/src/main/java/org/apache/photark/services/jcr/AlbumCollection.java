@@ -17,29 +17,14 @@
  * under the License.    
  */
 
-package org.apache.photark.services;
+package org.apache.photark.services.jcr;
+
+import org.apache.photark.Album;
+import org.apache.tuscany.sca.data.collection.Collection;
 
 /**
- * PhotArk Runtime Exception
- * 
  * @version $Rev$ $Date$
  */
-public class PhotarkRuntimeException extends RuntimeException {
+public interface AlbumCollection extends Collection<String, Album> {
 
-    private static final long serialVersionUID = -7709593429900166516L;
-
-    public PhotarkRuntimeException() {
-    }
-
-    public PhotarkRuntimeException(String message) {
-        super(message);
-    }
-
-    public PhotarkRuntimeException(Throwable cause) {
-        super(cause);
-    }
-
-    public PhotarkRuntimeException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

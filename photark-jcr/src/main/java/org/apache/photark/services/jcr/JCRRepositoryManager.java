@@ -17,7 +17,7 @@
  * under the License.    
  */
 
-package org.apache.photark.jcr;
+package org.apache.photark.services.jcr;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,9 @@ import org.oasisopen.sca.annotation.Scope;
 
 /**
  *  A JCR Repository Manager that controls access to JCR session
- *  This is a singleton component controlled by the SCA Runtime via scope composite 
+ *  This is a singleton component controlled by the SCA Runtime via scope composite
+ *  
+ * @version $Rev$ $Date$
  */
 @Scope("COMPOSITE")
 @EagerInit
