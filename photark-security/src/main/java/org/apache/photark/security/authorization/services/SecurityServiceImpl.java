@@ -17,15 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.jcr.security;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+package org.apache.photark.security.authorization.services;
 
 import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.User;
@@ -35,13 +27,21 @@ import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 
 @Service(Servlet.class)
 @Scope("COMPOSITE")
-public class JCRSecurityServiceImpl  extends HttpServlet implements Servlet /*SecurityService*/ {
+public class SecurityServiceImpl extends HttpServlet implements Servlet /*SecurityService*/ {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6452934544772432330L;
 	private AccessManager accessManager;
@@ -64,49 +64,50 @@ public class JCRSecurityServiceImpl  extends HttpServlet implements Servlet /*Se
 		StringBuffer sb = new StringBuffer();
 		String userId= accessList.getUserId();
 		User user ;
-		
-		if("get".equalsIgnoreCase(request.getParameter("userInfo").toString())){
-			
+
+		if("get".equalsIgnoreCase(request.getParameter("userInfo"))){
+
 			 user = accessManager.getUser(userId);
 			 UserInfo userInfo= user.getUserInfo();
-			if(accessManager.isUserStoredInRole(userId, "unRegisteredUserRole")){
-
+			if(accessManager.isUserStoredInRole(userId, "registeredUserRole")){
+                request.getSession().setAttribute("toRigester", "false");
 			/*	sb.append("userId="+ userId);
 				sb.append(",displayName=" + userInfo.getDisplayName());
 				sb.append(",email=" + userInfo.getEmail());
 				sb.append(",realName=" + userInfo.getRealName());
 				sb.append(",webSite=" + userInfo.getWebsite());*/
-				sb.append( "registered,"+userId+","+ userInfo.getRealName()+","+userInfo.getDisplayName()+","+ userInfo.getEmail()+","+userInfo.getWebsite());
+                sb.append("registered,").append(userId).append(",").append(userInfo.getRealName()).append(",").append(userInfo.getDisplayName()).append(",").append(userInfo.getEmail()).append(",").append(userInfo.getWebsite());
 
 			}else {
 				/*sb.append("userId="+ userId);
 				sb.append(",unRegistered=false");*/
-				sb.append("unRegistered,"+userId+","+ userInfo.getRealName()+","+userInfo.getDisplayName()+","+ userInfo.getEmail()+","+userInfo.getWebsite());		
+                sb.append("unRegistered,").append(userId).append(",").append(userInfo.getRealName()).append(",").append(userInfo.getDisplayName()).append(",").append(userInfo.getEmail()).append(",").append(userInfo.getWebsite());
 			}
 
-		}else if("set".equalsIgnoreCase( request.getParameter("userInfo").toString())){
-			
-			user = new User(userId);
-			UserInfo userInfo = new UserInfo(request.getParameter("displayName").toString(),
-					request.getParameter("email").toString(),
-					request.getParameter("realName").toString(),
-					request.getParameter("webSite").toString());
-			user.setUserInfo(userInfo);
-			
-			if(accessManager.isUserStoredInRole(userId, "unRegisteredUserRole")){
-				accessManager.removeUserFromRole(userId,"unRegisteredUserRole");
-			}
-			if(!accessManager.isUserStoredInRole(userId, "registeredUserRole")){
-				accessManager.addUserToRole(user,"registeredUserRole");
-			}
-			//sb.append("userId="+ userId);
-			//sb.append(",unRegistered=false");
-				
+		}else if("set".equalsIgnoreCase(request.getParameter("userInfo"))){
+			if(request.getParameter("displayName") !=null&& !request.getParameter("displayName").trim().equals("")){
+                request.getSession().setAttribute("toRigester", "false");
+                user = new User(userId);
+                UserInfo userInfo = new UserInfo(request.getParameter("displayName"),
+                        request.getParameter("email"),
+                        request.getParameter("realName"),
+                        request.getParameter("webSite"));
+                user.setUserInfo(userInfo);
+
+                if(accessManager.isUserStoredInRole(userId, "unRegisteredUserRole")){
+                    accessManager.removeUserFromRole(userId,"unRegisteredUserRole");
+                }
+                if(!accessManager.isUserStoredInRole(userId, "registeredUserRole")){
+                    accessManager.addUserToRole(user,"registeredUserRole");
+                }
+                //sb.append("userId="+ userId);
+                //sb.append(",unRegistered=false");
+            }
 			}
 		PrintWriter out = response.getWriter();
 		out.write(sb.toString());
 		out.flush();
 		out.close();
-	
+
 	}
 }

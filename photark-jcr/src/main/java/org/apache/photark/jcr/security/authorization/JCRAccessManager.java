@@ -19,23 +19,18 @@
 
 package org.apache.photark.jcr.security.authorization;
 
-import java.util.ArrayList;
-
-import javax.jcr.LoginException;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.User;
 import org.apache.photark.security.authorization.UserInfo;
 import org.apache.photark.security.authorization.services.AccessManager;
-import org.oasisopen.sca.annotation.Destroy;
-import org.oasisopen.sca.annotation.Init;
-import org.oasisopen.sca.annotation.Reference;
-import org.oasisopen.sca.annotation.Remotable;
-import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.*;
+
+import javax.jcr.LoginException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.ArrayList;
 
 @Remotable
 @Scope("COMPOSITE")
@@ -139,6 +134,12 @@ public class JCRAccessManager implements AccessManager {
 		User user = null;
 		try {
 			Session session = repositoryManager.getSession();
+//            //to delete userStore
+//            Node root =  session.getRootNode();
+//            Node userStoreT= root.getNode("userStore");
+//            userStoreT.remove();
+//            session.save();
+//            //
 			Node allUsers = (Node) session.getItem("/userStore/allUsers");
 			Node userNode;
 

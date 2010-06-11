@@ -45,7 +45,7 @@
 	
 	<!-- Component responsible for providing REST access to Security Data -->
     <component name="SecurityServiceComponent">
-		<implementation.java class="org.apache.photark.jcr.security.JCRSecurityServiceImpl"/>
+		<implementation.java class="org.apache.photark.security.authorization.services.SecurityServiceImpl"/>
 		<service name="Servlet">
 			<tuscany:binding.http uri="/security"/>
 		</service>

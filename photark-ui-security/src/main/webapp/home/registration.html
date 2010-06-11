@@ -19,115 +19,171 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>Registration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Registration</title>
     <script type="text/javascript" src="../js/constants.js"></script>
     <script type="text/javascript" src="../dojo/dojo.js"></script>
-    
-<script type="text/javascript">
-    	
-	dojo.addOnLoad(function() {
-  	//  dojo.require("dojo.rpc.JsonService");
-  	dojo.require("dojo._base.xhr");
- 	});
-   
-	
-	function populateInfo() {
-		dojo.xhrPost({
-	            url:"../security", //photark.constants.SecurityEndpoint,
-	            content:{userInfo:"get"},
-	            handleAs: "text",
-	            load: function(response, ioArgs){
-	                setUserInfo(response);
-	            },
-	            error: function(response, ioArgs){
-	            console.error("Error in getting user info");
-	            }
-	        });
-	}
-	
-	function  setUserInfo(response){
-		var array = new Array(); 
-		array =response.split(',');
-		document.getElementById('userId').innerHTML=""+array[1];
-		if(array[0]!=null && array[0]=="unRegistered"){
-			document.getElementById('realName').value=array[2];
-			document.getElementById('displayName').value=array[3];
-			document.getElementById('email').value=array[4];
-			document.getElementById('webSite').value=array[5];
-		}else {
-		}
-		
-	}
 
-	function init() {
-		try {
-			populateInfo();
-		} catch (e) {
-			alert(e);
-		}
-	}
-	
-	function redirect(){
-	 	window.location="../admin/upload.html";
-	}
-	
-	function set(){
-		dojo.xhrPost({
-	            url:"../security", //photark.constants.SecurityEndpoint,
-	            content:{userInfo:"set",
-	            	realName:document.getElementById('realName').value,
-	        		displayName:document.getElementById('displayName').value,
-	            	email:document.getElementById('email').value,
-	            	webSite:document.getElementById('webSite').value},
-	            handleAs: "text",
-	            load: function(response, ioArgs){
-	             	redirect();
-	            },
-	            error: function(response, ioArgs){
-	            console.error("Error in getting user info");
-	            	redirect();
-	            }
+    <script type="text/javascript">
+
+        dojo.addOnLoad(function() {
+            //  dojo.require("dojo.rpc.JsonService");
+            dojo.require("dojo._base.xhr");
         });
-	}
 
-	
-</script>
+
+        function populateInfo() {
+            dojo.xhrPost({
+                url:"../security", //photark.constants.SecurityEndpoint,
+                content:{userInfo:"get"},
+                handleAs: "text",
+                load: function(response, ioArgs) {
+                    setUserInfo(response);
+                },
+                error: function(response, ioArgs) {
+                    console.error("Error in getting user info");
+                }
+            });
+        }
+
+        function setUserInfo(response) {
+            var array = new Array();
+            array = response.split(',');
+            document.getElementById('userId').innerHTML = "" + array[1];
+            if (array[0] != null && array[0] == "unRegistered") {
+                document.getElementById('realName').value = array[2];
+                document.getElementById('displayName').value = array[3];
+                document.getElementById('email').value = array[4];
+                document.getElementById('webSite').value = array[5];
+            } else {
+                window.location = "/photark/home/registration.html"
+            }
+
+        }
+
+        function init() {
+            try {
+                populateInfo();
+            } catch (e) {
+                alert(e);
+            }
+        }
+
+        function save() {
+            if (document.getElementById('displayName').value != null && trimAll(document.getElementById('displayName').value) != "") {
+
+                set();
+            } else {
+                document.getElementById('displayName').style.borderColor = "red";
+                alert("Please enter a \"Display Name\"!");
+                document.getElementById('displayName').focus();
+            }
+        }
+
+        function trimAll(sString)
+        {
+            while (sString.substring(0, 1) == ' ')
+            {
+                sString = sString.substring(1, sString.length);
+            }
+            while (sString.substring(sString.length - 1, sString.length) == ' ')
+            {
+                sString = sString.substring(0, sString.length - 1);
+            }
+            return sString;
+        }
+
+        function set() {
+            dojo.xhrPost({
+                url:"../security", //photark.constants.SecurityEndpoint,
+                content:{userInfo:"set",
+                    realName:document.getElementById('realName').value,
+                    displayName:document.getElementById('displayName').value,
+                    email:document.getElementById('email').value,
+                    webSite:document.getElementById('webSite').value},
+                handleAs: "text",
+                load: function(response, ioArgs) {
+                    window.location = "/photark/home/registration.html"
+                },
+                error: function(response, ioArgs) {
+                    console.error("Error in getting user info");
+                    window.location = "../logout";
+
+                }
+            });
+        }
+
+
+    </script>
+    <style type="text/css">
+         #container {
+      padding: 1em;
+    }
+
+    #container p {
+      font-size: 1.2em;
+      font-family: Tahoma,Verdana;
+    }
+
+
+    </style>
 
 </head>
 
 <body onload="init()">
 
-<h2>Get Registered With PhotArk</h2>
 
-<table border="0">
-<tr>
-<td>OpenID : </td>
-<td><div id="userId"></div></td>
-</tr>
-<tr>
-<td>Real Name : </td>
-<td><input id="realName" type="text" name="realName" /></td>
-</tr>
-<tr>
-<td>Display Name : </td>
-<td><input id="displayName" type="text" name="displayName" /></td>
-</tr>
-<tr>
-<td>E-mail : </td>
-<td><input id="email" type="text" name="email" /></td>
-</tr>
-<tr>
-<td>Website :</td>
-<td><input id="webSite" type="text" name="webSite" /></td>
-</tr>
-</tr>
-<tr>
-<td><button id="submit" type="button" onclick="set()">Register</button></td>
-<td><button id="cancel" type="button" onclick="redirect()">Cancel</button></td>
-</tr>
-</table> 
+<div id="container" style="margin-left:5px">
+<div style="float:right;width:50%;font-size:0.7em;text-align:right;">
+    <div><span><a href="../">Gallery</a></span></div>
+</div>
+    <p>Get <span style="color:orange">registered</span> with PhotArk</p>
 
+
+    <table border="0">
+        <tr>
+            <td>OpenID :</td>
+            <td>
+                <div id="userId" style="color:green;"></div>
+            </td>
+        </tr>
+        <tr>
+            <td><span>Display Name </span><span style="color:red">*</span><span> : </span></td>
+            <td><label>
+                <input id="displayName" type="text" name="displayName" size="20"/>
+            </label></td>
+        </tr>
+        <tr>
+            <td>Real Name :</td>
+            <td><label>
+                <input id="realName" type="text" name="realName" size="35"/>
+            </label></td>
+        </tr>
+        <tr>
+            <td>E-mail :</td>
+            <td><label>
+                <input id="email" type="text" name="email" size="35"/>
+            </label></td>
+        </tr>
+        <tr>
+            <td>Website :</td>
+            <td><label>
+                <input id="webSite" type="text" name="webSite" size="35"/>
+            </label></td>
+        </tr>
+         <tr>
+        </tr>
+        <tr>
+            <td>
+
+            </td>
+            <td>
+                 <button id="submit" type="button" onclick="save()" style="margin-right:5px">Register</button>
+                <button id="cancel" type="button" onclick="redirect()">Cancel</button>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 
 </html>
