@@ -30,5 +30,6 @@ photark.constants.adminContextRoot = "/photark/admin/";
 
 
 photark.constants.GalleryServiceEndpoint = photark.constants.contextRoot + "GalleryService?smd";
+//photark.constants.SecurityEndpoint = photark.constants.contextRoot + "Security?smd";
 
 photark.constants.UploadEndpoint = photark.constants.adminContextRoot + "upload";

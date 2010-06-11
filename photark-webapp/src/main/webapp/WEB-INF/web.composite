@@ -42,6 +42,17 @@
 		</service>
 		<reference name="repositoryManager" target="RepositoryManager"/>
 	</component>
+	
+	<!-- Component responsible for providing REST access to Security Data -->
+    <component name="SecurityServiceComponent">
+		<implementation.java class="org.apache.photark.jcr.security.JCRSecurityServiceImpl"/>
+		<service name="Servlet">
+			<tuscany:binding.http uri="/security"/>
+		</service>
+		<reference name="accessmanager" target="AccessManager">
+			<binding.sca name="local"/>
+		</reference>   	
+	</component>
     
     <!-- Component responsible for providing upload support for gallery/album -->
     <component name="ImageUploadServiceComponent">
@@ -97,6 +108,7 @@
    		<service name="AccessManager">
    			<interface.java interface="org.apache.photark.security.authorization.services.AccessManager"/>
    			<binding.sca name="local"/>
+   		<!--<tuscany:binding.jsonrpc uri="/Security"/> -->
 		</service>  
    		<reference name="repositoryManager" target="RepositoryManager"/>
     </component> 

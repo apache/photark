@@ -19,10 +19,16 @@
 
 package org.apache.photark.security.authorization;
 
+import java.io.Serializable;
+
 /**
  * Model representing a Permission
  */
-public class Permission {
+public class Permission implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 115956810128294635L;
 	public String permission;
 	private String desc;
 	

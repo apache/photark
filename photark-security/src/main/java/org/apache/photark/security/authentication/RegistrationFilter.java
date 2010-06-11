@@ -31,41 +31,43 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.photark.security.authorization.AccessList;
 
 /**
- * Authorization Filter. This will only allow authenticated user 
- * to access to upload.html and redirect others to OpenID authentication
+ * Authorization Filter. This will only allow authenticated user to access to
+ * upload.html and redirect others to OpenID authentication
  * 
  * 
  * 
  */
-public class AuthorizationFilter implements Filter {
-        private static final Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());
-    
+
+public class RegistrationFilter implements Filter {
+	private static final Logger logger = Logger
+			.getLogger(RegistrationFilter.class.getName());
+
 	private String redirectPage;
 
-    /** Filter should be configured with an redirect page. */
+	/** Filter should be configured with an redirect page. */
 	public void init(FilterConfig FilterConfig) throws ServletException {
 		if (FilterConfig != null) {
-		    redirectPage = FilterConfig.getInitParameter("redirect_page");
+			redirectPage = FilterConfig.getInitParameter("redirect_page");
 		}
 	}
-	
+
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws ServletException, IOException {
-		
+		FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 		HttpServletResponse httpResp = (HttpServletResponse) response;
 		
-		if (httpReq.getSession().getAttribute("accessList") != null && ! httpReq.getSession().getAttribute("accessList").equals("")) {
-			System.err.println(((AccessList)httpReq.getSession().getAttribute("accessList")).getUserId() +" Accessing Admin page");
+		if (httpReq.getSession().getAttribute("toRigester") != null
+				&& httpReq.getSession().getAttribute("toRigester").equals("true")) {
+			httpReq.getSession().setAttribute("toRigester", "false");
 			chain.doFilter(request, response);
 		} else {
+			// httpResp.sendRedirect(httpReq.getContextPath() +"/admin/upload.html");
 			httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
 		}
 

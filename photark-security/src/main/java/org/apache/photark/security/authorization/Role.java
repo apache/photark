@@ -19,13 +19,18 @@
 
 package org.apache.photark.security.authorization;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Model representing a Role
  */
-public class Role {
+public class Role implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7560129536060718311L;
 	public String roleName;
 	public List<Permission> permissions = new ArrayList<Permission>();
 	

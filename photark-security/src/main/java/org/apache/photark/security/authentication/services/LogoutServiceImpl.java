@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.photark.security.authorization.AccessList;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -59,19 +60,20 @@ public class LogoutServiceImpl extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
-  
-	System.err.print((String)request.getSession().getAttribute("accessList"));
-	// Removing the AccessList
-	request.getSession().setAttribute("accessList", "");
-	// invalidating the Authenticated OpenID User
-	RelyingParty.getInstance().invalidate(request, response);
-	// invalidating the Authenticated Super Admin User
-	request.getSession().invalidate();
+    	if(request.getSession().getAttribute("accessList")!=null){
+    		System.err.print(((AccessList)request.getSession().getAttribute("accessList")).getUserId());
+    	}
+		// Removing the AccessList
+		request.getSession().setAttribute("accessList", "");
+		// invalidating the Authenticated OpenID User
+		RelyingParty.getInstance().invalidate(request, response);
+		// invalidating the Authenticated Super Admin User
+		request.getSession().invalidate();
+		
+		System.err.println(" logged out");
 	
-	System.err.println(" logged out");
-
-	// Redirect to Gallery
-	response.sendRedirect(request.getContextPath() + "/");
+		// Redirect to Gallery
+		response.sendRedirect(request.getContextPath() + "/");
     }
 
 }

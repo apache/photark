@@ -19,39 +19,54 @@
 
 package org.apache.photark.security.authorization;
 
+import java.io.Serializable;
+
+import org.oasisopen.sca.annotation.Remotable;
+
 /**
  * Model representing Information of an User of Gallery
  */
-public class UserInfo {
-	private String displayName;
-	private String email;
-	private String realName;
-	private String website;
-	
-	
-	public UserInfo(String email){
+
+public class UserInfo implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3735573328644358405L;
+	private String displayName = "";
+	private String email = "";
+	private String realName = "";
+	private String website = "";
+
+	public UserInfo(String email) {
 		this.email = email;
 	}
-	
-	public String getDisplayName(){
-		return displayName;
+
+	public UserInfo(String displayName, String email, String realName,
+			String website) {
+		super();
+		this.displayName = displayName;
+		this.email = email;
+		this.realName = realName;
+		this.website = website;
 	}
-	
-	
-	public void setDiplayName(String  displayName){
+
+	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-	
-	public String getEmail(){
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public String getEmail() {
 		return email;
 	}
-	
-	
-	public String getRealName(){
+
+	public String getRealName() {
 		return realName;
 	}
-	
-	public String getWebsite(){
+
+	public String getWebsite() {
 		return website;
 	}
 }

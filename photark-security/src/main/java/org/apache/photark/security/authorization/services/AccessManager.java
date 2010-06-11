@@ -19,10 +19,18 @@
 
 package org.apache.photark.security.authorization.services;
 
+import org.apache.photark.security.authorization.AccessList;
+import org.apache.photark.security.authorization.User;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
 public interface AccessManager {
+
+	AccessList creatAccessList(String identity, String email);
 	
-	String creatAccessList(String accessList );
+	boolean isUserStoredInRole(String userId, String node);
+	 User getUser(String userId);
+	 void removeUserFromRole(String userId, String node);
+	 void addUserToRole(User user, String node);
+	 
 }

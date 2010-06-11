@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.services.AccessManager;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
@@ -84,23 +85,34 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             	
             	//Invalidating the Super Admin user
             	request.getSession().invalidate();
-            	//Creating the accessList for the newly authenticated user
-        	    //Creating the accessList
-        	    String accesList=accessManager.creatAccessList(user.getIdentity());
-        	    request.getSession().setAttribute("accessList", accesList);
-
+            	
+            	String email=null;
+            	
                 Map<String,String> sreg = SRegExtension.remove(user);
                 Map<String,String> axschema = AxSchemaExtension.remove(user);
                 if(sreg!=null && !sreg.isEmpty())
                 {
                     System.err.println("sreg: " + sreg);
                     user.setAttribute("info", sreg);
+                    email= sreg.get("email");
                 }
                 else if(axschema!=null && !axschema.isEmpty())
                 {                    
                     System.err.println("axschema: " + axschema);
                     user.setAttribute("info", axschema);
-                }          
+                    email= axschema.get("email");
+                }   
+              //Creating the accessList for the newly authenticated user
+            	
+            	if (email==null){
+            		email="";
+            	}
+        	    AccessList accesList=accessManager.creatAccessList(user.getIdentity(),email);
+        	    request.getSession().setAttribute("accessList", accesList);
+        	    if(!accessManager.isUserStoredInRole(accesList.getUserId(), "registeredUserRole")){
+        	    	request.getSession().setAttribute("toRigester", "true");
+        	    }
+
             }            
             public void onAccess(OpenIdUser user, HttpServletRequest request)
             {        
@@ -180,10 +192,12 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             if(user.isAuthenticated())
             {
                 // user already authenticated
-               // request.getRequestDispatcher("/home/home.jsp").forward(request, response);
+                // request.getRequestDispatcher("/home/home.jsp").forward(request, response);
             	//added by suho
-                response.sendRedirect(request.getContextPath() + "/admin/upload.html");
-               
+            	// the original entry
+            		//response.sendRedirect(request.getContextPath() + "/admin/upload.html");
+            	// for registering purposes
+                  	response.sendRedirect(request.getContextPath() + "/home/registration.html");         		
                 return;
             }
             

@@ -19,13 +19,21 @@
 
 package org.apache.photark.security.authorization;
 
+import java.io.Serializable;
+
 
 /**
  * Model representing an User of Gallery
  */
-public class User {
-	private String userId;
-	private UserInfo userinfo;
+
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3933174647645362951L;
+	private String userId ="";
+	private UserInfo userinfo  = new UserInfo("");
+	
 	
 	/**
 	 * 

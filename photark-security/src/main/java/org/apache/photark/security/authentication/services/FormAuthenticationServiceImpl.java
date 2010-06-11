@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.services.AccessManager;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
@@ -71,7 +72,7 @@ public class FormAuthenticationServiceImpl extends HttpServlet implements Servle
 	    RelyingParty.getInstance().invalidate(request, response);
 	    
 	    //Creating the accessList
-	    String accesList=accessManager.creatAccessList("SuperAdmin");
+	    AccessList accesList=accessManager.creatAccessList("SuperAdmin","");
 	    request.getSession().setAttribute("accessList", accesList);
 	    System.err.println("Super Admin authenticated");
 

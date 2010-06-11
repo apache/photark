@@ -19,19 +19,28 @@
 
 package org.apache.photark.security.authorization;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.oasisopen.sca.annotation.Remotable;
 
 
 /**
  * Immutable AccessList Object responsible for storing permissions of the user.
  * 
  */
-public class AccessList {
+
+public class AccessList implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6849853208649971131L;
 	/** */
-	private String userId;
+	private String userId="";
 	/** */
-	private List<String> permissions;
+	private List<String> permissions= new ArrayList<String>();
 	
 
 	/**
@@ -41,10 +50,13 @@ public class AccessList {
 	 * @param permissions  List<String>
 	 */
 	public AccessList(String userId, List<String> permissions){ 
-		this.permissions = Collections.unmodifiableList(permissions);
+		 //TODO	this.permissions = Collections.unmodifiableList(permissions);
 		this.userId = userId;
 	}
 	
+	public AccessList(){ 
+			
+	}
 	
 	/**
 	 * 
