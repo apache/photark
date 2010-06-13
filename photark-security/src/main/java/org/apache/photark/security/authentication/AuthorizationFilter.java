@@ -63,8 +63,15 @@ public class AuthorizationFilter implements Filter {
 		HttpServletResponse httpResp = (HttpServletResponse) response;
 		
 		if (httpReq.getSession().getAttribute("accessList") != null && ! httpReq.getSession().getAttribute("accessList").equals("")) {
-			System.err.println(((AccessList)httpReq.getSession().getAttribute("accessList")).getUserId() +" Accessing Admin page");
-			chain.doFilter(request, response);
+            if (httpReq.getSession().getAttribute("toRigester") != null
+				&& httpReq.getSession().getAttribute("toRigester").equals("true")) {
+                httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
+            } else{
+               System.err.println(((AccessList)httpReq.getSession().getAttribute("accessList")).getUserId() +" Accessing Admin page");
+			chain.doFilter(request, response); 
+            }
+
+
 		} else {
 			httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
 		}

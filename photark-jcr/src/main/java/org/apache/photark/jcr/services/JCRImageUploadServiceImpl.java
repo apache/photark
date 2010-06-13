@@ -229,8 +229,8 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 
 	/**
 	 * @param albumName String
-	 * @param picture Picture
-	 * @param String albumDescription
+	 * @param albumDescription Picture
+	 * @param image albumDescription
 	 */
 	private void addPictureToAlbum(String albumName,String albumDescription, Image image) {
 		gallery.addAlbum(albumName);

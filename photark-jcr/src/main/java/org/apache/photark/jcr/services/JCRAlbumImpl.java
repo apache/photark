@@ -203,7 +203,7 @@ public class JCRAlbumImpl implements Album {
 
             while (nodes.hasNext()) {
                 Node node = nodes.nextNode();
-                if (node.getPath().equals("/jcr:system"))
+                if (node.getPath().equals("/jcr:system")||node.getPath().equals("/userStore"))
                     continue;
                 pictures.add(node.getProperty("location").getString());
             }

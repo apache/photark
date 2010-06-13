@@ -42,7 +42,9 @@ var slideShowSpeed=0;
 var timer;
 
 dojo.addOnLoad(function() {
+    dojo.require("dojo._base.xhr");
     dojo.require("dojo.rpc.JsonService");
+    dojo.addOnLoad(populateUserInfo);
     dojo.addOnLoad(initServices);
     dojo.addOnLoad(initGallery);
  });
@@ -60,6 +62,31 @@ function initGallery() {
     } catch(exception) {
         alert(exception);
     }
+}
+
+function populateUserInfo() {
+            dojo.xhrPost({
+                url:"security", //photark.constants.SecurityEndpoint,
+                content:{request:"getUser"},
+                handleAs: "json",
+                load: function(response, ioArgs) {
+                    displayLoginLinks(response);
+                },
+                error: function(response, ioArgs) {
+                    console.error("Error in getting user info");
+                }
+            });
+        }
+function displayLoginLinks  (response) {
+    if(response!=null&&response.user.userId!="null"){
+        var displayName = response.user.userInfo.displayName;
+
+        document.getElementById("loginLinks").innerHTML="Welcome <b>"+displayName+"</b> : <span><a href=\"./admin/upload.html\"><u>Admin page</u></a></span>&nbsp;&nbsp;<span><a href=\"./logout/\"><u>Logout</u></a></span>" ;
+    } else {
+        document.getElementById("loginLinks").innerHTML="<span><a href=\"./admin/authenticate\"><u>Super admin</u></a></span>&nbsp;&nbsp;<span><a href=\"./home/authenticate\"><u>Login</u></a></span>";
+    }
+          
+
 }
 
 function gallery_getAlbumsResponse(albums, exception) {

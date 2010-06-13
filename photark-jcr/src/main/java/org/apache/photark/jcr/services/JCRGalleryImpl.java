@@ -97,7 +97,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
             NodeIterator albumNodes = rootNode.getNodes();
             while (albumNodes.hasNext()) {
                 Node albumNode = albumNodes.nextNode();
-                if (albumNode.getPath().equals("/jcr:system")) {
+                if (albumNode.getPath().equals("/jcr:system")||albumNode.getPath().equals("/userStore")) {
                     continue;
                 }
                 String albumName = albumNode.getName();

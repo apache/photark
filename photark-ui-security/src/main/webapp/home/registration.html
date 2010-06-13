@@ -35,7 +35,7 @@
         function populateInfo() {
             dojo.xhrPost({
                 url:"../security", //photark.constants.SecurityEndpoint,
-                content:{userInfo:"get"},
+                content:{request:"getUserInfo"},
                 handleAs: "text",
                 load: function(response, ioArgs) {
                     setUserInfo(response);
@@ -56,7 +56,7 @@
                 document.getElementById('email').value = array[4];
                 document.getElementById('webSite').value = array[5];
             } else {
-                window.location = "/photark/home/registration.html"
+                window.location = "authenticate"
             }
 
         }
@@ -96,23 +96,25 @@
         function set() {
             dojo.xhrPost({
                 url:"../security", //photark.constants.SecurityEndpoint,
-                content:{userInfo:"set",
+                content:{request:"setUserInfo",
                     realName:document.getElementById('realName').value,
                     displayName:document.getElementById('displayName').value,
                     email:document.getElementById('email').value,
                     webSite:document.getElementById('webSite').value},
                 handleAs: "text",
                 load: function(response, ioArgs) {
-                    window.location = "/photark/home/registration.html"
+                    window.location = "authenticate"
                 },
                 error: function(response, ioArgs) {
                     console.error("Error in getting user info");
-                    window.location = "../logout";
+                   logout();
 
                 }
             });
         }
-
+        function logout(){
+          window.location = "../logout";
+        }
 
     </script>
     <style type="text/css">
@@ -135,7 +137,7 @@
 
 <div id="container" style="margin-left:5px">
 <div style="float:right;width:50%;font-size:0.7em;text-align:right;">
-    <div><span><a href="../">Gallery</a></span></div>
+    <div><span><a href="../logout">Gallery</a></span></div>
 </div>
     <p>Get <span style="color:orange">registered</span> with PhotArk</p>
 
@@ -179,7 +181,7 @@
             </td>
             <td>
                  <button id="submit" type="button" onclick="save()" style="margin-right:5px">Register</button>
-                <button id="cancel" type="button" onclick="redirect()">Cancel</button>
+                <button id="cancel" type="button" onclick="logout()">Cancel</button>
             </td>
         </tr>
     </table>

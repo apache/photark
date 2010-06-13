@@ -195,7 +195,35 @@ var r;
     }
 }
 
+
+function populateUserInfo() {
+            dojo.xhrPost({
+                url:"../security", //photark.constants.SecurityEndpoint,
+                content:{request:"getUser"},
+                handleAs: "json",
+                load: function(response, ioArgs) {
+                    displayLoginLinks(response);
+                },
+                error: function(response, ioArgs) {
+                    console.error("Error in getting user info");
+                }
+            });
+        }
+
+function displayLoginLinks  (response) {
+    if(response!=null&&response.user.userId!="null"){
+        var displayName = response.user.userInfo.displayName;
+
+        document.getElementById("loginName").innerHTML="<b>"+displayName+"</b>" ;
+    } else {
+        document.getElementById("loginName").innerHTML="";
+    }
+
+
+}
 dojo.addOnLoad( function() {
+    dojo.addOnLoad(populateUserInfo);
     populateSelect();
+
 
 });
