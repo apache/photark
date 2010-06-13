@@ -102,7 +102,7 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
                 if (!accessManager.isUserStoredInRole(userId, "registeredUserRole")) {
                     accessManager.addUserToRole(user, "registeredUserRole");
                 }
-                //sb.append("userId="+ userId);
+                sb.append("OK");
                 //sb.append(",unRegistered=false");
             }
         } else if ("getUser".equalsIgnoreCase(request.getParameter("request"))) {

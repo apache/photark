@@ -56,7 +56,7 @@
                 document.getElementById('email').value = array[4];
                 document.getElementById('webSite').value = array[5];
             } else {
-                window.location = "authenticate"
+                window.location = "/photark/admin/upload.html";
             }
 
         }
@@ -103,7 +103,9 @@
                     webSite:document.getElementById('webSite').value},
                 handleAs: "text",
                 load: function(response, ioArgs) {
-                    window.location = "authenticate"
+                         if(response=="OK"){
+                         window.location = "/photark/admin/upload.html"
+                        }
                 },
                 error: function(response, ioArgs) {
                     console.error("Error in getting user info");
