@@ -63,9 +63,10 @@ public class LogoutServiceImpl extends HttpServlet {
     	if(request.getSession().getAttribute("accessList")!=null){
     		System.err.print(((AccessList)request.getSession().getAttribute("accessList")).getUserId());
     	}
-		// Removing the AccessList
-		request.getSession().setAttribute("accessList", "");
-		// invalidating the Authenticated OpenID User
+        // Removing the AccessList
+        request.getSession().setAttribute("accessList", "");
+        request.getSession().setAttribute("toRigester", "false");
+        // invalidating the Authenticated OpenID User
 		RelyingParty.getInstance().invalidate(request, response);
 		// invalidating the Authenticated Super Admin User
 		request.getSession().invalidate();

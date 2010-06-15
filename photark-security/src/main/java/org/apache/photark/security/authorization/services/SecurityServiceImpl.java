@@ -59,30 +59,23 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-
+        PrintWriter out = response.getWriter();
         StringBuffer sb = new StringBuffer();
 
-        if ("getUserInfo".equalsIgnoreCase(request.getParameter("request"))) {
+        if ("getUserInfo".equalsIgnoreCase(request.getParameter("request")) && (request.getSession().getAttribute("accessList") != null && !request.getSession().getAttribute("accessList").equals(""))) {
             AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
             String userId = accessList.getUserId();
-            User user;
-            user = accessManager.getUser(userId);
-            UserInfo userInfo = user.getUserInfo();
+            StringBuffer ssb = createJSONUser(request);
             if (accessManager.isUserStoredInRole(userId, "registeredUserRole")) {
                 request.getSession().setAttribute("toRigester", "false");
-                /*	sb.append("userId="+ userId);
-                    sb.append(",displayName=" + userInfo.getDisplayName());
-                    sb.append(",email=" + userInfo.getEmail());
-                    sb.append(",realName=" + userInfo.getRealName());
-                    sb.append(",webSite=" + userInfo.getWebsite());*/
-                sb.append("registered,").append(userId).append(",").append(userInfo.getRealName()).append(",").append(userInfo.getDisplayName()).append(",").append(userInfo.getEmail()).append(",").append(userInfo.getWebsite());
 
+                sb.append("{registered:'true'," + ssb + "}");
+                //  response.sendRedirect(request.getContextPath() + "/admin/upload.html");
             } else {
-                /*sb.append("userId="+ userId);
-                    sb.append(",unRegistered=false");*/
-                sb.append("unRegistered,").append(userId).append(",").append(userInfo.getRealName()).append(",").append(userInfo.getDisplayName()).append(",").append(userInfo.getEmail()).append(",").append(userInfo.getWebsite());
-            }
+                sb.append("{registered:'false'," + ssb + "}");
 
+            }
+            send(out, sb);
         } else if ("setUserInfo".equalsIgnoreCase(request.getParameter("request"))) {
             AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
             String userId = accessList.getUserId();
@@ -105,46 +98,55 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
                 sb.append("OK");
                 //sb.append(",unRegistered=false");
             }
+            send(out, sb);
         } else if ("getUser".equalsIgnoreCase(request.getParameter("request"))) {
-            if (request.getSession().getAttribute("accessList") != null && request.getSession().getAttribute("accessList") != "") {
-
-                AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
-
-                String userId = accessList.getUserId();
-                if(userId.equals("SuperAdmin")){
-
-                sb.append("{user:{userId:'" + userId +
-                        "',userInfo:{realName:'" +
-                        "',displayName:'"+userId + 
-                        "',email:'" +
-                        "',website:'" +  "'}}}");
-
-                }   else{
-                    User user;
-                user = accessManager.getUser(userId);
-                UserInfo userInfo = user.getUserInfo();
-
-                /*	sb.append("userId="+ userId);
-              sb.append(",displayName=" + userInfo.getDisplayName());
-              sb.append(",email=" + userInfo.getEmail());
-              sb.append(",realName=" + userInfo.getRealName());
-              sb.append(",webSite=" + userInfo.getWebsite());*/
-                sb.append("{user:{userId:'" + userId +
-                        "',userInfo:{realName:'" + userInfo.getRealName() +
-                        "',displayName:'" + userInfo.getDisplayName() +
-                        "',email:'" + userInfo.getEmail() +
-                        "',website:'" + userInfo.getWebsite() + "'}}}");
-                }
-
-
-            }else{
-                 sb.append("{user:{userId:'null'}}");
-            }
+            sb.append("{" + createJSONUser(request) + "}");
+            send(out, sb);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/home/authenticate");
         }
-        PrintWriter out = response.getWriter();
+
+
+    }
+
+    private void send(PrintWriter out, StringBuffer sb) {
         out.write(sb.toString());
         out.flush();
         out.close();
+    }
 
+    private StringBuffer createJSONUser(HttpServletRequest request) {
+        StringBuffer sb = new StringBuffer();
+        if (request.getSession().getAttribute("accessList") != null && request.getSession().getAttribute("accessList") != "") {
+
+            AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
+
+            String userId = accessList.getUserId();
+            if (userId.equals("SuperAdmin")) {
+
+                sb.append("user:{userId:'" + userId +
+                        "',userInfo:{realName:'" +
+                        "',displayName:'" + userId +
+                        "',email:'" +
+                        "',website:'" + "'}}");
+
+            } else {
+                User user;
+                user = accessManager.getUser(userId);
+                UserInfo userInfo = user.getUserInfo();
+
+
+                sb.append("user:{userId:'" + userId +
+                        "',userInfo:{realName:'" + userInfo.getRealName() +
+                        "',displayName:'" + userInfo.getDisplayName() +
+                        "',email:'" + userInfo.getEmail() +
+                        "',website:'" + userInfo.getWebsite() + "'}}");
+            }
+
+
+        } else {
+            sb.append("user:{userId:'null'}");
+        }
+        return sb;
     }
 }

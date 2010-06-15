@@ -73,7 +73,7 @@
 	</error-page>
 
 	<filter>
-	     <filter-name>login-filter</filter-name>
+	     <filter-name>authorization-filter</filter-name>
 	     <filter-class>org.apache.photark.security.authentication.AuthorizationFilter</filter-class>
 	     <description>This Filter authorizes user access to application
 	                  components based upon request URI.</description>
@@ -84,39 +84,8 @@
 	</filter>
 	
 	<filter-mapping>
-	     <filter-name>login-filter</filter-name>
+	     <filter-name>authorization-filter</filter-name>
 	     <url-pattern>/admin/upload.html</url-pattern>
-	</filter-mapping>
-	
-	<filter>
-	     <filter-name>registration-filter</filter-name>
-	     <filter-class>org.apache.photark.security.authentication.RegistrationFilter</filter-class>
-	     <description>This Filter registers the unregistered user.</description>
-	     <init-param>
-	        <param-name>redirect_page</param-name>
-	        <param-value>/admin/upload.html</param-value>
-	     </init-param>
-	</filter>
-	
-	<filter-mapping>
-	     <filter-name>registration-filter</filter-name>
-	     <url-pattern>/home/registration.html</url-pattern>
-	</filter-mapping>
-
-	<filter>
-		<filter-name>openid-filter</filter-name>
-		<filter-class>com.dyuproject.openid.OpenIdServletFilter</filter-class>
-		<load-on-startup>1</load-on-startup>
-		<init-param>
-			<param-name>forwardUri</param-name>
-			<param-value>/login.html</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>openid-filter</filter-name>
-		<url-pattern>/home/login.html</url-pattern>
-		<url-pattern>/home/error.html</url-pattern>
 	</filter-mapping>
 
 </web-app>

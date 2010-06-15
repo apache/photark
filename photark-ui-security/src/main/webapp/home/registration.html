@@ -26,44 +26,38 @@
 
     <script type="text/javascript">
 
-        dojo.addOnLoad(function() {
-            //  dojo.require("dojo.rpc.JsonService");
-            dojo.require("dojo._base.xhr");
-        });
-
 
         function populateInfo() {
             dojo.xhrPost({
                 url:"../security", //photark.constants.SecurityEndpoint,
                 content:{request:"getUserInfo"},
-                handleAs: "text",
+                sync:true,
+                handleAs: "json",
                 load: function(response, ioArgs) {
-                    setUserInfo(response);
+                    if (response.registered == "false" && response.user.userId != "null" && response.user.userId != "SuperAdmin") {
+                        document.getElementById('userId').innerHTML = "" + response.user.userId;
+                        document.getElementById('realName').value = response.user.userInfo.realName;
+                        document.getElementById('displayName').value = response.user.userInfo.displayName;
+                        document.getElementById('email').value = response.user.userInfo.email;
+                        document.getElementById('webSite').value = response.user.userInfo.website;
+                    } else {
+                        window.location = "/photark/home/authenticate";
+                    }
                 },
                 error: function(response, ioArgs) {
                     console.error("Error in getting user info");
+                    logout();
                 }
             });
         }
 
-        function setUserInfo(response) {
-            var array = new Array();
-            array = response.split(',');
-            document.getElementById('userId').innerHTML = "" + array[1];
-            if (array[0] != null && array[0] == "unRegistered") {
-                document.getElementById('realName').value = array[2];
-                document.getElementById('displayName').value = array[3];
-                document.getElementById('email').value = array[4];
-                document.getElementById('webSite').value = array[5];
-            } else {
-                window.location = "/photark/admin/upload.html";
-            }
-
-        }
-
         function init() {
             try {
-                populateInfo();
+                dojo.addOnLoad(function() {
+                    dojo.require("dojo._base.xhr");
+                    populateInfo();
+                });
+
             } catch (e) {
                 alert(e);
             }
@@ -80,14 +74,11 @@
             }
         }
 
-        function trimAll(sString)
-        {
-            while (sString.substring(0, 1) == ' ')
-            {
+        function trimAll(sString) {
+            while (sString.substring(0, 1) == ' ') {
                 sString = sString.substring(1, sString.length);
             }
-            while (sString.substring(sString.length - 1, sString.length) == ' ')
-            {
+            while (sString.substring(sString.length - 1, sString.length) == ' ') {
                 sString = sString.substring(0, sString.length - 1);
             }
             return sString;
@@ -103,31 +94,31 @@
                     webSite:document.getElementById('webSite').value},
                 handleAs: "text",
                 load: function(response, ioArgs) {
-                         if(response=="OK"){
-                         window.location = "/photark/admin/upload.html"
-                        }
+                    if (response == "OK") {
+                        window.location = "/photark/home/authenticate"
+                    }
                 },
                 error: function(response, ioArgs) {
                     console.error("Error in getting user info");
-                   logout();
+                    logout();
 
                 }
             });
         }
-        function logout(){
-          window.location = "../logout";
+        function logout() {
+            window.location = "../logout";
         }
 
     </script>
     <style type="text/css">
-         #container {
-      padding: 1em;
-    }
+        #container {
+            padding: 1em;
+        }
 
-    #container p {
-      font-size: 1.2em;
-      font-family: Tahoma,Verdana;
-    }
+        #container p {
+            font-size: 1.2em;
+            font-family: Tahoma, Verdana;
+        }
 
 
     </style>
@@ -138,9 +129,9 @@
 
 
 <div id="container" style="margin-left:5px">
-<div style="float:right;width:50%;font-size:0.7em;text-align:right;">
-    <div><span><a href="../logout">Gallery</a></span></div>
-</div>
+    <div style="float:right;width:50%;font-size:0.7em;text-align:right;">
+        <div><span><a href="../logout">Gallery</a></span></div>
+    </div>
     <p>Get <span style="color:orange">registered</span> with PhotArk</p>
 
 
@@ -175,14 +166,14 @@
                 <input id="webSite" type="text" name="webSite" size="35"/>
             </label></td>
         </tr>
-         <tr>
+        <tr>
         </tr>
         <tr>
             <td>
 
             </td>
             <td>
-                 <button id="submit" type="button" onclick="save()" style="margin-right:5px">Register</button>
+                <button id="submit" type="button" onclick="save()" style="margin-right:5px">Register</button>
                 <button id="cancel" type="button" onclick="logout()">Cancel</button>
             </td>
         </tr>

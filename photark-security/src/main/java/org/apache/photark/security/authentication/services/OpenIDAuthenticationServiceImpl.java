@@ -19,23 +19,6 @@
 
 package org.apache.photark.security.authentication.services;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.Map;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.photark.security.authorization.AccessList;
-import org.apache.photark.security.authorization.services.AccessManager;
-import org.oasisopen.sca.annotation.Reference;
-import org.oasisopen.sca.annotation.Scope;
-import org.oasisopen.sca.annotation.Service;
-
 import com.dyuproject.openid.OpenIdServletFilter;
 import com.dyuproject.openid.OpenIdUser;
 import com.dyuproject.openid.RelyingParty;
@@ -43,6 +26,21 @@ import com.dyuproject.openid.YadisDiscovery;
 import com.dyuproject.openid.ext.AxSchemaExtension;
 import com.dyuproject.openid.ext.SRegExtension;
 import com.dyuproject.util.http.UrlEncodedParameterMap;
+import org.apache.photark.security.authorization.AccessList;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.oasisopen.sca.annotation.Reference;
+import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.Service;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Map;
 
 /**
  * OpenID Authentication Service Impl. If authenticated, goes to the home page. If not, goes to the login page.
@@ -179,11 +177,12 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
                     // set error msg if the openid_identifier is not resolved.
                     if(request.getParameter(_relyingParty.getIdentifierParameter())!=null){
                         request.setAttribute(OpenIdServletFilter.ERROR_MSG_ATTR, errorMsg);//TODO error pages, massage not passed to front end
-                        request.getRequestDispatcher("/home/error.html").forward(request, response);
+                       // request.getRequestDispatcher("/home/error.html").forward(request, response);
+                        response.sendRedirect(request.getContextPath() + "/home/error.html");
                     }else{
                     // new user
-                    request.getRequestDispatcher("/home/login.html").forward(request, response);
-                    //response.sendRedirect(request.getContextPath() + "/home/login.html");
+                    //request.getRequestDispatcher("/home/login.html").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/home/login.html");
                     }
                 }
                 return;
@@ -193,11 +192,17 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             {
                 // user already authenticated
                 // request.getRequestDispatcher("/home/home.jsp").forward(request, response);
-            	//added by suho
-            	// the original entry
-            		//response.sendRedirect(request.getContextPath() + "/admin/upload.html");
-            	// for registering purposes
-                  	response.sendRedirect(request.getContextPath() + "/home/registration.html");         		
+                //added by suho
+                // the original entry
+                if (request.getSession().getAttribute("toRigester") != null
+                        && request.getSession().getAttribute("toRigester").equals("true")) {
+                    // for registering purposes
+                    //  request.getRequestDispatcher("/home/registration.html").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/home/registration.html");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/admin/upload.html");
+                }
+
                 return;
             }
             
@@ -209,13 +214,15 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
                     // authenticated                    
                     // redirect to home to remove the query params instead of doing:
                     // request.getRequestDispatcher("/home.jsp").forward(request, response);
+                    // send to the authorization filter to loop back
                     response.sendRedirect(request.getContextPath() + "/home/authenticate");
                 }
                 else
                 {
                     // failed verification
                     //request.getRequestDispatcher("/home/login.jsp").forward(request, response);
-                    request.getRequestDispatcher("/home/error.html").forward(request, response);
+                   // request.getRequestDispatcher("/home/error.html").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/home/error.html");
                 }
                 return;
             }
@@ -248,7 +255,8 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             errorMsg = OpenIdServletFilter.DEFAULT_ERROR_MSG;//TODO error pages, massage not passed to front end
         }
         request.setAttribute(OpenIdServletFilter.ERROR_MSG_ATTR, errorMsg);//TODO error pages, massage not passed to front end
-        request.getRequestDispatcher("/home/login.html").forward(request, response);
+        //request.getRequestDispatcher("/home/login.html").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/home/login.html");
     }
 
 }
