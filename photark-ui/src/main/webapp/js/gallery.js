@@ -31,6 +31,7 @@ var show_slide_slow  = new Image(31,31); show_slide_slow.src = "images/show_slid
 var show_slide_slow_on  = new Image(31,31); show_slide_slow_on.src = "images/show_slide_slow_on.gif";
 
 var gallery;
+var searchService;
 var galleryName;
 var galleryAlbums;
 var albumCovers = new Array();
@@ -50,14 +51,12 @@ dojo.addOnLoad(function() {
  });
 
 function initServices(){
+  	searchService = new dojo.rpc.JsonService( photark.constants.SearchServiceEndpoint );
     gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
 }
 
 function initGallery() {
     try {
-        if( !gallery) {
-            gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
-        }
         gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
     } catch(exception) {
         alert(exception);
@@ -117,6 +116,43 @@ function gallery_getAlbumCoverResponse(cover, exception) {
     }
 }
 
+function searchResponse(items, exception){
+
+ 	if(exception) {
+        alert(exception.msg);
+        return;
+    }
+
+	var table=document.getElementById('tableSearch');
+	deleteTableRows(table);
+    var lastRow = 0;//table.rows.length;
+    for (i = 0; i < items.length; i++) {
+        var row = table.insertRow(lastRow++);
+        var column = row.insertCell(0);
+   
+        var img = document.createElement("img");
+        img.src = "";
+        //img.class = "slideImage";
+        img.alt = items[i];
+        var a = document.createElement("a");
+        a.href = window.location.href + "gallery/" + items[i];
+        a.appendChild(img);
+        column.appendChild(a);
+        row = table.insertRow(lastRow++);
+        column = row.insertCell(0)
+        column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+   }
+   
+   displaySearchResults();
+		 
+}
+
+function deleteTableRows(table) {
+	while (table.rows.length > 0) {
+		table.deleteRow(0);
+	}
+}
+
 function initializeGallery() {
     var table=document.getElementById('tableGallery');
     var lastRow = table.rows.length;
@@ -150,6 +186,13 @@ function initializeGallery() {
 function displayGallery() {
     setVisibility('gallery',true);
     setVisibility('album',false);
+    setVisibility('search',false);
+}
+
+function displaySearchResults() {
+    setVisibility('search',true);
+    setVisibility('gallery',false);
+    setVisibility('album',false);
 }
 
 function initializeAlbum(albumName) {
@@ -182,6 +225,7 @@ function showAlbum() {
 function displayAlbum() {
     setVisibility('gallery',false);
     setVisibility('album',true);
+    setVisibility('search',false);
 }
 
 function showImage(albumPos) {
@@ -258,6 +302,11 @@ function beforeClick(){
         clearTimeout(timer);
         slideShowSpeed=0;
         document.show.src=slide_before_start.src;
+}
+
+function search(){
+		var query = document.getElementById("search-input").value;
+		searchService.search(query).addCallback(searchResponse);
 }
 
 function onSlideShow(){

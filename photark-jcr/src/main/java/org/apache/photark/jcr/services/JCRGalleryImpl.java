@@ -21,6 +21,7 @@ package org.apache.photark.jcr.services;
 
 import java.io.File;
 import java.net.URL;
+import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 
 import javax.jcr.Node;
@@ -28,6 +29,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.BaseGalleryImpl;
@@ -88,6 +90,18 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
         }
         
         initialized = true;
+        Album[] albums = getAlbums();
+        
+        for (Album album : albums) {
+            String[] pictures = album.getPictures();
+            
+            
+            for (String picture : pictures) {
+                imageAdded(album.getName(), new Image(picture, new GregorianCalendar().getTime(), null));
+            }
+            
+        }
+        
     }
     
     private void getAlbumsFromJcrRepository() {

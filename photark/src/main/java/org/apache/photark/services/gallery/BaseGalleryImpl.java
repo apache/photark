@@ -23,12 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.photark.Image;
 import org.apache.photark.services.album.Album;
+import org.oasisopen.sca.annotation.AllowsPassByReference;
 import org.oasisopen.sca.annotation.Property;
+import org.oasisopen.sca.annotation.Reference;
 
 public abstract class BaseGalleryImpl {
     private static final Logger logger = Logger.getLogger(BaseGalleryImpl.class.getName());
-    
+
+    @Reference(required = false)
+    public GalleryListener listeners;
+
     protected String name;
     private String location;
     protected boolean initialized;
@@ -53,9 +59,9 @@ public abstract class BaseGalleryImpl {
         this.name = name;
     }
 
-    //public void addAlbum(Album album) {
+    // public void addAlbum(Album album) {
     //
-    //}
+    // }
 
     public Album[] getAlbums() {
         if (!initialized) {
@@ -111,4 +117,33 @@ public abstract class BaseGalleryImpl {
     private String getLocation() {
         return location;
     }
+    
+    @AllowsPassByReference
+    public void imageAdded(String albumName, Image image) {
+        
+        if (this.listeners != null) {
+            
+//            for (GalleryListener listener : listeners) {
+//                listener.imageAdded(image);
+//            }
+            listeners.imageAdded(albumName, image);
+            
+        }
+        
+    }
+    
+    @AllowsPassByReference
+    public void imageRemoved(String albumName, Image image) {
+        
+        if (this.listeners != null) {
+            
+//            for (GalleryListener listener : listeners) {
+//                listener.imageRemoved(image);
+//            }
+            listeners.imageRemoved(albumName, image);
+            
+        }
+        
+    }
+    
 }

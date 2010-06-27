@@ -33,6 +33,7 @@
 <body onload="initGallery()">
   <div style="float:right;width:50%;font-size:1em;text-align:right;">
    <div>&nbsp;</div>
+      <span><input id="search-input" type="text" value="" size="20" alt="search"/><input type="button" onclick="search();" value="Search"/></span>
       <div id="loginLinks"><span><a href="./admin/authenticate"><u>Super admin</u></a></span>&nbsp;&nbsp;<span><a href="./home/authenticate"><u>Login</u></a></span>&nbsp;&nbsp;<span><a href="./logout/"><u>Logout</u></a></span></div>
   </div>
   <div style="clear:both"></div>
@@ -44,6 +45,12 @@
 
     <div id="gallery" style="display:none;visibility:hidden;">
          <table id='tableGallery' style="margin-left:auto; margin-right:auto;width:720px;" border="0"
+                cellspacing="0" cellpadding="1">
+         </table>
+    </div>
+    
+    <div id="search" style="display:none;visibility:hidden;">
+         <table id='tableSearch' style="margin-left:auto; margin-right:auto;width:720px;" border="0"
                 cellspacing="0" cellpadding="1">
          </table>
     </div>

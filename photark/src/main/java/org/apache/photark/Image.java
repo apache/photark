@@ -22,6 +22,7 @@ package org.apache.photark;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +31,19 @@ import org.apache.photark.util.ImageMetadataScanner;
 /**
  * Model representing an album image
  */
-public class Image {
+public class Image implements Serializable {
+    
+    private static final long serialVersionUID = 2681872730283844321L;
+    
     private String imageName;
     private Date datePosted;
-    private InputStream imageStream;
+    private transient InputStream imageStream;
 
     private List<ImageMetadata> imageAttributes;
+    
+    public Image() {
+        
+    }
 
     /**
      * Constructor

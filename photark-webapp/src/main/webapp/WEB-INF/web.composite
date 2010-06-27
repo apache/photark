@@ -32,6 +32,7 @@
    			<tuscany:binding.jsonrpc uri="/GalleryService"/>
    		</service>
    		<reference name="repositoryManager" target="RepositoryManager"/>
+   		<reference name="listeners" target="SearchService"/>
     </component>
     
     <!-- Component responsible for providing REST access to images -->
@@ -112,4 +113,18 @@
 		</service>  
    		<reference name="repositoryManager" target="RepositoryManager"/>
     </component> 
+	
+	<!-- Component responsible for indexing and searching images -->
+    <component name="SearchService">
+		<implementation.java class="org.apache.photark.search.services.impl.SearchServiceImpl"/>
+		<property name="indexDirectoryPath">search-index</property>
+		
+		<service name="SearchService">
+   			<interface.java interface="org.apache.photark.search.services.SearchService"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/SearchService"/>
+   		</service>
+		
+	</component>    
+	
 </composite>

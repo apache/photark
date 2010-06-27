@@ -237,6 +237,9 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 		Album album = new JCRAlbumImpl(repositoryManager, albumName);
 		album.addPicture(image);
 		album.setDescription(albumDescription);
+		
+		this.gallery.imageAdded(albumName, image);
+		
 	}
 
 	/**

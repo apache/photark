@@ -22,7 +22,7 @@ import org.apache.photark.services.album.Album;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
-public interface Gallery {
+public interface Gallery extends GalleryListener {
     
     String getName();
     

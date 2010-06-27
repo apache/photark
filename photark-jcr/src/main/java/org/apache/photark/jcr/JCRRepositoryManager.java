@@ -49,7 +49,6 @@ public class JCRRepositoryManager {
     /**Default Name of the repository home directory */
     private final String REPO_HOME_DEFAULT = "photark";
     
-    @Property(name="repositoryHome", required=true)
     private String repositoryHome;
     /** JCR Repository **/
     private static Repository repository;
@@ -82,7 +81,11 @@ public class JCRRepositoryManager {
     @Destroy
     public void destroy() {
         logger.log(Level.INFO,"Shutting down JCR repository");
-        session.logout();
+        
+        if (session != null) {
+            session.logout();
+        }
+        
         session = null;
         repository = null;
     }

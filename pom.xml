@@ -195,6 +195,7 @@
                 <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+                <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
@@ -214,6 +215,7 @@
                 <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+                <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
@@ -233,6 +235,7 @@
                 <module>photark-security</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
+                <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
