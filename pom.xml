@@ -89,7 +89,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <tuscany.version>2.0-SNAPSHOT</tuscany.version>
+        <tuscany.version>2.0-M5</tuscany.version>
     </properties>
     
     
@@ -210,7 +210,8 @@
             </activation>
             <modules>
                 <module>photark</module>
-                <module>photark-filesystem</module>                
+                <module>photark-filesystem</module>
+                <module>photark-flickr</module>
                 <module>photark-jcr</module>
 				<module>photark-security</module>
                 <module>photark-ui</module>
