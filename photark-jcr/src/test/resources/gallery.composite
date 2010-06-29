@@ -21,8 +21,20 @@
 		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
 		targetNamespace="http://org.apache.photoark"
 		name="gallery">
-		
-	<component name="Gallery">
+
+    <!-- Component responsible for providing JCR Management Support -->
+    <component name="RepositoryManager">
+		<implementation.java class="org.apache.photark.services.jcr.JCRRepositoryManager"/>
+		<property name="repositoryHome">photark</property>
+	</component> 	
+	
+	<component name="SubscriptionComponent">
+		<implementation.java class="org.apache.photark.services.jcr.JCRSubscriptionCollection"/>
+		<reference name="repositoryManager" target="RepositoryManager"/>
+	</component>
+
+	<!--		
+	<component name="GalleryComponent">
 		<implementation.java class="org.apache.photark.services.jcr.JCRGallery"/>
 		<property name="galleryRoot">gallery-root</property> 
 		<service name="GalleryService">
@@ -31,4 +43,5 @@
     		</tuscany:binding.rest>
    		</service>	
 	</component>
+	-->
 </composite>

@@ -110,7 +110,21 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-node-api</artifactId>
+			<version>${tuscany.version}</version>
+			<scope>test</scope>
+		</dependency>
+						
+		<dependency>
+			<groupId>org.apache.tuscany.sca</groupId>
+			<artifactId>tuscany-node-impl</artifactId>
+			<version>${tuscany.version}</version>
+			<scope>test</scope>
+		</dependency>
+				
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

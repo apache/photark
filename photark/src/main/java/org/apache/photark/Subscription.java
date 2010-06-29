@@ -1,0 +1,93 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.    
+ */
+
+package org.apache.photark;
+
+/**
+ * Model representing a subscription where images are loded from
+ * Subscriptions can be local (e.g fileSystem) or remote (e.g Flickr, Picasa, etc)
+ * 
+ * @version $Rev$ $Date$
+ */
+public class Subscription {
+    private String title;
+    private String type;
+    private String url;
+    
+    /**
+     * Get subscription title
+     * 
+     * @return the subscription title
+     */
+    public String getTitle() {
+        return title;
+    }
+    
+    /**
+     * Set subscription title
+     * 
+     * @param title the subscription title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    /**
+     * Get subscription type
+     * 
+     * @return the subscription title
+     */
+    public String getType() {
+        return type;
+    }
+    
+    /**
+     * Set subscription type
+     * 
+     * @param type the subscription type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    /**
+     * Get subscription url (e.g Local filesystem or remote Flickr Album)
+     * 
+     * @return the subscription url
+     */
+    public String getUrl() {
+        return url;
+    }
+    
+    /**
+     *  Set subscription url (e.g Local filesystem or remote Flickr Album)
+     *  
+     * @param url the subscription url
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Subscription [title=" + title + ", type=" + type + ", url=" + url + "]";
+    }
+    
+    
+}
