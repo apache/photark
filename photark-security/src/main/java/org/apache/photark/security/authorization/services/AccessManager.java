@@ -26,11 +26,14 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface AccessManager {
 
-	AccessList creatAccessList(String identity, String email);
-	
-	boolean isUserStoredInRole(String userId, String node);
-	 User getUser(String userId);
-	 void removeUserFromRole(String userId, String node);
-	 void addUserToRole(User user, String node);
-	 
+    AccessList createAccessList(String identity, String email);
+
+    boolean isUserStoredInRole(String userId, String node);
+
+    User getUser(String userId);
+
+    void removeUserFromRole(String userId, String node);
+
+    void addUserToRole(User user, String node);
+
 }

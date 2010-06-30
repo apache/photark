@@ -31,6 +31,11 @@ public class Permission implements Serializable {
 	private static final long serialVersionUID = 115956810128294635L;
 	public String permission;
 	private String desc;
+
+    public Permission(String permission,String description){
+		this.permission = permission;
+        this.desc = description;
+	}
 	
 	/**
 	 * 

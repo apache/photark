@@ -72,8 +72,8 @@ public class FormAuthenticationServiceImpl extends HttpServlet implements Servle
 	    RelyingParty.getInstance().invalidate(request, response);
 	    
 	    //Creating the accessList
-	    AccessList accesList=accessManager.creatAccessList("SuperAdmin","");
-	    request.getSession().setAttribute("accessList", accesList);
+	    AccessList accessList=accessManager.createAccessList("SuperAdmin","");
+	    request.getSession().setAttribute("accessList", accessList);
 	    System.err.println("Super Admin authenticated");
 
 	    response.sendRedirect(request.getContextPath() + "/admin/upload.html");

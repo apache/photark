@@ -27,35 +27,46 @@ import java.util.List;
  * Model representing a Role
  */
 public class Role implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7560129536060718311L;
-	public String roleName;
-	public List<Permission> permissions = new ArrayList<Permission>();
-	
-	/**
-	 * 
-	 * @param roleName String
-	 */
-	public Role(String roleName){
-		this.roleName = roleName;
-	}
-	
-	/**
-	 * 
-	 * @param permission Permission
-	 */
-	public void setPermission(Permission permission){
-		this.permissions.add(permission);
-	}
-	
-	
-	/**
-	 * 
-	 * @return List<Permission>
-	 */
-	public List<Permission> getPermissions(){
-		return permissions;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7560129536060718311L;
+    private String roleName;
+    private List<Permission> permissions = new ArrayList<Permission>();
+    private List<Role> parents = new ArrayList<Role>();
+
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public List<Role> getParents() {
+        return parents;
+    }
+
+    public void setParent(Role parent) {
+        this.parents.add(parent);
+    }
+
+    /**
+     * @param roleName String
+     */
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
+    /**
+     * @param permission Permission
+     */
+    public void setPermission(Permission permission) {
+        this.permissions.add(permission);
+    }
+
+
+    /**
+     * @return List<Permission>
+     */
+    public List<Permission> getPermissions() {
+        return permissions;
 	}
 }

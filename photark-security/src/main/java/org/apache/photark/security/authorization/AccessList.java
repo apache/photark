@@ -20,11 +20,7 @@
 package org.apache.photark.security.authorization;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.oasisopen.sca.annotation.Remotable;
+import java.util.*;
 
 
 /**
@@ -40,7 +36,7 @@ public class AccessList implements Serializable {
 	/** */
 	private String userId="";
 	/** */
-	private List<String> permissions= new ArrayList<String>();
+	private Map<String, List<Permission>> permissions= new HashMap<String, List<Permission>>();
 	
 
 	/**
@@ -49,8 +45,8 @@ public class AccessList implements Serializable {
 	 * 
 	 * @param permissions  List<String>
 	 */
-	public AccessList(String userId, List<String> permissions){ 
-		 //TODO	this.permissions = Collections.unmodifiableList(permissions);
+	public AccessList(String userId, Map<String, List<Permission>>  permissions){
+        this.permissions = Collections.unmodifiableMap(permissions);
 		this.userId = userId;
 	}
 	
@@ -62,7 +58,7 @@ public class AccessList implements Serializable {
 	 * 
 	 * @return List<String>
 	 */
-	public List<String> getPermissions(){
+	public  Map<String, List<Permission>>  getPermissions(){
 		return permissions;
 	}
 
@@ -84,11 +80,9 @@ public class AccessList implements Serializable {
 			return false;
 		
 		AccessList accessList = (AccessList)obj;
-		if(accessList.userId.equals(userId) && isPermissionsEqual(accessList.permissions))
-			return true;
-				
-		return false;	
-	}
+        return accessList.userId.equals(userId) && isPermissionsEqual(accessList.permissions);
+
+    }
 	
 	
 	/**
@@ -96,32 +90,38 @@ public class AccessList implements Serializable {
 	 * @param permissionList List<String>
 	 * 
 	 * @return boolean
-	 */
-	private boolean isPermissionsEqual(List<String> permissionList){
-		if(permissionList != null && permissions != null){
-			if(permissionList.size() == permissions.size()){
-				for(String permission : permissionList){
-					if(!permissions.contains(permission))
-					return false;
-				}
-				return true;
-			}
-			else
-				return false;
-		}
-		return false;
-	}
+     */
+    private boolean isPermissionsEqual(Map<String, List<Permission>> permissionList) {
+        if (permissionList != null && permissions != null) {
+            if (permissionList.size() == permissions.size()) {
+                for (String permission : permissionList.keySet()) {
+                    if (!permissions.keySet().contains(permission))
+                        return false;
+                    for (Permission aPermission : permissionList.get(permission)) {
+                        if (permissions.get(permission).contains(aPermission))
+                            return false;
+                    }
+                }
+                return true;
+            } else
+                return false;
+        }
+        return false;
+    }
 	
 	
 	/**
 	 * 
 	 */
-	public int hashCode(){
-		int hash = 1;
-		hash = hash * 7 + userId == null ? 0 : userId.hashCode();
-		for(String permission : permissions){
-			hash = hash * 7 + (permission == null ? 0 : permission.hashCode());
-		}
-		return hash;
-	}
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 7 + (userId.equals("") ? 0 : userId.hashCode());
+        for (String permission : permissions.keySet()) {
+            hash = hash * 7 + (permission == null ? 0 : permission.hashCode());
+            for (Permission aPermission : permissions.get(permission)) {
+                hash = hash * 7 + (aPermission == null ? 0 : aPermission.hashCode());
+            }
+        }
+        return hash;
+    }
 }

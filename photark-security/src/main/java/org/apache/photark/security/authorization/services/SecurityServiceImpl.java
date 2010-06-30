@@ -99,6 +99,9 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
                 //sb.append(",unRegistered=false");
             }
             send(out, sb);
+              accessList=accessManager.createAccessList(userId,request.getParameter("email"));
+                 request.getSession().removeAttribute("accessList");
+        	    request.getSession().setAttribute("accessList", accessList);
         } else if ("getUser".equalsIgnoreCase(request.getParameter("request"))) {
             sb.append("{" + createJSONUser(request) + "}");
             send(out, sb);

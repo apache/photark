@@ -29,17 +29,17 @@
 	<name>Apache PhotArk JCR based Implementation</name>
 
 	<dependencies>
-		<dependency>
+        <dependency>
+            <groupId>org.apache.photark</groupId>
+            <artifactId>photark-security</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.photark</groupId>
-			<artifactId>photark-security</artifactId>
-			<version>1.0-incubating-SNAPSHOT</version>
-		</dependency>
-
+		
         <!-- Tuscany Dependencies -->
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>

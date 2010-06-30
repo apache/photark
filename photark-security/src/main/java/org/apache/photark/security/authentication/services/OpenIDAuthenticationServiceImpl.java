@@ -105,9 +105,9 @@ public class OpenIDAuthenticationServiceImpl extends HttpServlet implements Serv
             	if (email==null){
             		email="";
             	}
-        	    AccessList accesList=accessManager.creatAccessList(user.getIdentity(),email);
-        	    request.getSession().setAttribute("accessList", accesList);
-        	    if(!accessManager.isUserStoredInRole(accesList.getUserId(), "registeredUserRole")){
+        	    AccessList accessList=accessManager.createAccessList(user.getIdentity(),email);
+        	    request.getSession().setAttribute("accessList", accessList);
+        	    if(!accessManager.isUserStoredInRole(accessList.getUserId(), "registeredUserRole")){
         	    	request.getSession().setAttribute("toRigester", "true");
         	    }
 
