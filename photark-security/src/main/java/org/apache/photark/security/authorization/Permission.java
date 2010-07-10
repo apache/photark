@@ -71,4 +71,16 @@ public class Permission implements Serializable {
 	public String getPermissionDesc(){
 		return desc;
 	}
+
+    public boolean equals(Object obj){
+		if(!(obj instanceof Permission))
+			return false;
+
+		Permission permission = (Permission)obj;
+        return this.getPermission().equals(permission.getPermission()) ;
+
+    }
+     public int hashCode() {
+        return permission.hashCode();
+    }
 }

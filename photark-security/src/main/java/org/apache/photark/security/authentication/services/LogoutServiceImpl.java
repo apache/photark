@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.photark.security.authorization.AccessList;
+import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -61,7 +62,10 @@ public class LogoutServiceImpl extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
     	if(request.getSession().getAttribute("accessList")!=null){
-    		System.err.print(((AccessList)request.getSession().getAttribute("accessList")).getUserId());
+            String userId=((AccessList)request.getSession().getAttribute("accessList")).getUserId();
+    		System.err.print(userId);
+            JSONRPCSecurityManager.removeAccessListAndToken(userId);
+            
     	}
         // Removing the AccessList
         request.getSession().setAttribute("accessList", "");

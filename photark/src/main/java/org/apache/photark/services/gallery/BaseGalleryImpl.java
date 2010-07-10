@@ -102,7 +102,7 @@ public abstract class BaseGalleryImpl {
         }
     }
 
-    private Album getAlbum(String albumName) {
+    protected Album getAlbum(String albumName) {
         Album albumLookup = null;
         for (Album album : albums) {
             if (album.getName().equalsIgnoreCase(albumName)) {
@@ -145,5 +145,15 @@ public abstract class BaseGalleryImpl {
         }
         
     }
-    
+    public Album[] getAlbumsToUser(String securityToken){
+         return getAlbums();
+    }
+
+   public String getAlbumCoverToUser(String albumName, String securityToken){
+        return getAlbumCover(albumName);
+    }
+
+   public String[] getAlbumPicturesToUser(String albumName, String securityToken) {
+       return getAlbumPictures(albumName);
+   }
 }

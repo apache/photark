@@ -33,6 +33,7 @@
    		</service>
    		<reference name="repositoryManager" target="RepositoryManager"/>
    		<reference name="listeners" target="SearchService"/>
+   	    <reference name="accessmanager" target="AccessManager"/>
     </component>
     
     <!-- Component responsible for providing REST access to images -->
@@ -64,7 +65,8 @@
 		<reference name="repositoryManager" target="RepositoryManager"/>
 		<reference name="gallery" target="Gallery">
 			<binding.sca name="local"/>
-		</reference>  	  	
+		</reference> 
+		<reference name="accessmanager" target="AccessManager"/>
 	</component>
 	
     <!-- Component responsible for providing JCR Management Support -->

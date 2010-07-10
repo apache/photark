@@ -36,4 +36,6 @@ public interface AccessManager {
 
     void addUserToRole(User user, String node);
 
+    boolean isPermitted(AccessList accessList, String resourceName, String[] permissionNames);
+
 }

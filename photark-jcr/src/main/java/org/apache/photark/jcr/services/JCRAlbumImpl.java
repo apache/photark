@@ -23,19 +23,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
+import javax.jcr.*;
 
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
+import org.apache.photark.security.authorization.Permission;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Destroy;
@@ -272,6 +267,62 @@ public class JCRAlbumImpl implements Album {
         }  finally {
             //repositoryManager.releaseSession();
         }
+    }
+
+    @Property
+    public void addOwner(String owner) {
+        List<String> ownerList = new ArrayList<String>();
+        ownerList.add(owner);
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode();
+            Node albumNode = root.getNode(name);
+            if (albumNode.hasProperty("owners")) {
+                for (Value ownerValue : albumNode.getProperty("owners").getValues()) {
+                    if (!ownerList.contains(ownerValue.getString())) {
+                        ownerList.add(ownerValue.getString());
+                    }
+
+                }
+            }
+            String[] owners = new String[ownerList.size()];
+            for (int i = 0; i < ownerList.size(); i++) {
+                owners[i] = ownerList.get(i);
+            }
+            albumNode.setProperty("owners", owners);
+            session.save();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
+        }
+    }
+
+    public String[] getOwners() {
+        if (!initialized) {
+            init();
+        }
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode();
+            Node albumNode = root.getNode(name);
+            if (albumNode.hasProperty("owners")) {
+                Value[] values = albumNode.getProperty("owners").getValues();
+                String[] owners = new String[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    owners[i] = values[i].getString();
+                }
+                return owners;
+            }
+
+
+        } catch (Exception e) {
+            // FIXME: ignore for now
+            e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
+        }
+        return new String[]{};
     }
 
     /**

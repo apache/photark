@@ -124,6 +124,14 @@ public class AlbumAgregator implements Album {
 
     }
 
+    public void addOwner(String owner) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String[] getOwners() {
+        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public void deletePicture(String picture){
 
     }

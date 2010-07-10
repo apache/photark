@@ -29,7 +29,7 @@ dojo.require("dojox.embed.Flash");
 var passthrough = function(msg){
 	//for catching messages from Flash
 	if(window.console){
-		console.log(msg);	
+		console.log(msg);
 	}
 };
 
@@ -41,7 +41,7 @@ var displayProgress = function (){
 
 var setProgressbar = function(currentVal,totalVal){
     jsProgress.update({
-      maximum: totalVal, 
+      maximum: totalVal,
       progress: currentVal,
       indeterminate:false
     });
@@ -62,10 +62,10 @@ dojo.addOnLoad( function(){
 			["Image Archive Files","*.zip;*.tar"]
 		]
 	};
-	
+
 	if(dojo.byId("btnUploader")){
 		dojo.byId("files").value = "";
-		
+
 		//instantiate uploader passing config properties
 		var uploader = new dojox.form.FileUploader(dojo.mixin({
 			button:dojo.byId("btnUploader"),
@@ -73,8 +73,8 @@ dojo.addOnLoad( function(){
 			selectMultipleFiles:true,
 			deferredUploading:false
 		},fileUploaderConfig), "btnUploader");
-		
-		
+
+
 		doUpload = function(){
 			console.log("doUpload");
 			displayProgress();
@@ -83,40 +83,41 @@ dojo.addOnLoad( function(){
 			var selected = selectAlbum.value;
 			albumName=selected;
 			var albumDescription= dojo.byId("albumDescription").value;
+            var securityToken =  SECURITY_TOKEN;
 			console.log("selected:"+selected);
 			if(files == 0) {//to stop upload when on files are selected
 				alert("Photo Upload can not be started. Select picture(s) before upload");
-				dojo.byId("progressBar").style.display="none"; 
+				dojo.byId("progressBar").style.display="none";
 			} else if(selected == null || (selected != null && selected == "" && selected.length == 0)) {
 				alert("Photo Upload can not be started.Select Album before upload");
-				dojo.byId("progressBar").style.display="none"; 
+				dojo.byId("progressBar").style.display="none";
 			} else if(selected == "New Album") {
 				albumName = dojo.byId("newAlbumName").value;
 				if( albumName == null || (albumName != null && albumName == "" && albumName.length == 0)) {
 					alert("Photo Upload can not be started.Enter the new album name");
-					dojo.byId("progressBar").style.display="none"; 
+					dojo.byId("progressBar").style.display="none";
 				} else {
 					//add new album to list of albums
 					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
 					//upload the files
 					setProgressbar(0,1);
-					uploader.upload({albumName:albumName, albumDescription:albumDescription});
+					uploader.upload({albumName:albumName, albumDescription:albumDescription, securityToken:securityToken});
 				}
 			} else {
 				//upload files to existent album
 				setProgressbar(0,1);
-				uploader.upload({albumName:selected,albumDescription:albumDescription});
+				uploader.upload({albumName:selected,albumDescription:albumDescription, securityToken:securityToken});
 			}
 			//dojo.byId("newAlbumName").value ="";
 		}
-		
+
 		dojo.connect(uploader, "onComplete", function(dataArray){
 			console.log("onComplete");
 			setProgressbar(1,1);
 			dojo.byId("newAlbumName").value ="";
 			reloadAdminGallery();
 		});
-		
+
 		dojo.connect(uploader, "onProgress", function(dataArray){
 			var uploadedPercent=0;
 			var totalPercent=0;
@@ -128,12 +129,12 @@ dojo.addOnLoad( function(){
 			setProgressbar((uploadedPercent/totalPercent),1.01011);
 			//dojo.byId("newAlbumName").value ="";
 		});
-		
+
 		dojo.connect(uploader, "onChange", function(dataArray){
 			//hiding the progress bar
 			dojo.byId("progressBar").style.display="none";
 		});
-		
+
 		dojo.connect(uploader, "onError", function(err){
 			var uploadedPercent=0;
 			var totalPercent=0;
@@ -148,7 +149,7 @@ dojo.addOnLoad( function(){
 				//alert("Error uploading files:" + err.text);
 			}
 		});
-		
+
 	}
 
 });

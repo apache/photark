@@ -20,11 +20,14 @@
 package org.apache.photark.jcr.security.authorization;
 
 import org.apache.photark.jcr.JCRRepositoryManager;
+import org.apache.photark.jcr.services.JCRAlbumImpl;
 import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.Permission;
 import org.apache.photark.security.authorization.User;
 import org.apache.photark.security.authorization.UserInfo;
 import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
+import org.apache.photark.services.album.Album;
 import org.oasisopen.sca.annotation.*;
 
 import javax.jcr.*;
@@ -103,6 +106,12 @@ public class JCRAccessManager implements AccessManager {
 				userNode.setProperty("webSite", "");
 				userNode.setProperty("userId","SuperAdmin");
 
+                 userNode=   unRegisteredUserRole.addNode("UnRegisteredUser");
+				userNode.setProperty("displayName","UnRegisteredUser");
+				userNode.setProperty("email", "");
+				userNode.setProperty("realName", "");
+				userNode.setProperty("webSite", "");
+				userNode.setProperty("userId","UnRegisteredUser");
 
                 unRegisteredUserRolePermissions.addNode("boston").setProperty("permissions", new String[]{"viewImages"});
                 // unRegisteredUserRolePermissions.addNode("vegas").setProperty("permissions",new String[]{"view"});
@@ -113,39 +122,39 @@ public class JCRAccessManager implements AccessManager {
 //                superAdminRolePermissions.addNode("boston").setProperty("permissions", new String[]{"viewImages", "addImages", "deleteImages", "deleteAlbum", "editAlbumDescription"});
 //                superAdminRolePermissions.addNode("vegas").setProperty("permissions", new String[]{"viewImages", "addImages", "deleteImages", "deleteAlbum", "editAlbumDescription"});
 
-                registeredUserRolePermissions.setProperty("permissions", new String[]{"createAlbum", "deleteOwnAlbum"
-                        , "createGroupRole", "deleteOwnGroupRole", "manageOwnGroupRole"
-                        , "viewImagesOnOwnAlbum", "addOwnImagesToOwnAlbum", "deleteImagesFromOwnAlbum", "editOwnAlbumDescription"});
+                registeredUserRolePermissions.setProperty("permissions", new String[]{"createAlbum", "deleteAlbum.own"
+                        , "createGroupRole", "deleteGroupRole.own", "manageGroupRole.own"
+                        , "viewImagesOnAlbum.own", "addImagesToAlbum.own", "deleteImagesFromAlbum.own", "editAlbumDescription.own"});
 
-                superAdminRolePermissions.setProperty("permissions", new String[]{"createAlbum", "deleteOwnAlbum", "deleteOtherAlbum"
-                        , "createGroupRole", "deleteOwnGroupRole", "deleteOthersGroupRole", "manageOwnGroupRole", "manageOthersGroupRole", "manageMainRoles"
-                        , "viewImagesOnOwnAlbum", "addOwnImagesToOwnAlbum", "deleteImagesFromOwnAlbum", "editOwnAlbumDescription"
-                        , "viewImagesOnOthersAlbum", "addOwnImagesToOthersAlbum", "deleteImagesFromOthersAlbum", "editOthersAlbumDescription"});
+                superAdminRolePermissions.setProperty("permissions", new String[]{"createAlbum", "deleteAlbum.own", "deleteAlbum.others"
+                        , "createGroupRole", "deleteGroupRole.own", "deleteGroupRole.others", "manageGroupRole.own", "manageGroupRole.others", "manageMainRoles"
+                        , "viewImagesOnAlbum.own", "addImagesToAlbum.own", "deleteImagesFromAlbum.own", "editAlbumDescription.own"
+                        , "viewImagesOnAlbum.others", "addImagesToAlbum.others", "deleteImagesFromAlbum.others", "editAlbumDescription.others"});
 
                 Node allPermissions = userStore.addNode("allPermissions");
 
                 allPermissions.addNode("createAlbum").setProperty("desc", "Allow the users to crete a new Albums");
 
-                allPermissions.addNode("deleteOwnAlbum").setProperty("desc", "Allow the users to delete the Albums they own");
-                allPermissions.addNode("deleteOtherAlbum").setProperty("desc", "Allow the users to delete the Albums they dont own");
+                allPermissions.addNode("deleteAlbum.own").setProperty("desc", "Allow the users to delete the Albums they own");
+                allPermissions.addNode("deleteAlbum.others").setProperty("desc", "Allow the users to delete the Albums they dont own");
 
                 allPermissions.addNode("createGroupRole").setProperty("desc", "Allow the users to create Groups");
-                allPermissions.addNode("deleteOwnGroupRole").setProperty("desc", "Allow the users to delete the Groups they own");
-                allPermissions.addNode("deleteOthersGroupRole").setProperty("desc", "Allow the users to delete the Groups they dont own");
-                allPermissions.addNode("manageOwnGroupRole").setProperty("desc", "Allow the users to change the users and permissions of the Groups they own");
-                allPermissions.addNode("manageOthersGroupRole").setProperty("desc", "Allow the users to change the users and permissions of the Groups they dont own");
+                allPermissions.addNode("deleteGroupRole.own").setProperty("desc", "Allow the users to delete the Groups they own");
+                allPermissions.addNode("deleteGroupRole.others").setProperty("desc", "Allow the users to delete the Groups they dont own");
+                allPermissions.addNode("manageGroupRole.own").setProperty("desc", "Allow the users to change the users and permissions of the Groups they own");
+                allPermissions.addNode("manageGroupRole.others").setProperty("desc", "Allow the users to change the users and permissions of the Groups they dont own");
 
                 allPermissions.addNode("manageMainRoles").setProperty("desc", "Allow the users to change the users and permissions of the Main roles (superAdminRole, registeredUserRole, unRegisteredUserRole, blockedUserRole)");
 
-                allPermissions.addNode("viewImagesOnOwnAlbum").setProperty("desc", "Allow the users to view their album images");
-                allPermissions.addNode("addOwnImagesToOwnAlbum").setProperty("desc", "Allow the users to add new images to their album");
-                allPermissions.addNode("deleteImagesFromOwnAlbum").setProperty("desc", "Allow the users to delete images from their album");
-                allPermissions.addNode("editOwnAlbumDescription").setProperty("desc", "Allow the users to edit their Album description");
+                allPermissions.addNode("viewImagesOnAlbum.own").setProperty("desc", "Allow the users to view their album images");
+                allPermissions.addNode("addImagesToAlbum.own").setProperty("desc", "Allow the users to add new images to their album");
+                allPermissions.addNode("deleteImagesFromAlbum.own").setProperty("desc", "Allow the users to delete images from their album");
+                allPermissions.addNode("editAlbumDescription.own").setProperty("desc", "Allow the users to edit their Album description");
 
-                allPermissions.addNode("viewImagesOnOthersAlbum").setProperty("desc", "Allow the users to view Others album images");
-                allPermissions.addNode("addOwnImagesToOthersAlbum").setProperty("desc", "Allow the users to add new images to Others album");
-                allPermissions.addNode("deleteImagesFromOthersAlbum").setProperty("desc", "Allow the users to delete images from Others album");
-                allPermissions.addNode("editOthersAlbumDescription").setProperty("desc", "Allow the users to edit Others Album description");
+                allPermissions.addNode("viewImagesOnAlbum.others").setProperty("desc", "Allow the users to view Others album images");
+                allPermissions.addNode("addImagesToAlbum.others").setProperty("desc", "Allow the users to add new images to Others album");
+                allPermissions.addNode("deleteImagesFromAlbum.others").setProperty("desc", "Allow the users to delete images from Others album");
+                allPermissions.addNode("editAlbumDescription.others").setProperty("desc", "Allow the users to edit Others Album description");
 
                 //per Album permissions
                 allPermissions.addNode("viewImages").setProperty("desc", "Allow the users to view the album images");
@@ -230,7 +239,7 @@ public class JCRAccessManager implements AccessManager {
             Node allMutuallyExclusiveRoles = (Node) session.getItem("/userStore/mutuallyExclusiveRoles");
             for (PropertyIterator pi = allMutuallyExclusiveRoles.getProperties(); pi.hasNext();) {
                 Property p = pi.nextProperty();
-                
+
                 if (!p.getName().equals("jcr:primaryType")) {
                     ArrayList<String> list =new ArrayList<String>();
                     for(Value v :p.getValues()){
@@ -514,5 +523,49 @@ public class JCRAccessManager implements AccessManager {
 			e.printStackTrace();
 		}
 	}
+
+    public boolean isPermitted(AccessList accessList, String resourceName, String[] permissionNames) {
+        if (accessList == null) {
+            return false;
+        }
+        Map<String, List<Permission>> userPermissions = accessList.getPermissions();
+        List allowedPermissions = Arrays.asList(permissionNames);
+        List<Permission> permissions = new ArrayList<Permission>();
+        if (userPermissions.containsKey(resourceName)) {
+            permissions = (userPermissions.get(resourceName));
+        }
+        for (Permission permission : permissions) {
+            if (allowedPermissions.contains(permission.getPermission())) {
+                if (!permission.getPermission().endsWith(".others") || !permission.getPermission().endsWith(".own")) {
+                    return true;
+                }
+            }
+        }
+
+        if (userPermissions.containsKey("_default")) {
+            permissions = (userPermissions.get("_default"));
+        }
+        for (Permission permission : permissions) {
+            if (allowedPermissions.contains(permission.getPermission())) {
+
+                // System.out.println(resourceName+ " added");
+                if (permission.getPermission().endsWith(".own") && isUserTheOwner(accessList.getUserId(), resourceName)) {
+                    return true;
+
+                } else if (permission.getPermission().endsWith(".others") && !isUserTheOwner(accessList.getUserId(), resourceName)) {
+                    return true;
+
+                } else if ((!permission.getPermission().endsWith(".others")) && (!permission.getPermission().endsWith(".own"))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isUserTheOwner(String userId, String albumName) {
+        Album album = new JCRAlbumImpl(repositoryManager, albumName);
+        return Arrays.asList(album.getOwners()).contains(userId);
+    }
 
 }

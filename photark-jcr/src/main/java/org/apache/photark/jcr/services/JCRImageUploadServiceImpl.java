@@ -23,10 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +42,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.jcr.util.ArchiveFileExtractor;
+import org.apache.photark.security.authorization.AccessList;
+import org.apache.photark.security.authorization.Permission;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
@@ -68,6 +69,8 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 
 	private JCRRepositoryManager repositoryManager;
 
+    private  static AccessManager accessManager;
+
 	private ServletFileUpload upload;
 
 	private Gallery gallery;
@@ -88,6 +91,11 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 	@Reference(name="repositoryManager")
 	protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
 		this.repositoryManager = repositoryManager;
+	}
+
+    @Reference(name="accessmanager")
+	protected void setAccessService(AccessManager accessManager) {
+		this.accessManager = accessManager;
 	}
 
 	@Reference(name="gallery")
@@ -118,12 +126,12 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 					albumDescription=  (String) request.getParameter("addAlbumDesc");
 				
 					if(albumDescription!=null){
-						addDescToAlbum(albumName,albumDescription);
-						if(logger.isLoggable(Level.INFO)) {
-							logger.log(Level.INFO, "album description updated in " + albumName+" with "+albumDescription);
-						}
-						PrintWriter out = response.getWriter();
-						out.write("albumDescription updated in " + albumName+" with "+albumDescription);
+                        PrintWriter out = response.getWriter();
+						if(addDescToAlbum(albumName,albumDescription,request)){
+                            out.write("albumDescription updated in " + albumName+" with "+albumDescription);
+                        }else{
+                           out.write("No permission to add albumDescription in " + albumName);
+                        }
 						out.close();
 						return;
 					}else{
@@ -163,6 +171,10 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 					albumDescription = fileItem.getString();
 				}
 
+                if (fileItem.getFieldName().equalsIgnoreCase("securityToken")&&request.getSession().getAttribute("accessList")==null) {
+					request.getSession().setAttribute("accessList", JSONRPCSecurityManager.getAccessListFromSecurityToken(fileItem.getString())) ;
+				}
+
 				boolean isFormField = fileItem.isFormField();
 
 				if (!isFormField) {
@@ -186,7 +198,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 					}
 
 					for (Image picture : pictures) {
-						addPictureToAlbum(albumName,albumDescription, picture);
+						addPictureToAlbum(albumName,albumDescription, picture,request);  //todo
 					}
 					sb.append("file=uploaded/" + fileName);
 					sb.append(",name=" + fileName);
@@ -206,7 +218,9 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 		}
 	}
 
-	@Override
+
+
+    @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 
@@ -217,7 +231,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 		imageName=  (String) request.getParameter("imageName");
 
 
-		deleteNode(albumName, imageName);
+		deleteNode(albumName, imageName,request);   //todo
 		PrintWriter out = response.getWriter();
 
 		//sb.append("deleted " + albumName+"/"+imageName);
@@ -231,41 +245,65 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 	 * @param albumName String
 	 * @param albumDescription Picture
 	 * @param image albumDescription
-	 */
-	private void addPictureToAlbum(String albumName,String albumDescription, Image image) {
-		gallery.addAlbum(albumName);
-		Album album = new JCRAlbumImpl(repositoryManager, albumName);
-		album.addPicture(image);
-		album.setDescription(albumDescription);
-		
-		this.gallery.imageAdded(albumName, image);
-		
-	}
+     */
+    private void addPictureToAlbum(String albumName, String albumDescription, Image image, HttpServletRequest request) {
+        Album album = new JCRAlbumImpl(repositoryManager, albumName);
+        AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
+        if (!gallery.hasAlbum(albumName)) {
+            if (accessManager.isPermitted(accessList, albumName, new String[]{"createAlbum"})) {
+                gallery.addAlbum(albumName);
+                album.addOwner(accessList.getUserId());
+            }
+        }
+
+
+        if (accessManager.isPermitted(accessList, albumName, new String[]{"addImagesToAlbum.own", "addImagesToAlbum.others", "addImages"})) {
+            album.addPicture(image);
+            this.gallery.imageAdded(albumName, image);
+        }
+        if (accessManager.isPermitted(accessList, albumName, new String[]{"editAlbumDescription.others", "editAlbumDescription.own", "editAlbumDescription"})) {
+            album.setDescription(albumDescription);
+        }
+
+    }
 
 	/**
-	 * @param albumName String
-	 * @param picture Picture
-	 * @param String albumDescription
+	 * @param albumName the name of the album
+	 * @param albumDescription the album description that need to be added
+     * @param request the HttpServletRequest
+     * @return boolean
 	 */
-	private void addDescToAlbum(String albumName,String albumDescription) {
-		gallery.addAlbum(albumName);
-		Album album = new JCRAlbumImpl(repositoryManager, albumName);
-		album.setDescription(albumDescription);
-	}
+    private boolean addDescToAlbum(String albumName, String albumDescription, HttpServletRequest request) {
+        if (accessManager.isPermitted((AccessList) request.getSession().getAttribute("accessList"), albumName, new String[]{"editAlbumDescription.others", "editAlbumDescription.own", "editAlbumDescription"})) {
+            gallery.addAlbum(albumName);
+            Album album = new JCRAlbumImpl(repositoryManager, albumName);
+            album.setDescription(albumDescription);
+            if (logger.isLoggable(Level.INFO)) {
+                logger.log(Level.INFO, "album description updated in " + albumName + " with " + albumDescription);
+            }
+            return true;
+        }
+        return false;
+    }
 
-
-	/**
+    /**
 	 *  
-	 * @param String albumName
-	 * @param String imageName
+	 * @param  albumName
+	 * @param  imageName
 	 */
-	private void deleteNode(String albumName, String imageName) {
+	private void deleteNode(String albumName, String imageName, HttpServletRequest request) {
+          AccessList accessList= (AccessList) request.getSession().getAttribute("accessList");
 			if(imageName==null){
+                if (accessManager.isPermitted(accessList, albumName, new String[]{"deleteAlbum.own", "deleteAlbum.others"})) {
+
 				gallery.deleteAlbum(albumName);
-				
+                }
 			}else{
+                if (accessManager.isPermitted(accessList, albumName, new String[]{"deleteImagesFromAlbum.own", "deleteImagesFromAlbum.others","deleteImages"})) {
+
 				Album album = new JCRAlbumImpl(repositoryManager, albumName);
 				album.deletePicture(imageName);
+                }
 			}
 		}
 

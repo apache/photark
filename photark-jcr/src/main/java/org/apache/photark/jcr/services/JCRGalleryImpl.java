@@ -21,7 +21,9 @@ package org.apache.photark.jcr.services;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jcr.Node;
@@ -31,6 +33,8 @@ import javax.jcr.Session;
 
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.BaseGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
@@ -41,16 +45,22 @@ import org.oasisopen.sca.annotation.Scope;
 @Scope("COMPOSITE")
 public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     private static final Logger logger = Logger.getLogger(JCRGalleryImpl.class.getName());
-    
-    private JCRRepositoryManager repositoryManager;
 
+    private JCRRepositoryManager repositoryManager;
+    private AccessManager accessManager;
     public JCRGalleryImpl() {
 
     }
-    
+
     @Reference(name="repositoryManager")
     protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
+    }
+
+
+    @Reference(name="accessmanager")
+    protected void setAccessService(AccessManager accessManager) {
+        this.accessManager = accessManager;
     }
 
     public JCRGalleryImpl(String name) {
@@ -88,22 +98,22 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
             // FIXME: ignore for now
             e.printStackTrace();
         }
-        
+
         initialized = true;
         Album[] albums = getAlbums();
-        
+
         for (Album album : albums) {
             String[] pictures = album.getPictures();
-            
-            
+
+
             for (String picture : pictures) {
                 imageAdded(album.getName(), new Image(picture, new GregorianCalendar().getTime(), null));
             }
-            
+
         }
-        
+
     }
-    
+
     private void getAlbumsFromJcrRepository() {
         try {
             Session session = repositoryManager.getSession();
@@ -150,7 +160,23 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
         }
     }
 
-	public void deleteAlbum(String albumName) {
+    public boolean hasAlbum(String albumName) {
+         try {
+            Session session = repositoryManager.getSession();
+            Node rootNode = session.getRootNode();
+            if (rootNode.hasNode(albumName)) {
+             //   logger.info("This album is already in gallery");
+                return true;
+            }
+               } catch (RepositoryException e) {
+            e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
+        }
+        return false;
+    }
+
+    public void deleteAlbum(String albumName) {
 		try {
 			Session session = repositoryManager.getSession();
 			Node root = session.getRootNode();
@@ -166,12 +192,83 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
 				logger.info("album " + albumName + " deleted");
 			}else{
 				logger.info("album " + albumName + " not found");
-			}    	            
+			}
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 		}  finally {
 			//repositoryManager.releaseSession();
 		}
-		
+
 	}
+
+
+    public String[] getAlbumPictures(String albumName) {
+        return getAlbumPicturesToUser(albumName, JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+    }
+
+    public String[] getAlbumPicturesToUser(String albumName, String securityToken) {
+String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "viewImagesOnAlbum.others"};
+        if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), albumName,permissions)) {
+            Album albumLookup = getAlbum(albumName);
+            if (albumLookup != null) {
+                return albumLookup.getPictures();
+            } else {
+                // FIXME: return proper not found exception
+                return new String[]{};
+            }
+        } else {
+            return new String[]{};
+        }
+    }
+
+    public String getAlbumCover(String albumName) {
+        return getAlbumCoverToUser(albumName, JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+    }
+
+    public String getAlbumCoverToUser(String albumName, String securityToken) {
+        String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.others", "viewImagesOnAlbum.own"};
+        if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), albumName, permissions)) {
+            Album albumLookup = getAlbum(albumName);
+
+            if (albumLookup != null) {
+                String[] pictures = albumLookup.getPictures();
+                // this check is to avoid Exception
+                if (pictures.length > 0) {
+                    return albumLookup.getPictures()[0];
+                } else {
+                    logger.info("No Album Cover Picture found for album:" + albumName);
+                    return null;
+                }
+            } else {
+                // FIXME: return proper not found exception
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public Album[] getAlbums() {
+        return getAlbumsToUser(JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+    }
+
+    public Album[] getAlbumsToUser(String securityToken) {
+        if (!initialized) {
+            init();
+        }
+        List<Album> userAlbums = new ArrayList<Album>();
+        for (Album album : albums) {
+            String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.others", "viewImagesOnAlbum.own"};
+            if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), album.getName(), permissions)) {
+                userAlbums.add(album);
+            }
+        }
+        Album[] albumArray = new Album[userAlbums.size()];
+        userAlbums.toArray(albumArray);
+        return albumArray;
+    }
+
+
+
+
 }

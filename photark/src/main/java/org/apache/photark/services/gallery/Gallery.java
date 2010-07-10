@@ -22,13 +22,15 @@ import org.apache.photark.services.album.Album;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
-public interface Gallery extends GalleryListener {
+public interface Gallery extends GalleryListener ,GallerySecurity{
     
     String getName();
     
     void setName(String name);
     
     void addAlbum(String albumName);
+
+    boolean hasAlbum(String albumName);
     
     void deleteAlbum(String albumName);
     

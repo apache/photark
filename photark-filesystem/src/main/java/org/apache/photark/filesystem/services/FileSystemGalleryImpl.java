@@ -83,7 +83,11 @@ public class FileSystemGalleryImpl extends BaseGalleryImpl implements Gallery {
 
     }
 
-	public void deleteAlbum(String albumName) {
+    public boolean hasAlbum(String albumName) {
+        return false; 
+    }
+
+    public void deleteAlbum(String albumName) {
 
 	}
 }

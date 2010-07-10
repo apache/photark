@@ -41,14 +41,36 @@ var albumPos = 0;
 var pos = 0;
 var slideShowSpeed=0;
 var timer;
+var userId;
+var SECURITY_TOKEN;
+var permissions = new Array();
 
 dojo.addOnLoad(function() {
     dojo.require("dojo._base.xhr");
     dojo.require("dojo.rpc.JsonService");
+    dojo.addOnLoad(getJSONAccessList);
     dojo.addOnLoad(populateUserInfo);
     dojo.addOnLoad(initServices);
     dojo.addOnLoad(initGallery);
  });
+
+function getJSONAccessList() {
+    dojo.xhrPost({
+        sync: true,
+        url:"security", //photark.constants.SecurityEndpoint,
+        content:{request:"getJSONAccessList"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+            userId = response.userId;
+            SECURITY_TOKEN = response.token;
+            permissions = response.defaultPermissions;
+
+        },
+        error: function(response, ioArgs) {
+            console.error("Error in getting JSON Access List");
+        }
+    });
+}
 
 function initServices(){
   	searchService = new dojo.rpc.JsonService( photark.constants.SearchServiceEndpoint );
@@ -57,7 +79,8 @@ function initServices(){
 
 function initGallery() {
     try {
-        gallery.getAlbums().addCallback(gallery_getAlbumsResponse);
+     //   gallery.getAlbums().addCallback(gallery_getAlbumsResponse); getAlbumsToUser
+        gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(gallery_getAlbumsResponse);
     } catch(exception) {
         alert(exception);
     }
@@ -77,14 +100,14 @@ function populateUserInfo() {
             });
         }
 function displayLoginLinks  (response) {
-    if(response!=null&&response.user.userId!="null"){
+    if(response!=null&&response.user.userId!="null"&&response.user.userId!="UnRegisteredUser"){
         var displayName = response.user.userInfo.displayName;
 
         document.getElementById("loginLinks").innerHTML="Welcome <b>"+displayName+"</b> : <span><a href=\"./admin/upload.html\"><u>Admin page</u></a></span>&nbsp;&nbsp;<span><a href=\"./logout/\"><u>Logout</u></a></span>" ;
     } else {
         document.getElementById("loginLinks").innerHTML="<span><a href=\"./admin/authenticate\"><u>Super admin</u></a></span>&nbsp;&nbsp;<span><a href=\"./home/authenticate\"><u>Login</u></a></span>";
     }
-          
+
 
 }
 
@@ -97,7 +120,8 @@ function gallery_getAlbumsResponse(albums, exception) {
 
     for(i=0; i< galleryAlbums.length; i++)
     {
-        gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
+       // gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
+          gallery.getAlbumCoverToUser(galleryAlbums[i].name,SECURITY_TOKEN).addCallback(gallery_getAlbumCoverResponse);
     }
 }
 
@@ -129,7 +153,7 @@ function searchResponse(items, exception){
     for (i = 0; i < items.length; i++) {
         var row = table.insertRow(lastRow++);
         var column = row.insertCell(0);
-   
+
         var img = document.createElement("img");
         img.src = "";
         //img.class = "slideImage";
@@ -142,9 +166,9 @@ function searchResponse(items, exception){
         column = row.insertCell(0)
         column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
    }
-   
+
    displaySearchResults();
-		 
+
 }
 
 function deleteTableRows(table) {
@@ -198,7 +222,8 @@ function displaySearchResults() {
 function initializeAlbum(albumName) {
     try {
         this.albumName = albumName;
-        gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse);
+       // gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse);
+          gallery.getAlbumPicturesToUser(albumName,SECURITY_TOKEN).addCallback(gallery_getAlbumPicturesResponse);
     } catch(exception) {
         alert(e);
     }

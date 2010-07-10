@@ -97,7 +97,15 @@ public class FileSystemAlbumImpl implements org.apache.photark.services.album.Al
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
-	public void deletePicture(String picture){
+    public void addOwner(String owner) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String[] getOwners() {
+        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void deletePicture(String picture){
 		throw new UnsupportedOperationException("Not implemented");
 	}
 
