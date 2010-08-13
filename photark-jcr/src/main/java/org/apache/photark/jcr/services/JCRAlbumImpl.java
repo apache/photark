@@ -305,14 +305,16 @@ public class JCRAlbumImpl implements Album {
         try {
             Session session = repositoryManager.getSession();
             Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
-            if (albumNode.hasProperty("owners")) {
-                Value[] values = albumNode.getProperty("owners").getValues();
-                String[] owners = new String[values.length];
-                for (int i = 0; i < values.length; i++) {
-                    owners[i] = values[i].getString();
+            if (root.hasNode(name)) {
+                Node albumNode = root.getNode(name);
+                if (albumNode.hasProperty("owners")) {
+                    Value[] values = albumNode.getProperty("owners").getValues();
+                    String[] owners = new String[values.length];
+                    for (int i = 0; i < values.length; i++) {
+                        owners[i] = values[i].getString();
+                    }
+                    return owners;
                 }
-                return owners;
             }
 
 
@@ -327,7 +329,7 @@ public class JCRAlbumImpl implements Album {
 
     /**
      * This method deletes the picture node.
-     * @param String pictureName
+     * @param  pictureName
      * 
      */
     public void deletePicture(String pictureName) {
@@ -353,7 +355,7 @@ public class JCRAlbumImpl implements Album {
      * This method create new album node in case it does not exists in
      * repository or return older album node otherwise.
      * 
-     * @param albumName
+     * @param
      * @return
      * @throws RepositoryException
      */

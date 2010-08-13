@@ -30,29 +30,36 @@ var albumDesc = "";
 var userId;
 var SECURITY_TOKEN;
 var permissions = "";
+var currentView = "";
+var userInit=false;
 
 var gallery = new dojo.rpc.JsonService(photark.constants.GalleryServiceEndpoint);
-
+function adminLogout() {
+    window.location = "../logout";
+}
 function populateSelect() {
     gallery = new dojo.rpc.JsonService(photark.constants.GalleryServiceEndpoint);
     gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(function(albums, exception) {
         //  gallery.getAlbums().addCallback( function(albums, exception) {
         if (exception) {
-            alert(exception.msg);
-            return;
+            //            alert(exception.msg);
+            //            return;
+            adminLogout();
         }
         this.albums = albums;
         var selectAlbum = dojo.byId("selectAlbum");
 
         selectAlbum.options.length = 0;
-        if (permissions.indexOf("|createAlbum|") != -1) {
+        if (userId != "Guest") {
             selectAlbum.options[selectAlbum.options.length] = new Option("New Album", "New Album", true, false);
         }
         for (var pos = 0; pos < albums.length; pos++) {
             selectAlbum.options[selectAlbum.options.length] = new Option(albums[pos].name, albums[pos].name, false, false);
         }
         dojo.byId("selectAlbum").value = albumName;
-        manageAlbumFields();
+        if (currentView == "AlbumOnload" || currentView == "Album") {
+            manageAlbumFields();
+        }
 
     });
 }
@@ -60,8 +67,9 @@ function populateSelect() {
 //to set the album cover
 function setAlbumCoverResponse(cover, exception) {
     if (exception) {
-        alert(exception.msg);
-        return;
+        //            alert(exception.msg);
+        //            return;
+        adminLogout();
     }
     document.getElementById('albumCoverDiv').innerHTML = "<table id='albumCover' style='width:200px;' border='0' cellspacing='0' cellpadding='1'></table>";
 
@@ -78,8 +86,9 @@ function setAlbumCoverResponse(cover, exception) {
 }
 
 function initializeAdminGallery() {
+    //var albumName = albums[albumIndex].name;
     var remove = false;
-    if (permissions.indexOf("|deleteImagesFromAlbum.others|") != -1 || (permissions.indexOf("|deleteImagesFromAlbum.own|") != -1 && albums[albumIndex].owners + "".indexOf(userId) != -1) || permissions.indexOf("|" + albumName + ".deleteImages|") != -1) {
+    if (userId == "SuperAdmin" || (albums[albumIndex].owners + "").indexOf(userId) != -1 || permissions.indexOf("|" + albumName + ".deleteImages|") != -1) {
         remove = true;
     }
     var table = document.getElementById('adminTableGallery');
@@ -89,12 +98,12 @@ function initializeAdminGallery() {
         for (var j = 0; j < 4; j++) {
             var column = row.insertCell(i % 4);
             if (albums[albumIndex].pictures[i] != null) {
-                var albumName = albums[albumIndex].name;
+
                 var img = document.createElement("img");
                 img.src = (window.location.href).replace("admin/upload.html", "") + "gallery/" + albumName + "/" + albums[albumIndex].pictures[i];
                 var img_html = "<img src=" + img.src + " class=\"slideImage\" width=200px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
                 if (remove) {
-                    var html = "<table border=\"0\" style=\"width:180px; text-align: center;\"><tr style=\"cellpadding:10\"><td colspan=\"2\"><a>" + img_html + "</a></td></tr><tr><td>" + albums[albumIndex].pictures[i] + "</td><td><a href=\"javascript:confirmDelete('" + albums[albumIndex].pictures[i] + "');\">Remove</a></td></tr></table>";
+                    var html = "<table border=\"0\" style=\"width:180px; text-align: center;\"><tr style=\"cellpadding:10\"><td colspan=\"2\"><a>" + img_html + "</a></td></tr><tr><td>" + albums[albumIndex].pictures[i] + "</td><td><a href=\"javascript:confirmDelete('" + albums[albumIndex].pictures[i] + "','image');\">Remove</a></td></tr></table>";
                 } else {
                     var html = "<table border=\"0\" style=\"width:180px; text-align: center;\"><tr style=\"cellpadding:10\"><td colspan=\"2\"><a>" + img_html + "</a></td></tr><tr><td>" + albums[albumIndex].pictures[i] + "</td><td></td></tr></table>";
                 }
@@ -118,7 +127,9 @@ function manageAlbumFields() {
     }
     cancelAlbumDesc();
     dojo.byId("progressBar").style.display = "none";
-
+    dojo.byId("filesDiv").style.display = "";
+    dojo.byId("btnUploader").style.display = "";
+    dojo.byId("btnUpload").style.display = "";
     if (albumName == "New Album") {
 
         document.getElementById('albumCoverDiv').innerHTML = "<table id='albumCover' style='width:200px;' border='0' cellspacing='0' cellpadding='1'></table>";
@@ -131,12 +142,12 @@ function manageAlbumFields() {
 
         dojo.byId("newAlbumName").style.display = "none";
         dojo.byId("newAlbumLabel").style.display = "none";
-        if (permissions.indexOf("|editAlbumDescription.others|") != -1 || (permissions.indexOf("|editAlbumDescription.own|") != -1 && albums[albumIndex].owners + "".indexOf(userId) != -1) || permissions.indexOf("|" + albumName + ".editAlbumDescription|") != -1) {
+        if (userId == "SuperAdmin" || ( (albums[albumIndex].owners + "").indexOf(userId) != -1) || permissions.indexOf("|" + albumName + ".editAlbumDescription|") != -1) {
             dojo.byId("btnAlbumDesc").style.display = "";
         } else {
             dojo.byId("btnAlbumDesc").style.display = "none";
         }
-        if (permissions.indexOf("|deleteAlbum.others|") != -1 || (permissions.indexOf("|deleteAlbum.own|") != -1 && albums[albumIndex].owners + "".indexOf(userId) != -1)) {
+        if (userId == "SuperAdmin" || ( (albums[albumIndex].owners + "").indexOf(userId) != -1) || permissions.indexOf("|" + albumName + ".deleteAlbum|") != -1) {
             dojo.byId("deleteAlbum").style.display = "";
         } else {
             dojo.byId("deleteAlbum").style.display = "none";
@@ -144,20 +155,17 @@ function manageAlbumFields() {
         gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(function(albums, exception) {
             //   gallery.getAlbums().addCallback( function(albums, exception) {
             if (exception) {
-                alert(exception.msg);
-                return;
+                //            alert(exception.msg);
+                //            return;
+                adminLogout();
             }
-            dojo.byId("albumDescription").value = albums[selectAlbum.selectedIndex - 1].description;
+            dojo.byId("albumDescription").value = albums[albumIndex].description;
             gallery.getAlbumCoverToUser(albums[albumIndex].name, SECURITY_TOKEN).addCallback(setAlbumCoverResponse);
             // gallery.getAlbumCover(albums[albumIndex].name).addCallback(setAlbumCoverResponse);
             initializeAdminGallery();
         });
         dojo.byId("albumDescription").value = "";
-        if (permissions.indexOf("|addImagesToAlbum.others|") != -1 || (permissions.indexOf("|addImagesToAlbum.own|") != -1 && albums[albumIndex].owners + "".indexOf(userId) != -1) || permissions.indexOf("|" + albumName + ".addImages|") != -1) {
-            dojo.byId("filesDiv").style.display = "";
-            dojo.byId("btnUploader").style.display = "";
-            dojo.byId("btnUpload").style.display = "";
-        } else {
+        if (!(userId == "SuperAdmin" || (albums[albumIndex].owners + "").indexOf(userId) != -1 || permissions.indexOf("|" + albumName + ".addImages|") != -1)) {
             dojo.byId("filesDiv").style.display = "none";
             dojo.byId("btnUploader").style.display = "none";
             dojo.byId("btnUpload").style.display = "none";
@@ -188,6 +196,7 @@ function addAlbumDesc() {
             },
             error: function(response, ioArgs) {
                 console.error("Error in editing album description");
+                adminLogout();
             }
         });
     }
@@ -213,6 +222,7 @@ function removeImage(imageName) {
         },
         error: function(response, ioArgs) {
             console.error("Error in deleting file");
+            adminLogout();
         }
     });
 }
@@ -223,16 +233,23 @@ function reloadAdminGallery() {
 }
 
 //confirm before deletion
-function confirmDelete(item) {
+function confirmDelete(item, type) {
     var r;
-    if (item == undefined) {
-        r = confirm("Are you sure to delete the album " + albumName + "?");
-    } else {
-        r = confirm("Are you sure to delete the image " + item + "?");
+    if (type == "Group") {
+        if (confirm("Are you sure to delete the user group " + groups[currentGroup][0] + "?")) {
+            deleteGroup();
+        }
+    } else if (type != "Role") {
+        if (item == undefined) {
+            r = confirm("Are you sure to delete the album " + albumName + "?");
+        } else {
+            r = confirm("Are you sure to delete the image " + item + "?");
+        }
+        if (r) {
+            removeImage(item);
+        }
     }
-    if (r == true) {
-        removeImage(item);
-    }
+
 }
 
 
@@ -242,10 +259,13 @@ function populateUserInfo() {
         content:{request:"getUser"},
         handleAs: "json",
         load: function(response, ioArgs) {
+            userInit=true;
             displayLoginLinks(response);
+             switchAdminViewsTo('AlbumOnload');
         },
         error: function(response, ioArgs) {
             console.error("Error in getting user info");
+            adminLogout();
         }
     });
 }
@@ -272,18 +292,68 @@ function getJSONAccessList() {
             userId = response.userId;
             SECURITY_TOKEN = response.token;
             permissions = response.permissions;
-            populateUserInfo();
-            populateSelect();
+            if(  userInit==false){
+
+               populateUserInfo();
+
+            //  populateSelect();
+            }
 
         },
         error: function(response, ioArgs) {
             console.error("Error in getting JSON Access List");
+            adminLogout();
         }
     });
 }
 
+function switchAdminViewsTo(toView) {
+    currentView = toView;
+    if ('AlbumOnload' == toView) {
+
+        populateSelect();
+        dojo.byId("userMgtDiv").style.display = "none";
+        dojo.byId("superAdminDiv").style.display = "none";
+        dojo.byId("newAlbum").style.display = "";
+
+    } else if ('Album' == toView) {
+        getJSONAccessList();
+        populateSelect();
+        dojo.byId("userMgtDiv").style.display = "none";
+        dojo.byId("superAdminDiv").style.display = "none";
+        dojo.byId("newAlbum").style.display = "";
+
+    } else {
+        if (userId == "SuperAdmin") {
+            getJSONAccessList();
+            populateSuperAdminRoles();
+            populateSuperAdminBlockUser();
+            dojo.byId("superAdminDiv").style.display = "";
+            dojo.byId("userMgtDiv").style.display = "none";
+            dojo.byId("newAlbum").style.display = "none";
+        } else {
+            if ('Group' == toView) {
+
+                populateGroups();
+                //  populateUsers();
+                dojo.byId("newRoleDetails").style.display = "none";
+                dojo.byId("newGroupDetails").style.display = "";
+            } else {
+                getJSONAccessList();
+                populateRoleAlbums();
+                dojo.byId("newRoleDetails").style.display = "";
+                dojo.byId("newGroupDetails").style.display = "none";
+            }
+            dojo.byId("userMgtDiv").style.display = "";
+            dojo.byId("newAlbum").style.display = "none";
+        }
+    }
+}
+
 dojo.addOnLoad(function() {
-    dojo.addOnLoad(getJSONAccessList);
+   //getJSONAccessList();
+     dojo.addOnLoad(getJSONAccessList);
+
 
 
 });

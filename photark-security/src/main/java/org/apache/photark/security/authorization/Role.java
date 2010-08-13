@@ -21,7 +21,9 @@ package org.apache.photark.security.authorization;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Model representing a Role
@@ -32,20 +34,11 @@ public class Role implements Serializable {
      */
     private static final long serialVersionUID = -7560129536060718311L;
     private String roleName;
-    private List<Permission> permissions = new ArrayList<Permission>();
-    private List<Role> parents = new ArrayList<Role>();
+    private  List<Permission> permissions = new ArrayList<Permission>();
 
 
     public String getRoleName() {
         return roleName;
-    }
-
-    public List<Role> getParents() {
-        return parents;
-    }
-
-    public void setParent(Role parent) {
-        this.parents.add(parent);
     }
 
     /**
@@ -58,15 +51,21 @@ public class Role implements Serializable {
     /**
      * @param permission Permission
      */
-    public void setPermission(Permission permission) {
-        this.permissions.add(permission);
+    public void setPermission( Permission permission) {
+        if (!this.permissions.contains(permission)) {
+          this.permissions.add(  permission) ;
+        }
+
     }
 
+    public void setPermission(List<Permission> permission) {
+        this.permissions.addAll(permission);
+    }
 
     /**
      * @return List<Permission>
      */
     public List<Permission> getPermissions() {
         return permissions;
-	}
+    }
 }

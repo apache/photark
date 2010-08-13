@@ -27,49 +27,53 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static org.apache.photark.security.utils.Constants.*;
+
 /**
  * Authorization Filter. This will only allow authenticated user
  * to access to upload.html and redirect others to OpenID authentication
- *
- * 
- *
  */
 public class AuthorizationFilter implements Filter {
-        private static final Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());
+    private static final Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());
 
-	private String redirectPage;
+    private String redirectPage;
 
-    /** Filter should be configured with an redirect page. */
-	public void init(FilterConfig FilterConfig) throws ServletException {
-		if (FilterConfig != null) {
-		    redirectPage = FilterConfig.getInitParameter("redirect_page");
-		}
-	}
+    /**
+     * Filter should be configured with an redirect page.
+     */
+    public void init(FilterConfig FilterConfig) throws ServletException {
+        if (FilterConfig != null) {
+            redirectPage = FilterConfig.getInitParameter("redirect_page");
+        }
+    }
 
 
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
+    public void destroy() {
+        // TODO Auto-generated method stub
+    }
 
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws ServletException, IOException {
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws ServletException, IOException {
 
-		HttpServletRequest httpReq = (HttpServletRequest) request;
-		HttpServletResponse httpResp = (HttpServletResponse) response;
-		if (httpReq.getSession().getAttribute("accessList") != null && ! httpReq.getSession().getAttribute("accessList").equals("")) {
-            if (httpReq.getSession().getAttribute("toRigester") != null
-				&& httpReq.getSession().getAttribute("toRigester").equals("true")) {
+        HttpServletRequest httpReq = (HttpServletRequest) request;
+        HttpServletResponse httpResp = (HttpServletResponse) response;
+        if (httpReq.getSession().getAttribute(ACCESS_LIST) != null && !httpReq.getSession().getAttribute(ACCESS_LIST).equals("")) {
+            if (httpReq.getSession().getAttribute(USER_NEED_TO_REGISTER) != null
+                    && httpReq.getSession().getAttribute(USER_NEED_TO_REGISTER).equals("true")) {
                 httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
-            } else{
-               System.err.println(((AccessList)httpReq.getSession().getAttribute("accessList")).getUserId() +" Accessing Admin page");
-			chain.doFilter(request, response);
+            } else if (httpReq.getSession().getAttribute(USER_NEED_TO_REGISTER) != null
+                    && httpReq.getSession().getAttribute(USER_NEED_TO_REGISTER).equals("blocked")) {
+                httpResp.sendRedirect(httpReq.getContextPath() + "/logout");
+            } else {
+                System.err.println(((AccessList) httpReq.getSession().getAttribute(ACCESS_LIST)).getUserId() + " Accessing Admin page");
+                chain.doFilter(request, response);
             }
 
 
-		} else {
-			httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
-		}
+        } else {
+            httpResp.sendRedirect(httpReq.getContextPath() + redirectPage);
+        }
 
-	}
+    }
 
 }

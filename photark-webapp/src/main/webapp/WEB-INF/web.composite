@@ -21,7 +21,22 @@
 		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
 		targetNamespace="http://org.apache.photoark"
 		name="photo-gallery-jcr">
-  
+
+  	<!-- Component responsible for providing Access Management for gallery/album -->
+	<component name="AccessManager">
+   		<implementation.java class="org.apache.photark.jcr.security.authorization.JCRAccessManager"/>
+   		<service name="AccessManager">
+   			<interface.java interface="org.apache.photark.security.authorization.services.AccessManager"/>
+   			<binding.sca name="local"/>
+   		    <!--<tuscany:binding.jsonrpc uri="/AccessManagerService"/>-->
+		</service>
+		<service name="JSONAccessManager">
+   			<interface.java interface="org.apache.photark.security.authorization.services.JSONAccessManager"/>
+   		    <tuscany:binding.jsonrpc uri="/AccessManagerService"/>
+		</service>
+   		<reference name="repositoryManager" target="RepositoryManager"/>
+    </component>
+
     <!-- Facade component for Gallery -->
     <component name="Gallery">
    		<implementation.java class="org.apache.photark.jcr.services.JCRGalleryImpl"/>
@@ -35,7 +50,7 @@
    		<reference name="listeners" target="SearchService"/>
    	    <reference name="accessmanager" target="AccessManager"/>
     </component>
-    
+
     <!-- Component responsible for providing REST access to images -->
     <component name="ImageServiceComponent">
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageCollectionImpl"/>
@@ -53,9 +68,10 @@
 		</service>
 		<reference name="accessmanager" target="AccessManager">
 			<binding.sca name="local"/>
-		</reference>   	
+		</reference>
+		<!--<reference name="accessmanager" target="AccessManager"/>-->
 	</component>
-    
+
     <!-- Component responsible for providing upload support for gallery/album -->
     <component name="ImageUploadServiceComponent">
 		<implementation.java class="org.apache.photark.jcr.services.JCRImageUploadServiceImpl"/>
@@ -102,19 +118,11 @@
 		<implementation.java class="org.apache.photark.security.authentication.services.LogoutServiceImpl"/>
 		<service name="Servlet">
 			<tuscany:binding.http uri="/logout"/>
-		</service>  	  	
-	</component> 
-	
-	<!-- Component responsible for providing Access Management for gallery/album -->
-	<component name="AccessManager">
-   		<implementation.java class="org.apache.photark.jcr.security.authorization.JCRAccessManager"/>
-   		<service name="AccessManager">
-   			<interface.java interface="org.apache.photark.security.authorization.services.AccessManager"/>
-   			<binding.sca name="local"/>
-   		<!--<tuscany:binding.jsonrpc uri="/Security"/> -->
-		</service>  
-   		<reference name="repositoryManager" target="RepositoryManager"/>
-    </component> 
+		</service>
+	    <reference name="accessmanager" target="AccessManager">
+			<binding.sca name="local"/>
+		</reference>	
+	</component>
 	
 	<!-- Component responsible for indexing and searching images -->
     <component name="SearchService">

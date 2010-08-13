@@ -52,8 +52,10 @@ dojo.addOnLoad(function() {
     dojo.addOnLoad(populateUserInfo);
     dojo.addOnLoad(initServices);
     dojo.addOnLoad(initGallery);
- });
-
+});
+function logout() {
+    window.location = "./logout";
+}
 function getJSONAccessList() {
     dojo.xhrPost({
         sync: true,
@@ -63,14 +65,16 @@ function getJSONAccessList() {
         load: function(response, ioArgs) {
             userId = response.userId;
             SECURITY_TOKEN = response.token;
-            permissions = response.defaultPermissions;
+            permissions = response.permissions;
 
         },
         error: function(response, ioArgs) {
             console.error("Error in getting JSON Access List");
+            logout();
         }
     });
 }
+
 
 function initServices(){
   	searchService = new dojo.rpc.JsonService( photark.constants.SearchServiceEndpoint );
@@ -83,6 +87,7 @@ function initGallery() {
         gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(gallery_getAlbumsResponse);
     } catch(exception) {
         alert(exception);
+        // logout();
     }
 }
 
@@ -100,7 +105,7 @@ function populateUserInfo() {
             });
         }
 function displayLoginLinks  (response) {
-    if(response!=null&&response.user.userId!="null"&&response.user.userId!="UnRegisteredUser"){
+    if(response!=null&&response.user.userId!="null"&&response.user.userId!="Guest"){
         var displayName = response.user.userInfo.displayName;
 
         document.getElementById("loginLinks").innerHTML="Welcome <b>"+displayName+"</b> : <span><a href=\"./admin/upload.html\"><u>Admin page</u></a></span>&nbsp;&nbsp;<span><a href=\"./logout/\"><u>Logout</u></a></span>" ;
@@ -113,8 +118,9 @@ function displayLoginLinks  (response) {
 
 function gallery_getAlbumsResponse(albums, exception) {
     if(exception) {
-        alert(exception.msg);
-        return;
+       // alert(exception.msg);
+       // return;
+         logout();
     }
     galleryAlbums = albums;
 
@@ -128,8 +134,9 @@ function gallery_getAlbumsResponse(albums, exception) {
 
 function gallery_getAlbumCoverResponse(cover, exception) {
     if(exception){
-        alert(exception.msg);
-        return;
+//        alert(exception.msg);
+//        return;
+         logout();
     }
     albumCovers[pos] = cover;
     pos += 1;
@@ -143,8 +150,9 @@ function gallery_getAlbumCoverResponse(cover, exception) {
 function searchResponse(items, exception){
 
  	if(exception) {
-        alert(exception.msg);
-        return;
+//        alert(exception.msg);
+//        return;
+          logout();
     }
 
 	var table=document.getElementById('tableSearch');
@@ -231,9 +239,10 @@ function initializeAlbum(albumName) {
 
 function gallery_getAlbumPicturesResponse(items, exception) {
     if(exception) {
-        alert(exception.msg);
+       // alert(exception.msg);
         displayGallery();
-        return;
+         logout();
+      //  return;
     }
     albumItems = items;
     albumPos = 0;

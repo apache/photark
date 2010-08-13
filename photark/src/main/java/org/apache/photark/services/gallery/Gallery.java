@@ -39,4 +39,5 @@ public interface Gallery extends GalleryListener ,GallerySecurity{
     String getAlbumCover(String albumName);
     
     String[] getAlbumPictures(String albumName);
+
 }

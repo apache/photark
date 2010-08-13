@@ -34,13 +34,13 @@ import javax.jcr.Session;
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.security.authorization.services.AccessManager;
-import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.BaseGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
+import static  org.apache.photark.security.utils.Constants.*;
 
 @Scope("COMPOSITE")
 public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
@@ -48,17 +48,19 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
 
     private JCRRepositoryManager repositoryManager;
     private AccessManager accessManager;
+
+
     public JCRGalleryImpl() {
 
     }
 
-    @Reference(name="repositoryManager")
+    @Reference(name = "repositoryManager")
     protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
 
-    @Reference(name="accessmanager")
+    @Reference(name = "accessmanager")
     protected void setAccessService(AccessManager accessManager) {
         this.accessManager = accessManager;
     }
@@ -86,7 +88,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
                             if (albumFile.isDirectory() && albumFile.exists()) {
                                 Album newAlbum = JCRAlbumImpl.createAlbum(repositoryManager, albumFile.getName());
                                 newAlbum.setName(albumFile.getName());
-                                ((JCRAlbumImpl)newAlbum).setGallery(name);
+                                ((JCRAlbumImpl) newAlbum).setGallery(name);
                                 this.albums.add(newAlbum);
                             }
                         }
@@ -100,7 +102,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
         }
 
         initialized = true;
-        Album[] albums = getAlbums();
+        Album[] albums = getAlbumsToUser(SUPER_ADMIN);
 
         for (Album album : albums) {
             String[] pictures = album.getPictures();
@@ -121,7 +123,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
             NodeIterator albumNodes = rootNode.getNodes();
             while (albumNodes.hasNext()) {
                 Node albumNode = albumNodes.nextNode();
-                if (albumNode.getPath().equals("/jcr:system")||albumNode.getPath().equals("/userStore")) {
+                if (albumNode.getPath().equals("/jcr:system") || albumNode.getPath().equals("/"+USER_STORE)) {
                     continue;
                 }
                 String albumName = albumNode.getName();
@@ -161,14 +163,14 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     }
 
     public boolean hasAlbum(String albumName) {
-         try {
+        try {
             Session session = repositoryManager.getSession();
             Node rootNode = session.getRootNode();
             if (rootNode.hasNode(albumName)) {
-             //   logger.info("This album is already in gallery");
+                //   logger.info("This album is already in gallery");
                 return true;
             }
-               } catch (RepositoryException e) {
+        } catch (RepositoryException e) {
             e.printStackTrace();
         } finally {
             //repositoryManager.releaseSession();
@@ -177,38 +179,38 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     }
 
     public void deleteAlbum(String albumName) {
-		try {
-			Session session = repositoryManager.getSession();
-			Node root = session.getRootNode();
-			if(root.hasNode(albumName)){
-				Node albumNode = root.getNode(albumName);
-				 Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);
-				if (albums.contains(album)) {
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode();
+            if (root.hasNode(albumName)) {
+                Node albumNode = root.getNode(albumName);
+                Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);
+                if (albums.contains(album)) {
                     albums.remove(album);
                 }
-				albumNode.remove();
-				session.save();
-				//init();
-				logger.info("album " + albumName + " deleted");
-			}else{
-				logger.info("album " + albumName + " not found");
-			}
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-		}  finally {
-			//repositoryManager.releaseSession();
-		}
+                albumNode.remove();
+                session.save();
+                //init();
+                logger.info("album " + albumName + " deleted");
+            } else {
+                logger.info("album " + albumName + " not found");
+            }
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        } finally {
+            //repositoryManager.releaseSession();
+        }
 
-	}
+    }
 
 
     public String[] getAlbumPictures(String albumName) {
-        return getAlbumPicturesToUser(albumName, JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+        return getAlbumPicturesToUser(albumName, accessManager.getSecurityTokenFromUserId(GUEST));
     }
 
     public String[] getAlbumPicturesToUser(String albumName, String securityToken) {
-String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "viewImagesOnAlbum.others"};
-        if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), albumName,permissions)) {
+        String[] permissions = new String[]{ALBUM_VIEW_IMAGES_PERMISSION};
+        if (accessManager.isPermitted(accessManager.getUserIdFromSecurityToken(securityToken), albumName, permissions)) {
             Album albumLookup = getAlbum(albumName);
             if (albumLookup != null) {
                 return albumLookup.getPictures();
@@ -222,12 +224,12 @@ String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "view
     }
 
     public String getAlbumCover(String albumName) {
-        return getAlbumCoverToUser(albumName, JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+        return getAlbumCoverToUser(albumName, accessManager.getSecurityTokenFromUserId(GUEST));
     }
 
     public String getAlbumCoverToUser(String albumName, String securityToken) {
-        String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.others", "viewImagesOnAlbum.own"};
-        if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), albumName, permissions)) {
+              String[] permissions = new String[]{ALBUM_VIEW_IMAGES_PERMISSION};
+        if (accessManager.isPermitted(accessManager.getUserIdFromSecurityToken(securityToken), albumName, permissions)) {
             Album albumLookup = getAlbum(albumName);
 
             if (albumLookup != null) {
@@ -249,7 +251,7 @@ String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "view
     }
 
     public Album[] getAlbums() {
-        return getAlbumsToUser(JSONRPCSecurityManager.getSecurityToken("UnRegisteredUser"));
+        return getAlbumsToUser(accessManager.getSecurityTokenFromUserId(GUEST));
     }
 
     public Album[] getAlbumsToUser(String securityToken) {
@@ -258,8 +260,8 @@ String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "view
         }
         List<Album> userAlbums = new ArrayList<Album>();
         for (Album album : albums) {
-            String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.others", "viewImagesOnAlbum.own"};
-            if (accessManager.isPermitted(JSONRPCSecurityManager.getAccessListFromSecurityToken(securityToken), album.getName(), permissions)) {
+            String[] permissions = new String[]{ALBUM_VIEW_IMAGES_PERMISSION};
+            if (accessManager.isPermitted(accessManager.getUserIdFromSecurityToken(securityToken), album.getName(), permissions)) {
                 userAlbums.add(album);
             }
         }
@@ -268,7 +270,22 @@ String[] permissions = new String[]{"viewImages", "viewImagesOnAlbum.own", "view
         return albumArray;
     }
 
-
+    /*this method is used to get the albums, that the user can add to various roles*/
+    public Album[] getAlbumsToSetPermission(String securityToken) {
+        if (!initialized) {
+            init();
+        }
+        List<Album> userAlbums = new ArrayList<Album>();
+        for (Album album : albums) {
+            // only the super admin and the album owner is allowed
+            if (accessManager.isPermitted(accessManager.getUserIdFromSecurityToken(securityToken), album.getName(), null)) {
+                userAlbums.add(album);
+            }
+        }
+        Album[] albumArray = new Album[userAlbums.size()];
+        userAlbums.toArray(albumArray);
+        return albumArray;
+    }
 
 
 }

@@ -24,92 +24,298 @@
 
     <title>Apache PhotArk - Upload Photos</title>
 
-    <script type="text/javascript" src="../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
+    <script type="text/javascript" src="../dojo/dojo.js"
+            djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
     <script type="text/javascript" src="../js/constants.js"></script>
     <script type="text/javascript" src="js/upload.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css" />
-    <link href="css/upload.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/roles.js"></script>
+    <link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css"/>
+    <link href="css/upload.css" rel="stylesheet"/>
 
     <script type="text/javascript" src="js/admin.js"></script>
 </head>
 
 <body>
-
-    <div id="newAlbum">
-	  <fieldset id="newAlbumDetails" style="text-align:left;">
-		  <legend>Album Details</legend>
-  <div style="float:right;width:50%;font-size:0.8em;text-align:right;">
-    <div><span id="loginName"></span>&nbsp;&nbsp;<span><a href="../">Gallery</a></span>&nbsp;&nbsp;<span><a href="../logout/">Logout</a></span></div>
-  </div>
-  <div style="clear:both"></div>
-		  <ol>
-			  <li>
-				  <label id="selectAlbumLabel" for="selectAlbum">Select Album:</label>
-				  <select id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlbumFields();">
-                  </select>
-				  <label id="newAlbumLabel" for="newAlbumName" >
-                      New Album:
-                  </label>
-				  <input type="text" class="text" name="newAlbumName" id="newAlbumName">
-				  <button type="button" name="deleteAlbum" id="deleteAlbum" onClick="confirmDelete(null);">
-                      Delete Album
-                  </button>
-			  </li>
-			  <li>
-				  <table border="0">
-			  		<tr>
-			  			<td>
-                        	<div id="albumCoverDiv">
+<div align="center">
+<div id="adminDiv">
+<div style="float:right;width:50%;font-size:0.8em;text-align:right;padding-top:5px;padding-right:10px;">
+    <div><span id="loginName"></span>&nbsp;&nbsp;<span><a href="../" style="color:black;">Gallery</a></span>&nbsp;&nbsp;<span><a
+            href="../logout/" style="color:black;">Logout</a></span></div>
+</div>
+<div id="newAlbum">
+    <fieldset id="newAlbumDetails" style="text-align:left;">
+        <legend>Album Details</legend>
+        <div style="clear:both"></div>
+        <ol>
+            <li>
+                <label id="selectAlbumLabel" for="selectAlbum">Select Album:</label>
+                <select id="selectAlbum" name="selectAlbum" autoComplete="true" onChange="manageAlbumFields();">
+                </select>
+                <label id="newAlbumLabel" for="newAlbumName">
+                    New Album:
+                </label>
+                <input type="text" class="text" name="newAlbumName" id="newAlbumName">
+                <button type="button" name="deleteAlbum" id="deleteAlbum" onClick="confirmDelete(null,'album');">
+                    Delete Album
+                </button>
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Role');"
+                     class="uploadBtn btn"
+                     id="switchToRoleMgt">
+                    Switch to Group Mgt
+                </div>
+            </li>
+            <li>
+                <table border="0">
+                    <tr>
+                        <td>
+                            <div id="albumCoverDiv">
 
                             </div>
-			  			</td>
-			  			<td>
-			  				<label for="albumDescriptionDiv">Album Description</label>
-			  				<div id="albumDescriptionDiv" >
+                        </td>
+                        <td>
+                            <label for="albumDescriptionDiv">Album Description</label>
 
-				  			</div>
-				  		</td>
-				  	</tr>
-  					<tr>
-    					<td></td>
-					<td>
-						<div id="btnAlbumDesc" class="uploadBtn btn" onClick="addAlbumDesc();" style="float: right;">
-                            Edit album Description
-                        </div>
-						<div id="cancelBtnAlbumDesc" class="uploadBtn btn" onClick="cancelAlbumDesc();"
-                             style="float: right;" >
-                            Cancel
-                        </div>
-					</td>
-  					</tr>
-				</table>
-			  </li>
-              <li>
-                 <div id="filesDiv" >
-                     <label>Files:</label>
-                     <div id="files" class="field"></div>
-                 </div>
-              </li>
-              <li>
-               	<div id="progressDiv" class="tundra" >
-                	<div id="progressBar" dojoType="dijit.ProgressBar" style="width:300px;display:none;"
+                            <div id="albumDescriptionDiv">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div id="btnAlbumDesc" class="uploadBtn btn" onClick="addAlbumDesc();"
+                                 style="float: right;">
+                                Edit album Description
+                            </div>
+                            <div id="cancelBtnAlbumDesc" class="uploadBtn btn" onClick="cancelAlbumDesc();"
+                                 style="float: right;">
+                                Cancel
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                <div id="filesDiv">
+                    <label>Files:</label>
+
+                    <div id="files" class="field"></div>
+                </div>
+            </li>
+            <li>
+                <div id="progressDiv" class="tundra">
+                    <div id="progressBar" dojoType="dijit.ProgressBar" style="width:300px;display:none;"
                          jsId="jsProgress">
                     </div>
-               	</div>
-              </li>
-              <li >
-               	<div id="btnUploader" class="uploadBtn btn">
-                       Select Files
                 </div>
-    		    <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">
+            </li>
+            <li>
+                <div id="btnUploader" class="uploadBtn btn">
+                    Select Files
+                </div>
+                <div id="btnUpload" class="uploadBtn btn" onClick="doUpload();">
                     Upload
                 </div>
-              </li>
-		  </ol>
-	  </fieldset>
-	</div>
-	<div id="adminGallery">
+            </li>
+        </ol>
+    </fieldset>
+    <div id="adminGallery">
     </div>
+</div>
+<div id="userMgtDiv" style="display:none;">
+    <fieldset id="newRoleDetails" style="text-align:left;">
+        <legend>Permissions Details</legend>
+        <div style="clear:both"></div>
+        <ol>
+            <li>
+                <label id="selectRoleAlbumLabel" for="selectRoleAlbum">Select Album:</label>
+                <select id="selectRoleAlbum" name="selectRoleAlbum" autoComplete="true"
+                        onChange="manageRoleAlbumFields();">
+                </select>
+
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Album');"
+                     class="uploadBtn btn"
+                     id="switchToAlbumMgt1">
+                    Switch to Album Mgt
+                </div>
+                <hr align=left width=60% noshade>
+            </li>
+            <li>
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Group');"
+                     class="uploadBtn btn"
+                     id="switchToGroup">
+                    Manage User Groups
+                </div>
+                <div id="addRoleDiv" style="margin-left:5%">
+                    <label id="addRoleLabel" for="addRole">Add Role:</label>
+                    <select id="addRole" name="addRole" autoComplete="true" onChange="manageRoleFields();">
+                    </select>
+                </div>
+            </li>
+            <li>
+
+                <div id="roleInfoTableDiv" style="margin-left:5%">
+                    <table id='roleInfoTable' border="1" style="width:60%;">
+                    </table>
+
+                </div>
+
+                <hr style="margin-left:5%" id="roleLine" align=left width=60% noshade>
+
+            </li>
+            <li>
+                <div id="addRoleGroupDiv" style="margin-left:5%">
+                    <label id="addRoleGroupLabel" for="addRoleGroup">Add User Group:</label>
+                    <select id="addRoleGroup" name="addRoleGroup" autoComplete="true"
+                            onChange="manageRoleGroupFields();">
+                    </select>
+                    <hr align=left width=60% noshade>
+                </div>
+
+            </li>
+            <li>
+                <div id="assignRoleButtonDiv" style="margin-left:5%">
+                    <button type="button" name="assignRoleButton" id="assignRoleButton" onClick="assignRole();">
+                        Add
+                    </button>
+                    <hr align=left width=60% noshade>
+                </div>
+            </li>
+            <li>
+
+                <div id="roleTableDiv">
+                    <table border="1" style="width:60%;">
+
+                    </table>
+                </div>
+            </li>
+            <li>
+                <button onclick="saveRoleInfo();" id="saveRole" name="saveRole" type="button" style="">
+                    Save
+                </button>
+            </li>
+        </ol>
+
+    </fieldset>
+    <fieldset id="newGroupDetails" style="text-align:left;">
+        <legend>Group Details</legend>
+        <div style="clear:both"></div>
+        <ol>
+            <li>
+                <label id="selectGroupLabel" for="selectGroup">Select Group:</label>
+                <select id="selectGroup" name="selectGroup" autoComplete="true" onChange="manageGroupFields();">
+                </select>
+                <label id="newGroupLabel" for="newGroupName">
+                    New Group:
+                </label>
+                <input type="text" class="text" name="newGroupName" id="newGroupName">
+                <button type="button" name="deleteGroup" id="deleteGroup" onClick="confirmDelete(null,'Group');">
+                    Delete Group
+                </button>
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Album');"
+                     class="uploadBtn btn"
+                     id="switchToAlbumMgt2">
+                    Switch to Album Mgt
+                </div>
+            </li>
+            <li>
+                <div style="margin-left:5%">
+                    <label id="addUserLabel" for="addUser">Add User:</label>
+                    <select id="addUser" name="addUser" autoComplete="true" onChange="manageGroupUserFields();">
+                    </select>
+
+                    <button type="button" name="addUserButton" id="addUserButton" onClick="addGroupUser();">
+                        Add
+                    </button>
+                </div>
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Role');"
+                     class="uploadBtn btn"
+                     id="switchToRole">
+                    Manage Album Permissions
+                </div>
+
+                <div id="userTableDiv">
+                    <table border="1" style="width:60%;">
+
+                    </table>
+                </div>
+            </li>
+            <li>
+                <button onclick="saveGroup();" id="saveGroup" name="saveGroup" type="button" style="">
+                    Save Group
+                </button>
+            </li>
+        </ol>
+    </fieldset>
+</div>
+<div id="superAdminDiv" style="display:none;">
+    <fieldset id="superAdminRoleDetails" style="text-align:left;">
+        <legend>Permission Details</legend>
+        <div style="clear:both"></div>
+        <ol>
+            <li>
+                <label id="superAdminSelectRoleLabel" for="superAdminSelectRole">Select Role:</label>
+                <select id="superAdminSelectRole" name="superAdminSelectRole" autoComplete="true"
+                        onChange="manageSuperAdminRoleFields();">
+                </select>
+                <label id="newSuperAdminRoleLabel" for="newSuperAdminRoleName">
+                    New Role:
+                </label>
+                <input type="text" class="text" name="newSuperAdminRoleName" id="newSuperAdminRoleName">
+                <button type="button" name="deleteSuperAdminRole" id="deleteSuperAdminRole"
+                        onClick="confirmRoleDelete();">
+                    Delete Role
+                </button>
+                <div style="float: right;margin-right:20px;" onclick="switchAdminViewsTo('Album');"
+                     class="uploadBtn btn"
+                     id="switchToAlbumMgt3">
+                    Switch to Album Mgt
+                </div>
+            </li>
+            <li>
+                <div id="superAdminRolePermissionTableDiv">
+                    <table border="1" style="width:60%;">
+
+                    </table>
+                </div>
+            </li>
+            <li>
+                <button onclick="saveSuperAdminRole();" id="saveSuperAdminRole" name="saveSuperAdminRole" type="button"
+                        style="">
+                    Save Role
+                </button>
+            </li>
+        </ol>
+    </fieldset>
+    <fieldset id="superAdminBlockUserDetails" style="text-align:left;">
+        <legend>Block Listed User Details</legend>
+        <div style="clear:both"></div>
+        <ol>
+            <li>
+                <label id="superAdminSelectBlockUserLabel" for="superAdminSelectBlockUser">Select User:</label>
+                <select id="superAdminSelectBlockUser" name="superAdminSelectBlockUser" autoComplete="true"
+                        onChange="manageSuperAdminBlockUserFields();">
+                </select>
+                <button type="button" name="addSuperAdminBlockUser" id="addSuperAdminBlockUser"
+                        onClick="addSuperAdminBlockUser();">
+                    Block User
+                </button>
+            </li>
+            <li>
+                <div id="superAdminBlockUserTableDiv">
+                    <table border="1" style="width:60%;">
+                    </table>
+                </div>
+            </li>
+            <li>
+                <button onclick="saveSuperAdminBlockUsers();" id="saveSuperAdminBlockUsers"
+                        name="saveSuperAdminBlockUsers" type="button" style="">
+                    Save Block Users
+                </button>
+            </li>
+        </ol>
+    </fieldset>
+</div>
+</div>
+</div>
 </body>
 </html>

@@ -19,10 +19,7 @@
 
 package org.apache.photark.security.authorization.services;
 
-import org.apache.photark.security.authorization.AccessList;
-import org.apache.photark.security.authorization.Permission;
-import org.apache.photark.security.authorization.User;
-import org.apache.photark.security.authorization.UserInfo;
+import org.apache.photark.security.authorization.*;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
@@ -39,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static org.apache.photark.security.utils.Constants.*;
+
 
 @Service(Servlet.class)
 @Scope("COMPOSITE")
@@ -49,7 +48,8 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
      */
     private static final long serialVersionUID = -6452934544772432330L;
     private AccessManager accessManager;
-    JSONRPCSecurityManager jsonSecurityManager=new JSONRPCSecurityManager();
+//     private boolean userInit =false;
+    //JSONRPCSecurityManager jsonSecurityManager = new JSONRPCSecurityManager();
 
     @Reference(name = "accessmanager")
     protected void setAccessService(AccessManager accessManager) {
@@ -65,15 +65,21 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
+//            AccessList accessList;
+        if (!(request.getSession().getAttribute(ACCESS_LIST) != null && !request.getSession().getAttribute(ACCESS_LIST).equals(""))) {
+            AccessList accessList = accessManager.createAccessList(GUEST, "");
+            request.getSession().setAttribute(ACCESS_LIST, accessList);
+//
+        }
+
         PrintWriter out = response.getWriter();
         StringBuffer sb = new StringBuffer();
 
-        if ("getUserInfo".equalsIgnoreCase(request.getParameter("request")) && (request.getSession().getAttribute("accessList") != null && !request.getSession().getAttribute("accessList").equals(""))) {
-            AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
-            String userId = accessList.getUserId();
+        if ("getUserInfo".equalsIgnoreCase(request.getParameter("request"))) {
+            String userId = ((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId();
             StringBuffer ssb = createJSONUser(request);
-            if (accessManager.isUserStoredInRole(userId, "registeredUserRole")) {
-                request.getSession().setAttribute("toRigester", "false");
+            if (accessManager.isUserStoredInList(userId, REGISTERED_USER_LIST)) {
+                request.getSession().setAttribute(USER_NEED_TO_REGISTER, "false");
 
                 sb.append("{registered:'true'," + ssb + "}");
                 //  response.sendRedirect(request.getContextPath() + "/admin/upload.html");
@@ -83,40 +89,34 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
             }
             send(out, sb);
         } else if ("setUserInfo".equalsIgnoreCase(request.getParameter("request"))) {
-            AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
-            String userId = accessList.getUserId();
+            String userId = ((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId();
             User user;
-            if (request.getParameter("displayName") != null && !request.getParameter("displayName").trim().equals("")) {
-                request.getSession().setAttribute("toRigester", "false");
+            if (request.getParameter(USER_DISPLAY_NAME) != null && !request.getParameter(USER_DISPLAY_NAME).trim().equals("")) {
+                request.getSession().setAttribute(USER_NEED_TO_REGISTER, "false");
                 user = new User(userId);
-                UserInfo userInfo = new UserInfo(request.getParameter("displayName"),
-                        request.getParameter("email"),
-                        request.getParameter("realName"),
-                        request.getParameter("webSite"));
+                UserInfo userInfo = new UserInfo(request.getParameter(USER_DISPLAY_NAME),
+                        request.getParameter(USER_EMAIL),
+                        request.getParameter(USER_REAL_NAME),
+                        request.getParameter(USER_WEBSITE));
                 user.setUserInfo(userInfo);
 
-                if (accessManager.isUserStoredInRole(userId, "unRegisteredUserRole")) {
-                    accessManager.removeUserFromRole(userId, "unRegisteredUserRole");
+                if (accessManager.isUserStoredInList(userId, UNREGISTERED_USER_LIST)) {
+                    accessManager.removeUserFromList(userId, UNREGISTERED_USER_LIST);
                 }
-                if (!accessManager.isUserStoredInRole(userId, "registeredUserRole")) {
-                    accessManager.addUserToRole(user, "registeredUserRole");
+                if (!accessManager.isUserStoredInList(userId, REGISTERED_USER_LIST)) {
+                    accessManager.addUserToList(user, REGISTERED_USER_LIST);
                 }
                 sb.append("OK");
-                //sb.append(",unRegistered=false");
             }
+            AccessList accessList = accessManager.createAccessList(userId, request.getParameter(USER_EMAIL));
+            request.getSession().setAttribute(ACCESS_LIST, accessList);
             send(out, sb);
-            accessList = accessManager.createAccessList(userId, request.getParameter("email"));
-            request.getSession().removeAttribute("accessList");
-            request.getSession().setAttribute("accessList", accessList);
         } else if ("getUser".equalsIgnoreCase(request.getParameter("request"))) {
             sb.append("{" + createJSONUser(request) + "}");
             send(out, sb);
         } else if ("getJSONAccessList".equalsIgnoreCase(request.getParameter("request"))) {
-            if (request.getSession().getAttribute("accessList") == null) {
-                AccessList accessList = accessManager.createAccessList("UnRegisteredUser", "");
-                request.getSession().setAttribute("accessList", accessList);
-            }
-            sb.append("{" + jsonSecurityManager.getJSONAccessList(request) + "}");
+
+            sb.append("{" + getJSONAccessList(request) + "}");
             send(out, sb);
         } else {
             response.sendRedirect(request.getContextPath() + "/home/authenticate");
@@ -125,11 +125,54 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
 
     }
 
+    private String createAccessToken(String userId) {
+        Random randomGenerator = new Random();
+        String token = "";
+        for (int i = 0; i < 25; i++) {
+            int n = randomGenerator.nextInt(36);
+            if (n < 10) {
+                token += (n); // digit 0-9
+            } else {
+                token += (char) (n - 10 + 'A'); // alpha A-Z
+            }
+        }
+        //  System.out.println(token);
 
-//    private AccessList getAccessList(String token) {  //todo
-//        Object[] accessListAndToken = AccessManager.accessTokenMap.get(token.substring(0,token.length()-25));
-//        return (AccessList )accessListAndToken[0] ;
-//    }
+        return userId + token;
+    }
+
+    public String getJSONAccessList(HttpServletRequest request) {
+        AccessList accessList = (AccessList) request.getSession().getAttribute(ACCESS_LIST);
+//        if (!userInit) {
+//            accessManager.putAccessListAndToken(accessManager.createAccessList(GUEST, ""), createAccessToken(GUEST));
+//            userInit = true;
+//        }
+        String token;
+        if (accessManager.isUserActive(accessList.getUserId())) {
+            token = accessManager.getSecurityTokenFromUserId(accessList.getUserId());
+            accessList = accessManager.getAccessListFromUserId(accessList.getUserId());
+            request.getSession().setAttribute(ACCESS_LIST, accessList);
+            accessManager.putAccessListAndToken(accessList, token);
+        } else {
+            token = createAccessToken(accessList.getUserId());
+            accessManager.putAccessListAndToken(accessList, token);
+        }
+
+
+        //    JSONRPCSecurityManager.putAccessListAndToken(accessList,token);
+        String jsonPermission = "|";
+        for (String albumName : accessList.getPermissions().keySet()) {
+            List permissions = accessList.getPermissions().get(albumName);
+            for (Object permission : permissions) {
+                jsonPermission += albumName + "." + ((Permission) permission).getPermission() + "|";
+            }
+        }
+        return "userId:'" + accessList.getUserId() +
+                "',token:'" + token +
+                "',permissions:'" + jsonPermission + "'";
+
+    }
+
 
     private void send(PrintWriter out, StringBuffer sb) {
         out.write(sb.toString());
@@ -139,12 +182,12 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
 
     private StringBuffer createJSONUser(HttpServletRequest request) {
         StringBuffer sb = new StringBuffer();
-        if (request.getSession().getAttribute("accessList") != null && request.getSession().getAttribute("accessList") != "") {
+        if (request.getSession().getAttribute(ACCESS_LIST) != null && request.getSession().getAttribute(ACCESS_LIST) != "") {
 
-            AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
+            AccessList accessList = (AccessList) request.getSession().getAttribute(ACCESS_LIST);
 
             String userId = accessList.getUserId();
-            if (userId.equals("SuperAdmin")) {
+            if (userId.equals(SUPER_ADMIN)) {
 
                 sb.append("user:{userId:'" + userId +
                         "',userInfo:{realName:'" +

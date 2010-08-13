@@ -147,6 +147,7 @@ dojo.addOnLoad( function(){
 			if(err && err.text) {
 				console.error("Error uploading files:" + err.text);
 				//alert("Error uploading files:" + err.text);
+                alert("Try after logging in again");
 			}
 		});
 

@@ -28,57 +28,69 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.photark.security.authorization.AccessList;
-import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
 import com.dyuproject.openid.RelyingParty;
+import static org.apache.photark.security.utils.Constants.*;
 
 /**
  * Logout Service Impl. This will logout all kind of Authenticated users
- * 
- * 
  */
 @Service(Servlet.class)
 @Scope("COMPOSITE")
 public class LogoutServiceImpl extends HttpServlet {
 
+    private AccessManager accessManager;
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 5282044123210612195L;
 
     public LogoutServiceImpl() {
 
     }
+    @Reference(name="accessmanager")
+	protected void setAccessService(AccessManager accessManager) {
+		this.accessManager = accessManager;
+	}
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException, ServletException {
-	doPost(request, response);
+            throws IOException, ServletException {
+        doPost(request, response);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException, ServletException {
-    	if(request.getSession().getAttribute("accessList")!=null){
-            String userId=((AccessList)request.getSession().getAttribute("accessList")).getUserId();
-    		System.err.print(userId);
-            JSONRPCSecurityManager.removeAccessListAndToken(userId);
-            
-    	}
+            throws IOException, ServletException {
+        if (request.getSession().getAttribute(ACCESS_LIST) != null) {
+            String userId = ((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId();
+            System.err.print(userId);
+            accessManager.removeAccessListAndToken(userId);
+
+        }
         // Removing the AccessList
-        request.getSession().setAttribute("accessList", "");
-        request.getSession().setAttribute("toRigester", "false");
+        request.getSession().setAttribute(ACCESS_LIST, "");
+        boolean blocked = false;
+        if (request.getSession().getAttribute(USER_NEED_TO_REGISTER) != null&&request.getSession().getAttribute(USER_NEED_TO_REGISTER).equals("blocked")) {
+            blocked = true;
+        }
+        request.getSession().setAttribute(USER_NEED_TO_REGISTER, "false");
         // invalidating the Authenticated OpenID User
-		RelyingParty.getInstance().invalidate(request, response);
-		// invalidating the Authenticated Super Admin User
-		request.getSession().invalidate();
-		
-		System.err.println(" logged out");
-	
-		// Redirect to Gallery
-		response.sendRedirect(request.getContextPath() + "/");
+        RelyingParty.getInstance().invalidate(request, response);
+        // invalidating the Authenticated Super Admin User
+        request.getSession().invalidate();
+
+        System.err.println(" logged out");
+        if (blocked) {
+            response.sendRedirect(request.getContextPath() + "/home/blocked.html");
+        } else {
+            // Redirect to Gallery
+            response.sendRedirect(request.getContextPath() + "/");
+        }
     }
 
 }

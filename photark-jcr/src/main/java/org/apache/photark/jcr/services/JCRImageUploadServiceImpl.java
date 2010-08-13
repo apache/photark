@@ -43,25 +43,24 @@ import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.jcr.util.ArchiveFileExtractor;
 import org.apache.photark.security.authorization.AccessList;
-import org.apache.photark.security.authorization.Permission;
 import org.apache.photark.security.authorization.services.AccessManager;
-import org.apache.photark.security.authorization.services.JSONRPCSecurityManager;
+import org.apache.photark.security.authorization.services.SecurityServiceImpl;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
+import static org.apache.photark.security.utils.Constants.*;
 
 /**
  * Servlet responsible for receiving image uploads
- * Album name is passed with the post, and should be created in case of new album 
+ * Album name is passed with the post, and should be created in case of new album
  */
 @Service(Servlet.class)
 @Scope("COMPOSITE")
 public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*ImageUploadService*/ {
 	private static final Logger logger = Logger.getLogger(JCRImageUploadServiceImpl.class.getName());
-
 	private static final long serialVersionUID = -7842318322982743234L;
 	public static final long MAX_UPLOAD_ZIP_IN_MEGS = 30;
 
@@ -106,7 +105,6 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-
 		PrintWriter out = response.getWriter();
 		out.write("<html><body><h1>Photark Upload Service</h1></body></html>");
 	}
@@ -114,8 +112,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.setContentType("text/html;charset=UTF-8");
-
+        response.setContentType("text/html;charset=UTF-8");
 		boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
 		if (!isMultipartContent) {
 			try {
@@ -124,7 +121,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 					//StringBuffer sb = new StringBuffer();
 					albumName=  (String) request.getParameter("albumName");
 					albumDescription=  (String) request.getParameter("addAlbumDesc");
-				
+
 					if(albumDescription!=null){
                         PrintWriter out = response.getWriter();
 						if(addDescToAlbum(albumName,albumDescription,request)){
@@ -140,7 +137,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 			} catch (Exception e) {
 				logger.info("Error adding albumDesc : " + e.getMessage());
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error adding albumDesc : " + e.getMessage());
-			}			
+			}
 		}
 
 		try {
@@ -171,8 +168,8 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 					albumDescription = fileItem.getString();
 				}
 
-                if (fileItem.getFieldName().equalsIgnoreCase("securityToken")&&request.getSession().getAttribute("accessList")==null) {
-					request.getSession().setAttribute("accessList", JSONRPCSecurityManager.getAccessListFromSecurityToken(fileItem.getString())) ;
+                if (fileItem.getFieldName().equalsIgnoreCase("securityToken")&&request.getSession().getAttribute(ACCESS_LIST)==null) {
+					request.getSession().setAttribute(ACCESS_LIST, accessManager.getAccessListFromSecurityToken(fileItem.getString())) ;
 				}
 
 				boolean isFormField = fileItem.isFormField();
@@ -223,8 +220,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
     @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-
-		String albumName ="";
+        String albumName ="";
 		String imageName ="";
 		//StringBuffer sb = new StringBuffer();
 		albumName=  (String) request.getParameter("albumName");
@@ -248,20 +244,20 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
      */
     private void addPictureToAlbum(String albumName, String albumDescription, Image image, HttpServletRequest request) {
         Album album = new JCRAlbumImpl(repositoryManager, albumName);
-        AccessList accessList = (AccessList) request.getSession().getAttribute("accessList");
-        if (!gallery.hasAlbum(albumName)) {
-            if (accessManager.isPermitted(accessList, albumName, new String[]{"createAlbum"})) {
+        String userId= ((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId();
+		        if (!gallery.hasAlbum(albumName)) {
+            if (accessManager.isPermitted(userId, albumName, new String[]{ALBUM_CREATE_PERMISSION})){
                 gallery.addAlbum(albumName);
-                album.addOwner(accessList.getUserId());
+                album.addOwner(userId);
             }
         }
 
 
-        if (accessManager.isPermitted(accessList, albumName, new String[]{"addImagesToAlbum.own", "addImagesToAlbum.others", "addImages"})) {
+        if (accessManager.isPermitted(userId, albumName, new String[]{ALBUM_ADD_IMAGES_PERMISSION})) {
             album.addPicture(image);
             this.gallery.imageAdded(albumName, image);
         }
-        if (accessManager.isPermitted(accessList, albumName, new String[]{"editAlbumDescription.others", "editAlbumDescription.own", "editAlbumDescription"})) {
+        if (accessManager.isPermitted(userId, albumName, new String[]{ALBUM_EDIT_ALBUM_DESCRIPTION_PERMISSION})) {
             album.setDescription(albumDescription);
         }
 
@@ -274,7 +270,9 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
      * @return boolean
 	 */
     private boolean addDescToAlbum(String albumName, String albumDescription, HttpServletRequest request) {
-        if (accessManager.isPermitted((AccessList) request.getSession().getAttribute("accessList"), albumName, new String[]{"editAlbumDescription.others", "editAlbumDescription.own", "editAlbumDescription"})) {
+     //   AccessList accessList= jsonSecurityManager.getAccessListFromUserId(((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId());
+
+        if (accessManager.isPermitted(((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId(), albumName, new String[]{ALBUM_EDIT_ALBUM_DESCRIPTION_PERMISSION})) {
             gallery.addAlbum(albumName);
             Album album = new JCRAlbumImpl(repositoryManager, albumName);
             album.setDescription(albumDescription);
@@ -287,19 +285,19 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
     }
 
     /**
-	 *  
+	 *
 	 * @param  albumName
 	 * @param  imageName
 	 */
 	private void deleteNode(String albumName, String imageName, HttpServletRequest request) {
-          AccessList accessList= (AccessList) request.getSession().getAttribute("accessList");
+          String userId= ((AccessList) request.getSession().getAttribute(ACCESS_LIST)).getUserId();
 			if(imageName==null){
-                if (accessManager.isPermitted(accessList, albumName, new String[]{"deleteAlbum.own", "deleteAlbum.others"})) {
+                if (accessManager.isPermitted(userId, albumName, null)) {
 
 				gallery.deleteAlbum(albumName);
                 }
 			}else{
-                if (accessManager.isPermitted(accessList, albumName, new String[]{"deleteImagesFromAlbum.own", "deleteImagesFromAlbum.others","deleteImages"})) {
+                if (accessManager.isPermitted(userId, albumName, new String[]{ALBUM_DELETE_IMAGES_PERMISSION})) {
 
 				Album album = new JCRAlbumImpl(repositoryManager, albumName);
 				album.deletePicture(imageName);
@@ -309,7 +307,7 @@ public class JCRImageUploadServiceImpl extends HttpServlet implements Servlet /*
 
 	/**
 	 * Test whether this stream is of archive or not
-	 * 
+	 *
 	 * @param inStream InputStream
 	 * @return boolean
 	 */

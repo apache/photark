@@ -29,11 +29,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.security.authorization.services.SecurityServiceImpl;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
 import com.dyuproject.openid.RelyingParty;
+import static org.apache.photark.security.utils.Constants.*;
 
 /**
  * Form Authentication Service Impl authenticates Super Admin.
@@ -63,7 +65,6 @@ public class FormAuthenticationServiceImpl extends HttpServlet implements Servle
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
-
 	
 	//check whether the Super Admin is authenticated
 	if (request.getUserPrincipal() != null) {
@@ -72,8 +73,8 @@ public class FormAuthenticationServiceImpl extends HttpServlet implements Servle
 	    RelyingParty.getInstance().invalidate(request, response);
 	    
 	    //Creating the accessList
-	    AccessList accessList=accessManager.createAccessList("SuperAdmin","");
-	    request.getSession().setAttribute("accessList", accessList);
+	    AccessList accessList=accessManager.createAccessList(SUPER_ADMIN,"");
+	    request.getSession().setAttribute(ACCESS_LIST, accessList);
 	    System.err.println("Super Admin authenticated");
 
 	    response.sendRedirect(request.getContextPath() + "/admin/upload.html");

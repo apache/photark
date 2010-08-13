@@ -26,12 +26,15 @@ import org.oasisopen.sca.annotation.Remotable;
  */
 
 @Remotable
-public interface GallerySecurity{
+public interface GallerySecurity {
 
     Album[] getAlbumsToUser(String securityToken);
 
+    Album[] getAlbumsToSetPermission(String securityToken);
+
     String getAlbumCoverToUser(String albumName, String securityToken);
-    
+
     String[] getAlbumPicturesToUser(String albumName, String securityToken);
+
 
 }

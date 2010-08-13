@@ -53,11 +53,17 @@
 	vertical-align:top;
  }
 
- #newAlbum {
+ #adminDiv {
  	clear: both;
     width: 905px;
     background-color: #F2EFE9;
  }
+ #adminGallery{
+	/*width: 905px;*/
+	/*background-color:#F2EFE9;*/
+	border-bottom: 2px solid #BFBAB0;
+	padding-top: 40px;
+}
  
  textarea {
 	width: 600px;
@@ -95,12 +101,7 @@
 	list-style:none;
  }
  
- #adminGallery{
-	width: 905px;
-	background-color:#F2EFE9;
-	border-bottom: 2px solid #BFBAB0;
-	padding-top: 40px;
-}
+
 
 .uploadBtn{
     border:1px solid #333333;

@@ -25,42 +25,46 @@ import org.apache.photark.security.authorization.Role;
 import org.apache.photark.security.authorization.User;
 import org.oasisopen.sca.annotation.Remotable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/*
-* the interface for the local classes
-*
-* */
+      /*
+      * the Json RPC interface
+      *
+      * */
 @Remotable
-public interface AccessManager {
+public interface JSONAccessManager {
 
-    AccessList createAccessList(String userId, String email);
+    //role
 
-    AccessList updateAccessList(String userId);
+    User[] getUsersFromList(String listName, String securityToken);
 
-    void addUserToList(User user, String listName);
+    void replaceUsersInList(String[] userIds, String listName, String securityToken);
 
-    void removeUserFromList(String userId, String listName);
+    public Role[] getRoles();
 
-    boolean isUserStoredInList(String userId, String listName);
+    public void addRole(String roleName, String permissions, String securityToken);
 
-    User getUser(String userId);
+    public void deleteRole(String roleName, String securityToken);
 
-    boolean isPermitted(String userId, String albumName, String[] permissionNames);
+    public Permission[] getPermissions();
 
-    AccessList getAccessListFromUserId(String userId);
+    public void addToRole(String albumName, List<String[]> RolesAndUserGroups, String securityToken);
 
-    boolean isUserActive(String userId);
+    public Object[] getAlbumPermissionInfo(String albumName, String securityToken);
 
-    String getSecurityTokenFromUserId(String userId);
 
-    void putAccessListAndToken(AccessList accessList, String token);
+    //user
 
-    void removeAccessListAndToken(String userId);
+    User[] getAllUsers();
 
-    AccessList getAccessListFromSecurityToken(String token);
 
-    String getUserIdFromSecurityToken(String token);
+    //user Groups
+
+    public List getGroups(String securityToken);
+
+    public void addGroup(String groupName, String users, String securityToken);
+
+    public void deleteGroup(String groupName, String securityToken);
+
+
 }

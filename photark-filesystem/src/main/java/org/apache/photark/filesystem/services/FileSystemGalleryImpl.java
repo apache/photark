@@ -90,4 +90,8 @@ public class FileSystemGalleryImpl extends BaseGalleryImpl implements Gallery {
     public void deleteAlbum(String albumName) {
 
 	}
+
+    public Album[] getAlbumsToSetPermission(String securityToken) {
+        return new Album[0]; 
+    }
 }
