@@ -213,6 +213,7 @@
                 <module>photark-filesystem</module>
                 <module>photark-flickr</module>
                 <module>photark-jcr</module>
+                <module>photark-picasa</module>
 				<module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>

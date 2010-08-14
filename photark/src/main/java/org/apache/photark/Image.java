@@ -33,6 +33,7 @@ public class Image implements Serializable {
 
     private static final long serialVersionUID = -2607872190168102433L;
 
+	private String id;
     private String name;
     private String title;
     private Date datePosted;
@@ -57,10 +58,27 @@ public class Image implements Serializable {
      * @param datePosted Date when image is being added
      * @param imageStream Image stream content
      */
-    public Image(String name, String title, Date datePosted) {
+    public Image(String id, String name, String title, Date datePosted) {
+		this.id = id;
         this.name = name;
         this.title = title;
         this.datePosted = datePosted;
+    }
+
+	/**
+     * Get image Id
+     * @return image id
+     */
+    public String getId() {
+        return this.id;
+    }
+	
+    /**
+     * Set image id
+     * @param id image id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
