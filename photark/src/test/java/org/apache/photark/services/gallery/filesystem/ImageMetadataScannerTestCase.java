@@ -22,6 +22,7 @@ package org.apache.photark.services.gallery.filesystem;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.photark.Image;
 import org.junit.Assert;
@@ -40,5 +41,7 @@ public class ImageMetadataScannerTestCase {
             System.out.println(">>" + metadata.getKey() + "\t" + metadata.getValue());
         }
         */
+        
     }
+    
 }

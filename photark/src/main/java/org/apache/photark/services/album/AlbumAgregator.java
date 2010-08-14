@@ -135,4 +135,5 @@ public class AlbumAgregator implements Album {
     public void deletePicture(String picture){
 
     }
+    
 }

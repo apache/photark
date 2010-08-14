@@ -97,9 +97,22 @@
 
       <table style="margin-left:auto; margin-right:auto;width:720px;" border="0" cellspacing="0" cellpadding="0">
         <tr>
+        	<td align="left"> 
+        		<table  style="margin-left:auto; margin-right:auto;width:150px;" border="0"
+			                cellspacing="0" cellpadding="1">
+			         </table>
+        	</td>
             <td align="center"> <!-- Image without original -->
                 <img id="albumImage" src="images/space.gif" class="slideImage" width="720" height="540" ondragstart="return false"
                      onselectstart="return false" oncontextmenu="return false" galleryimg="no" usemap="#imagemap" alt=""/>
+            </td>
+             <td align="left"> 
+                <div id="tags">
+    	 			<input id="addtag-input" style="width:20;" type="text" style="display:inline;" value="" size="20" alt="add tag..."/><input type="button" onclick="addTag();" style="display:inline;" value="Add Tag"/>
+			         <table id='tableTags' style="margin-left:auto; margin-right:auto;width:150;" border="0"
+			                cellspacing="0" cellpadding="1">
+			         </table>
+			    </div>
             </td>
         </tr>
       </table>

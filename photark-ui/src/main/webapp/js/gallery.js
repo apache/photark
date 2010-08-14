@@ -34,6 +34,7 @@ var gallery;
 var searchService;
 var galleryName;
 var galleryAlbums;
+var albumTags;
 var albumCovers = new Array();
 var albumName;
 var albumItems;
@@ -44,6 +45,7 @@ var timer;
 var userId;
 var SECURITY_TOKEN;
 var permissions = new Array();
+var albumImageToBeLoaded = null;
 
 dojo.addOnLoad(function() {
     dojo.require("dojo._base.xhr");
@@ -83,7 +85,6 @@ function initServices(){
 
 function initGallery() {
     try {
-     //   gallery.getAlbums().addCallback(gallery_getAlbumsResponse); getAlbumsToUser
         gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(gallery_getAlbumsResponse);
     } catch(exception) {
         alert(exception);
@@ -157,22 +158,37 @@ function searchResponse(items, exception){
 
 	var table=document.getElementById('tableSearch');
 	deleteTableRows(table);
-    var lastRow = 0;//table.rows.length;
-    for (i = 0; i < items.length; i++) {
-        var row = table.insertRow(lastRow++);
-        var column = row.insertCell(0);
+    
+    for (i = 0; i < items.length / 5; i++) {
+ 	   var row = table.insertRow(i*2);
+	    for (j = 0; j < 5 && i*5 + j < items.length ; j++) {
+	        
+	        var column = row.insertCell(j);
+	        var aux = items[i*5 + j].split('/', 2);
+	        var albumName = aux[0];
+	        var imageName = aux[1];
+	
+	        var img = document.createElement("img");
+	        img.src = "";
+	        img['class'] = "slideImage";
+	        img.width=10;
+	        img.height=10;
+	        img.ondragstart = function () { return false; };
+	        img.onselectstart = function () { return false; };
+	        img.onconstextmenu = function () { return false; };
+	        img.alt = items[i*5 + j];
+	        var a = document.createElement("a");
+	        a.href = "javascript:initializeAlbum('" + albumName + "', '" + imageName + "')";
+	        a.appendChild(img);
+	        column.appendChild(a);
 
-        var img = document.createElement("img");
-        img.src = "";
-        //img.class = "slideImage";
-        img.alt = items[i];
-        var a = document.createElement("a");
-        a.href = window.location.href + "gallery/" + items[i];
-        a.appendChild(img);
-        column.appendChild(a);
-        row = table.insertRow(lastRow++);
-        column = row.insertCell(0)
-        column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+        
+  		 }
+  	 
+  	 	 row = table.insertRow(i*2+1);
+	     column = row.insertCell(0)
+	     column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+   
    }
 
    displaySearchResults();
@@ -183,6 +199,24 @@ function deleteTableRows(table) {
 	while (table.rows.length > 0) {
 		table.deleteRow(0);
 	}
+}
+
+function addTag() {
+	var tag = document.getElementById("addtag-input").value;
+	searchService.addTag(albumName, albumItems[albumPos], tag);
+	
+	var imageID = albumName + '/' + albumItems[albumPos];
+	var imageTags = albumTags[imageID];
+	
+	if (imageTags == null) {
+		imageTags = new Array();
+		albumTags[imageID] = imageTags;
+		
+	}
+	
+	imageTags.push(tag);
+	showTags(imageTags);
+	 
 }
 
 function initializeGallery() {
@@ -198,7 +232,7 @@ function initializeGallery() {
             var img = document.createElement("img");
             img.src = window.location.href + "gallery/"+ albumName +"/" + albumCovers[i];
             var img_html = "<img src=" + img.src + " class=\"slideImage\" width=180px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
-            var html = "<a href=\"javascript:initializeAlbum('" + albumName + "')\">" + img_html + "</a>";
+            var html = "<a href=\"javascript:initializeAlbum('" + albumName + "', null)\">" + img_html + "</a>";
             column.innerHTML = html;
 
             column = row.insertCell(1);
@@ -227,14 +261,104 @@ function displaySearchResults() {
     setVisibility('album',false);
 }
 
-function initializeAlbum(albumName) {
+function initializeAlbum(albumName,imageName) {
     try {
         this.albumName = albumName;
-       // gallery.getAlbumPictures(albumName).addCallback(gallery_getAlbumPicturesResponse);
-          gallery.getAlbumPicturesToUser(albumName,SECURITY_TOKEN).addCallback(gallery_getAlbumPicturesResponse);
+   	   	albumImageToBeLoaded = imageName;
+   	   	albumTags = new Array();
+   	   	gallery.getAlbumPicturesToUser(albumName,SECURITY_TOKEN).addCallback(gallery_getAlbumPicturesResponse);
+    	  
     } catch(exception) {
         alert(e);
     }
+}
+
+function loadTags(albumPos) {
+	var imageTags = albumTags[albumName + '/' + albumItems[albumPos]];
+	
+	if (imageTags == null) {
+		searchService.getTags(albumName, albumItems[albumPos]).addCallback(getTagsResponse);
+		
+	} else {
+		showTags(imageTags);
+	}
+	
+}
+
+function getTagsResponse(items, exception) {
+    if(exception) {
+        alert(exception.msg);
+        return;
+    }
+    
+    albumTags[items.imageID] = items.tags;
+    
+    if (albumName + '/'  + albumItems[albumPos] == items.imageID) {
+    	showTags(items.tags);
+    }
+    
+}
+
+function showTags(tags) {
+	var table=document.getElementById('tableTags');
+	var textField = document.getElementById('addtag-input');
+	textField.value = "";
+	deleteTableRows(table);
+
+	var lastRow = 0;
+	for (i = 0; i < tags.length; i++) {
+    	var row = table.insertRow(lastRow++);
+        var column = row.insertCell(0);
+
+		var divElement = document.createElement("div");
+        var tagElement = document.createElement("a");
+        tagElement.href = "javascript:executeSearch('tag:" + tags[i] + "')"; 
+        tagElement.innerHTML = tags[i];
+        divElement.id = tags[i];
+        divElement.style.display = 'inline';
+        divElement.onmouseover = function (evt) {
+        	this.removeButton.style.display = 'inline';
+            this.removeButton.style.visibility = 'visible';
+        };
+        divElement.onmouseout = function (evt) {
+        	this.removeButton.style.display = 'none';
+            this.removeButton.style.visibility = 'hidden';
+        };
+        
+		divElement.appendChild(tagElement);
+		
+        var removeElement = document.createElement("a");
+        removeElement['class'] = "removeTag";
+        removeElement.href = "javascript:removeTag('" + tags[i] + "')";
+        removeElement.id = "removeTag_" + tags[i];
+        removeElement.innerHTML = 'remove';
+        removeElement.style.display = 'none';
+        removeElement.style.visibility = 'hidden';
+        divElement.removeButton = removeElement;
+        divElement.appendChild(removeElement);
+        
+        column.appendChild(divElement);
+        
+     }
+     
+     setVisibility('tableTags',true);
+    
+}
+
+function removeTag(tag) {
+	searchService.removeTag(albumName, albumItems[albumPos], tag);
+	var table=document.getElementById('tableTags');
+	
+	for (i = 0 ; i < table.rows.length ; i++) {
+	
+		if (table.rows[i].cells[0].firstChild.id == tag) {
+			table.deleteRow(i);
+			break;
+		}
+		
+	}
+	
+	
 }
 
 function gallery_getAlbumPicturesResponse(items, exception) {
@@ -246,6 +370,21 @@ function gallery_getAlbumPicturesResponse(items, exception) {
     }
     albumItems = items;
     albumPos = 0;
+    
+    if (albumImageToBeLoaded != null) {
+    
+    	for (i = 0 ; i < items.length ; i++) {
+    	
+    		if (items[i] == albumImageToBeLoaded) {
+    			albumPos = i;
+    			albumImageToBeLoaded = null;
+    			
+    		}	
+    	
+    	}
+    	
+    }
+    
     showAlbum();
 }
 
@@ -270,6 +409,7 @@ function showImage(albumPos) {
         document.getElementById("albumImage").height=this.height;
     }
     img.src = window.location.href + "gallery/"+ this.albumName +"/" + albumItems[albumPos];
+    loadTags(albumPos);
     return false;
 }
 
@@ -288,7 +428,7 @@ function goPrevious() {
 }
 
 function setVisibility(divId, visible) {
-    //valid values { visible, hidden }
+ 	 //valid values { visible, hidden }
     if (document.getElementById) {
         var element = document.getElementById(divId)
         if(visible) {
@@ -339,8 +479,12 @@ function beforeClick(){
 }
 
 function search(){
-		var query = document.getElementById("search-input").value;
-		searchService.search(query).addCallback(searchResponse);
+	var query = document.getElementById("search-input").value;
+	executeSearch(query);
+}
+
+function executeSearch(query) {
+	searchService.search(query).addCallback(searchResponse);
 }
 
 function onSlideShow(){

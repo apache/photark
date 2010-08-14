@@ -17,36 +17,32 @@
  * under the License.    
  */
 
-package org.apache.photark.services.album;
+package org.apache.photark.search.services.impl;
 
-import org.apache.photark.Image;
-import org.oasisopen.sca.annotation.Remotable;
+import java.io.Serializable;
 
-@Remotable
-public interface Album {
+import org.apache.photark.search.services.ImageTags;
 
-    String getName();
+public class ImageTagsImpl implements ImageTags, Serializable, Cloneable {
+    
+    private static final long serialVersionUID = 541904835779808460L;
 
-    void setName(String name);
+    final private String id;
+    
+    final private String[] tags;
+    
+    public ImageTagsImpl(String id, String[] tags) {
+        this.id = id;
+        this.tags = tags;
+        
+    }
 
-    String getDescription();
+    public String getImageID() {
+        return this.id;
+    }
 
-    void setDescription(String description);
-
-    String getLocation();
-
-    void setLocation(String location);
-
-    String[] getPictures();
-
-    void addPicture(Image picture);
-
-    void deletePicture(String picture);
-
-    void deletePicture(Image picture);
-
-    void addOwner(String owner);
-
-    String[] getOwners();
+    public String[] getTags() {
+        return this.tags;
+    }
 
 }
