@@ -38,11 +38,9 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
@@ -109,12 +107,6 @@ public class SearchServiceImpl implements SearchService {
         this.dir = FSDirectory.getDirectory(new File(this.indexDirectoryPath));
         this.indexWriter = new IndexWriter(dir, this.defaultAnalyzer, MaxFieldLength.UNLIMITED);
         this.indexSearcher = new IndexSearcher(this.dir);
-
-        TermEnum terms = this.indexSearcher.getIndexReader().terms();
-        System.out.println("termmmmmmmmmmmmmmmmmsssssss");
-        while (terms.next()) {
-            System.out.println(terms.term());
-        }
 
     }
 
