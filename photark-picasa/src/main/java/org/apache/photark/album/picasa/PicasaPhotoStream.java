@@ -33,15 +33,17 @@ import org.apache.tuscany.sca.data.collection.Collection;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 
-import com.google.gdata.client.GoogleService;
+import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.Feed;
-import com.google.gdata.data.Link;
+import com.google.gdata.data.photos.AlbumFeed;
+import com.google.gdata.data.photos.PhotoEntry;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
 public class PicasaPhotoStream implements Collection<String, Image> {
     private static final Logger logger = Logger.getLogger(PicasaPhotoStream.class.getName());
 
+    private static final String APPLICATION_NAME = "photark";
     private static final String PICASA_SERVICE_TYPE = "lh2";
 
     private final String feedURI;
@@ -50,7 +52,7 @@ public class PicasaPhotoStream implements Collection<String, Image> {
 
     private boolean initialized = false;
 
-    private com.google.gdata.client.GoogleService googleService;
+    private PicasawebService picasaService;
 
     public PicasaPhotoStream(String feedURI) {
         this.feedURI = feedURI;
@@ -67,11 +69,11 @@ public class PicasaPhotoStream implements Collection<String, Image> {
 
     private void initialize() {
         logger.log(Level.FINE, "Initializing Google services to retrieve Picasa photo stream");
-        googleService = new GoogleService(PICASA_SERVICE_TYPE, "");
+        picasaService = new PicasawebService(APPLICATION_NAME);
         if(this.username != null & this.password != null) {
             logger.log(Level.FINE, "Authenticating user");
             try {
-                googleService.setUserCredentials(username, password);
+                picasaService.setUserCredentials(username, password);
             } catch (AuthenticationException e) {
                 throw new IllegalArgumentException(
                 "Illegal username/password combination.");
@@ -99,11 +101,9 @@ public class PicasaPhotoStream implements Collection<String, Image> {
 
 
         try {
-            Feed feed = googleService.getFeed(new URL(feedURI), Feed.class);
-            Iterator<com.google.gdata.data.Entry> entries = feed.getEntries().iterator();
-            while(entries.hasNext()) {
-                com.google.gdata.data.Entry entry = (com.google.gdata.data.Entry) entries.next();
-                Image image = fromEntry(entry);
+            AlbumFeed feed = picasaService.getFeed(new URL(feedURI), AlbumFeed.class);
+            for(PhotoEntry photo : feed.getPhotoEntries()) {
+                Image image = fromEntry(photo);
                 images.add(new Entry(image.getId(), image));
             }
         } catch (MalformedURLException e) {
@@ -142,22 +142,24 @@ public class PicasaPhotoStream implements Collection<String, Image> {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    private static Image fromEntry(com.google.gdata.data.Entry entry) {
+    private static Image fromEntry(PhotoEntry photo) {
 
         if(logger.isLoggable(Level.FINEST)) {
             logger.log(Level.FINEST, ">>>>>>>>>>>>>");
-            logger.log(Level.FINEST, ">> ID : " + entry.getId());
-            logger.log(Level.FINEST, ">> Title : " + entry.getTitle().getPlainText());
-            logger.log(Level.FINEST, ">> Link : " + entry.getLinks().get(0).getHref());
+            logger.log(Level.FINEST, ">> ID : " + photo.getId());
+            logger.log(Level.FINEST, ">> Title : " + photo.getTitle().getPlainText());
+            logger.log(Level.FINEST, ">> Link : " + photo.getLinks().get(0).getHref());
         }
 
         Image image = new Image();
 
-        String id = entry.getId();
-        image.setId(id.substring(id.lastIndexOf("/") + 1));
-        image.setName(entry.getTitle().getPlainText());
-        image.setTitle(entry.getTitle().getPlainText());
-        image.setLocation(entry.getLinks().get(0).getHref());
+        // further documentation available at
+        // http://code.google.com/apis/picasaweb/docs/2.0/developers_guide_java.html
+
+        image.setId(photo.getGphotoId());
+        image.setName(photo.getTitle().getPlainText());
+        image.setTitle(photo.getTitle().getPlainText());
+        image.setLocation(photo.getMediaContents().get(0).getUrl());
 
         return image;
     }

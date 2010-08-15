@@ -49,29 +49,46 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>com.google.collections</groupId>
+		    <artifactId>google-collections</artifactId>
+		    <version>1.0-rc1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-client</artifactId>
-			<version>1.0</version>
+			<version>1.41.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-client-meta</artifactId>
-			<version>1.0</version>
+			<version>1.41.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-core</artifactId>
-			<version>1.0</version>
+			<version>1.41.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-media</artifactId>
-			<version>1.0</version>
+			<version>1.41.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-photos</artifactId>
+			<version>1.41.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-photos-meta</artifactId>
+			<version>1.41.4</version>
+		</dependency>
 
 		<!-- marking dependency as provided to exclude from war file -->
 		<dependency>
