@@ -7,15 +7,15 @@
     * to you under the Apache License, Version 2.0 (the
     * "License"); you may not use this file except in compliance
     * with the License.  You may obtain a copy of the License at
-    * 
+    *
     *   http://www.apache.org/licenses/LICENSE-2.0
-    * 
+    *
     * Unless required by applicable law or agreed to in writing,
     * software distributed under the License is distributed on an
     * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     * KIND, either express or implied.  See the License for the
     * specific language governing permissions and limitations
-    * under the License.    
+    * under the License.
 -->
 <project>
 	<modelVersion>4.0.0</modelVersion>
@@ -35,25 +35,17 @@
 			<artifactId>photark</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-search</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-jcr</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
-			<!-- 
-			<exclusions>
-				<exclusion>
-					<artifactId>jackrabbit-text-extractors</artifactId>
-					<groupId>org.apache.jackrabbit</groupId>
-				</exclusion>
-			</exclusions>
-			-->
 		</dependency>
 
 		<dependency>
@@ -69,7 +61,7 @@
 			<version>1.0-incubating-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-ui-security</artifactId>
@@ -77,11 +69,10 @@
 			<type>war</type>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>
-			<version>${tuscany.version}</version> 
+			<version>${tuscany.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -90,7 +81,7 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>				
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -104,7 +95,7 @@
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-implementation-java-runtime</artifactId>
 			<version>${tuscany.version}</version>
-			<scope>runtime</scope> 
+			<scope>runtime</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>asm</groupId>
@@ -116,7 +107,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-binding-jsonrpc-runtime</artifactId>
@@ -138,42 +129,42 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>				
+				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-binding-http-runtime</artifactId>
 			<version>${tuscany.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-		<dependency>
+
+		<!-- dependency>
 		   <groupId>org.dojotoolkit</groupId>
 		   <artifactId>dojo</artifactId>
-		   <version>1.4.2</version>
+		   <version>1.5</version>
 		   <type>zip</type>
-		</dependency>   
+		</dependency-->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.5.11</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.11</version>
-		</dependency>		
-		 
+		</dependency>
+
 		<dependency>
 		    <groupId>log4j</groupId>
 		    <artifactId>log4j</artifactId>
 		    <version>1.2.16</version>
 		</dependency>
-		 
+
 		<!-- marking dependency as provided to exclude from war file -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -181,8 +172,8 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
-	<!--<dependency>
+
+		<!--<dependency>
         	<groupId>org.mortbay.jetty</groupId>
         	<artifactId>jsp-2.1</artifactId>
         	<version>7.0.0pre2</version>
@@ -206,6 +197,21 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>install-dojo</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="./build-dojo.xml" target="install-dojo-nomaven">
+                                    <property name="localRepository" value="${settings.localRepository}"/>
+                                    <property name="artifactId" value="photark"/>
+                                </ant>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>copy-dojo-files</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -213,7 +219,7 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <ant antfile="./build-dojo.xml" target="unpack-dojo-files">
+                                <ant antfile="./build-dojo.xml" target="unpack-dojo-files-nomaven">
                                     <property name="localRepository" value="${settings.localRepository}"/>
                                     <property name="artifactId" value="photark"/>
                                 </ant>
@@ -237,7 +243,7 @@
                     </execution>
                 </executions>
             </plugin>
-		
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
