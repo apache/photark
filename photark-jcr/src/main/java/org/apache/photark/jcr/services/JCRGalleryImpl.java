@@ -102,7 +102,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
         }
 
         initialized = true;
-        Album[] albums = getAlbumsToUser(SUPER_ADMIN);
+        Album[] albums = getAlbumsToUser(accessManager.getSecurityTokenFromUserId(SUPER_ADMIN));
 
         for (Album album : albums) {
             String[] pictures = album.getPictures();

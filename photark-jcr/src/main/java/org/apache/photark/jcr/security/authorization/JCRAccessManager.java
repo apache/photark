@@ -528,6 +528,19 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
         return Arrays.asList(album.getOwners()).contains(userId);
     }
 
+    private boolean isNoOwnerForAlbum(String albumName) {
+        if (albumName == null || albumName.trim().equals("")) {
+            return false;
+        }
+        Album album = new JCRAlbumImpl(repositoryManager, albumName);
+        String[] owners = album.getOwners();
+        if (owners.length == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // get all permissions
 
     public synchronized Permission[] getPermissions() {
@@ -722,6 +735,10 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
             allowedPermissions = Arrays.asList(permissionNames);
         } else {
             allowedPermissions = new ArrayList<String>();
+        }
+        // all albums with no owners are viewable by everyone
+        if (allowedPermissions.contains(ALBUM_VIEW_IMAGES_PERMISSION) && isNoOwnerForAlbum(resourceName)) {
+           return true;
         }
         List<Permission> permissions = new ArrayList<Permission>();
         // if the user in Registered User List or in the Supper Admin List

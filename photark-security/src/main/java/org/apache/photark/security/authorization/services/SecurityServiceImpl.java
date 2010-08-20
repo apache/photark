@@ -20,6 +20,7 @@
 package org.apache.photark.security.authorization.services;
 
 import org.apache.photark.security.authorization.*;
+import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
@@ -48,6 +49,7 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
      */
     private static final long serialVersionUID = -6452934544772432330L;
     private AccessManager accessManager;
+    private static boolean initialised = false;
 //     private boolean userInit =false;
     //JSONRPCSecurityManager jsonSecurityManager = new JSONRPCSecurityManager();
 
@@ -55,6 +57,16 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
     protected void setAccessService(AccessManager accessManager) {
         this.accessManager = accessManager;
     }
+
+    @Init
+    public synchronized void init() {
+        if (!accessManager.isUserActive(SUPER_ADMIN)) {
+            String token = createAccessToken(SUPER_ADMIN);
+            accessManager.putAccessListAndToken(accessManager.createAccessList(SUPER_ADMIN, ""), token);
+        }
+        initialised=true;
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -156,6 +168,9 @@ public class SecurityServiceImpl extends HttpServlet implements Servlet /*Securi
         } else {
             token = createAccessToken(accessList.getUserId());
             accessManager.putAccessListAndToken(accessList, token);
+        }
+        if(!initialised){
+            init();
         }
 
 
