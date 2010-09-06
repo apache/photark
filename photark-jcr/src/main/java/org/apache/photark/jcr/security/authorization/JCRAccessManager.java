@@ -191,7 +191,7 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
     // ****************************************************************************************
     // for lists
 
-    // add user to one of the four lists
+    // add user to one of the four user lists
 
     public synchronized void addUserToList(User user, String listName) {
         if (!initialised) {
@@ -353,7 +353,7 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
         }
     }
 
-    // ckeck whether the user is stored in the list
+    // check whether the user is stored in the list
 
     public synchronized boolean isUserStoredInList(String userId, String listName) {
         if (userId == null || listName == null || userId.trim().equals("") || listName.trim().equals("")) {
@@ -476,7 +476,7 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
     // **********************************************************
     // for permissions
 
-    // assign Album. Roles , Permissions, User Groups
+    // assign Album User Groups to the Role
 
     public synchronized void addToRole(String albumName, List<String[]> rolesAndUserGroups, String securityToken) {
 
@@ -989,7 +989,7 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
 
     }
 
-    // get user groups owned by the user. If super admin, or all groups
+    // get user groups owned by the user. For super admin all groups
 
     public synchronized List getGroups(String securityToken) {
         AccessList accessList = getAccessListFromSecurityToken(securityToken);
@@ -1206,7 +1206,7 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
 
     }
 
-    // check is the user in the access token map
+    // check whether the user in the access token map
 
     public boolean isUserActive(String userId) {
         return accessTokenMap.containsKey(userId);
