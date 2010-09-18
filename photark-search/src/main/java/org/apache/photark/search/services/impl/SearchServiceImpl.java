@@ -74,14 +74,14 @@ public class SearchServiceImpl implements SearchService {
 
     static {
         Collections.addAll(INDEXED_METADATA,
-                           "XResolution",
-                           "YResolution",
-                           "Date Time",
-                           "Date Time Original",
-                           "GPS Latitude Ref",
-                           "GPS Latitude",
-                           "GPS Longitude Ref",
-                           "GPS Longitude");
+                "XResolution",
+                "YResolution",
+                "Date Time",
+                "Date Time Original",
+                "GPS Latitude Ref",
+                "GPS Latitude",
+                "GPS Longitude Ref",
+                "GPS Longitude");
     }
 
     final private Analyzer defaultAnalyzer = new TagAnalyzer();
@@ -89,8 +89,8 @@ public class SearchServiceImpl implements SearchService {
     private IndexWriter indexWriter;
 
     private MultiFieldQueryParser queryParser =
-        new MultiFieldQueryParser(new String[] {TAG_FIELD, IMAGE_NAME_FIELD, IMAGE_ALBUM_FIELD}, this.defaultAnalyzer);
-    
+            new MultiFieldQueryParser(new String[]{TAG_FIELD, IMAGE_NAME_FIELD, IMAGE_ALBUM_FIELD}, this.defaultAnalyzer);
+
     {
         this.queryParser.setAllowLeadingWildcard(true);
     }
@@ -105,10 +105,13 @@ public class SearchServiceImpl implements SearchService {
     @Init
     public void init() throws IOException {
         this.dir = FSDirectory.getDirectory(new File(this.indexDirectoryPath));
+        if (this.dir.fileExists("write.lock")) {
+            this.dir.deleteFile("write.lock");
+        }
         this.indexWriter = new IndexWriter(dir, this.defaultAnalyzer, MaxFieldLength.UNLIMITED);
         this.indexSearcher = new IndexSearcher(this.dir);
-
     }
+
 
     public void clear() {
 
@@ -153,15 +156,18 @@ public class SearchServiceImpl implements SearchService {
 
     @AllowsPassByReference
     public void imageAdded(String albumName, Image image) {
-
         try {
             Term idTerm = getImageIDTerm(albumName, image);
-            Document doc = createDocument(idTerm, albumName, image);
-            this.indexWriter.deleteDocuments(idTerm);
-            this.indexWriter.addDocument(doc);
+            TopDocs docs = this.indexSearcher.search(new TermQuery(idTerm), 1);
 
-            this.indexWriter.commit();
-            reopenIndexSearcher();
+            if (docs.scoreDocs.length < 1) {
+                Document doc = createDocument(idTerm, albumName, image);
+                // this.indexWriter.updateDocument(idTerm,doc);
+                this.indexWriter.deleteDocuments(idTerm);
+                this.indexWriter.addDocument(doc);
+                this.indexWriter.commit();
+                reopenIndexSearcher();
+            }
 
         } catch (Exception e) {
             // create a new exception type for this
@@ -188,8 +194,8 @@ public class SearchServiceImpl implements SearchService {
         doc.add(new Field(IMAGE_ALBUM_FIELD, albumName, Store.YES, Index.ANALYZED));
         doc.add(new Field(IMAGE_NAME_FIELD, image.getName(), Store.YES, Index.ANALYZED));
         doc.add(new Field(IMAGE_DATE_POSTED_FIELD, DateTools.timeToString(image.getDatePosted().getTime(),
-                                                                          Resolution.MINUTE), Store.YES,
-                          Index.NOT_ANALYZED));
+                Resolution.MINUTE), Store.YES,
+                Index.NOT_ANALYZED));
 
         // for (ImageMetadata metadata : image.getImageMetadata()) {
         //
@@ -229,10 +235,10 @@ public class SearchServiceImpl implements SearchService {
         }
 
         try {
-            this.indexWriter.close();
+            this.indexWriter.commit();
+            this.indexWriter.close(true);
         } catch (Exception e) {
         }
-
     }
 
     private static Term getImageIDTerm(String albumName, Image image) {
@@ -257,13 +263,13 @@ public class SearchServiceImpl implements SearchService {
             Field[] tagFields = doc.getFields(TAG_FIELD);
 
             for (Field tagField : tagFields) {
-                
+
                 if (tagField.stringValue().equals(tag)) {
                     return;
                 }
-                
+
             }
-            
+
             doc.add(new Field(TAG_FIELD, tag, Store.YES, Index.ANALYZED));
 
             this.indexWriter.deleteDocuments(pictureID);
@@ -293,7 +299,7 @@ public class SearchServiceImpl implements SearchService {
             Document newDoc = new Document();
 
             for (Object obj : fieldList) {
-                Fieldable field = (Fieldable)obj;
+                Fieldable field = (Fieldable) obj;
 
                 if (!field.name().equals(TAG_FIELD) || !field.stringValue().equals(tag)) {
                     newDoc.add(field);
