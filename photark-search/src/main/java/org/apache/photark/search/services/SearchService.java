@@ -28,11 +28,13 @@ public interface SearchService extends GalleryListener {
     void clear();
 
     String[] search(String queryString);
-    
+
+    String[] searchToUser(String queryString,String securityToken);
+
     ImageTags getTags(String album, String imageName);
-    
+
     void addTag(String album, String imageName, String tag);
-    
+
     void removeTag(String album, String imageName, String tag);
 
 }

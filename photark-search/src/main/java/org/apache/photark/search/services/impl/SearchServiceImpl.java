@@ -52,11 +52,11 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.photark.Image;
 import org.apache.photark.search.services.ImageTags;
 import org.apache.photark.search.services.SearchService;
-import org.oasisopen.sca.annotation.AllowsPassByReference;
-import org.oasisopen.sca.annotation.Destroy;
-import org.oasisopen.sca.annotation.Init;
-import org.oasisopen.sca.annotation.Property;
-import org.oasisopen.sca.annotation.Scope;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.services.gallery.Gallery;
+import org.oasisopen.sca.annotation.*; 
+
+import static org.apache.photark.security.utils.Constants.*;
 
 // TODO: review actions when index is corrupted
 @Scope("COMPOSITE")
@@ -102,6 +102,13 @@ public class SearchServiceImpl implements SearchService {
 
     private Directory dir;
 
+    private  static AccessManager accessManager;
+
+
+    @Reference(name="accessmanager")
+	protected void setAccessService(AccessManager accessManager) {
+		this.accessManager = accessManager;
+	}
     @Init
     public void init() throws IOException {
         this.dir = FSDirectory.getDirectory(new File(this.indexDirectoryPath));
@@ -114,10 +121,8 @@ public class SearchServiceImpl implements SearchService {
 
 
     public void clear() {
-
         try {
             this.indexWriter.deleteDocuments(new MatchAllDocsQuery());
-
         } catch (IOException e) {
             // create a new exception type for this
             throw new RuntimeException(e);
@@ -126,6 +131,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public String[] search(String queryString) {
+        return searchToUser(queryString, GUEST);
+    }
+
+    public String[] searchToUser(String queryString, String securityToken) {
 
         try {
             Query query = this.queryParser.parse(queryString);
@@ -136,7 +145,9 @@ public class SearchServiceImpl implements SearchService {
 
                 for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                     Document doc = this.indexSearcher.doc(scoreDoc.doc);
-                    pictureNames.add(doc.get(IMAGE_ALBUM_FIELD) + '/' + doc.get(IMAGE_NAME_FIELD));
+                    if (accessManager.isPermitted(accessManager.getUserIdFromSecurityToken(securityToken), doc.get(IMAGE_ALBUM_FIELD), new String[]{ALBUM_VIEW_IMAGES_PERMISSION})) {
+                        pictureNames.add(doc.get(IMAGE_ALBUM_FIELD) + '/' + doc.get(IMAGE_NAME_FIELD));
+                    }
                 }
 
                 return pictureNames.toArray(new String[0]);

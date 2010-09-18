@@ -36,7 +36,11 @@
 			<artifactId>photark</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 		</dependency>
-
+             <dependency>
+            <groupId>org.apache.photark</groupId>
+            <artifactId>photark-security</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>

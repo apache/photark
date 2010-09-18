@@ -167,12 +167,11 @@ function searchResponse(items, exception){
 	        var aux = items[i*5 + j].split('/', 2);
 	        var albumName = aux[0];
 	        var imageName = aux[1];
-	
 	        var img = document.createElement("img");
-	        img.src = "";
+	        img.src = (window.location.href).replace("admin/upload.html", "") + "gallery/" +items[i*5 + j ];
 	        img['class'] = "slideImage";
-	        img.width=10;
-	        img.height=10;
+	        img.width=100;
+	        //img.height=10;
 	        img.ondragstart = function () { return false; };
 	        img.onselectstart = function () { return false; };
 	        img.onconstextmenu = function () { return false; };
@@ -182,11 +181,11 @@ function searchResponse(items, exception){
 	        a.appendChild(img);
 	        column.appendChild(a);
 
-        
+
   		 }
   	 
   	 	 row = table.insertRow(i*2+1);
-	     column = row.insertCell(0)
+	     column = row.insertCell(0) ;
 	     column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
    
    }
@@ -288,6 +287,7 @@ function loadTags(albumPos) {
 function getTagsResponse(items, exception) {
     if(exception) {
         alert(exception.msg);
+        // logout();
         return;
     }
     
@@ -484,7 +484,8 @@ function search(){
 }
 
 function executeSearch(query) {
-	searchService.search(query).addCallback(searchResponse);
+	//searchService.search(query).addCallback(searchResponse);
+    searchService.searchToUser(query,SECURITY_TOKEN).addCallback(searchResponse);
 }
 
 function onSlideShow(){

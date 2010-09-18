@@ -134,6 +134,9 @@
    			<binding.sca name="local"/>
    			<tuscany:binding.jsonrpc uri="/SearchService"/>
    		</service>
+   		<reference name="accessmanager" target="AccessManager">
+			<binding.sca name="local"/>
+		</reference>	
 		
 	</component>    
 	
