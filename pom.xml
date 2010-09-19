@@ -149,18 +149,35 @@
             </snapshots>
         </pluginRepository>
 
+        <!-- Codehaus repository -->
+        <!--
+        <pluginRepository>
+            <id>codehaus-snapshot</id>
+            <name>Codehaus Snapshot Repository</name>
+            <url>http://repository.codehaus.org</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        -->
+
         <!-- Codehaus SNAPSHOT repository -->
+        <!--
         <pluginRepository>
             <id>codehaus-snapshot</id>
             <name>Codehaus Snapshot Repository</name>
             <url>http://snapshots.repository.codehaus.org</url>
             <releases>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
+        -->
     </pluginRepositories>
 
     <!-- ====================================================================== -->
