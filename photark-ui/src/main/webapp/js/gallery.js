@@ -167,19 +167,19 @@ function searchResponse(items, exception){
 	        var aux = items[i*5 + j].split('/', 2);
 	        var albumName = aux[0];
 	        var imageName = aux[1];
-	        var img = document.createElement("img");
-	        img.src = (window.location.href).replace("admin/upload.html", "") + "gallery/" +items[i*5 + j ];
-	        img['class'] = "slideImage";
-	        img.width=100;
-	        //img.height=10;
-	        img.ondragstart = function () { return false; };
-	        img.onselectstart = function () { return false; };
-	        img.onconstextmenu = function () { return false; };
-	        img.alt = items[i*5 + j];
-	        var a = document.createElement("a");
-	        a.href = "javascript:initializeAlbum('" + albumName + "', '" + imageName + "')";
-	        a.appendChild(img);
-	        column.appendChild(a);
+//	        var img = document.createElement("img");
+//	        img.src = (window.location.href).replace("admin/upload.html", "") + "gallery/" +items[i*5 + j ];
+//	        img['class'] = "slideImage";
+//	        img.width=100;
+//	        //img.height=10;
+//	        img.ondragstart = function () { return false; };
+//	        img.onselectstart = function () { return false; };
+//	        img.onconstextmenu = function () { return false; };
+//	        img.alt = items[i*5 + j];
+//	        var a = document.createElement("a");
+//	        a.href = "javascript:initializeAlbum('" + albumName + "', '" + imageName + "')";
+//	        a.appendChild(img);
+	        column.innerHTML= "<a href=\"javascript:initializeAlbum('" + albumName + "', '" + imageName + "')\">"+albumName+"/"+imageName+"</a>";
 
 
   		 }
