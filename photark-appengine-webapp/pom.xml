@@ -7,15 +7,15 @@
     * to you under the Apache License, Version 2.0 (the
     * "License"); you may not use this file except in compliance
     * with the License.  You may obtain a copy of the License at
-    * 
+    *
     *   http://www.apache.org/licenses/LICENSE-2.0
-    * 
+    *
     * Unless required by applicable law or agreed to in writing,
     * software distributed under the License is distributed on an
     * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     * KIND, either express or implied.  See the License for the
     * specific language governing permissions and limitations
-    * under the License.    
+    * under the License.
 -->
 <project>
 	<modelVersion>4.0.0</modelVersion>
@@ -38,6 +38,12 @@
 
 		<dependency>
 			<groupId>org.apache.photark</groupId>
+			<artifactId>photark-filesystem</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.photark</groupId>
 			<artifactId>photark-ui</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 			<type>war</type>
@@ -55,7 +61,7 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>				
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -79,7 +85,7 @@
 					<groupId>cglib</groupId>
 					<artifactId>cglib</artifactId>
 				</exclusion>
-			</exclusions>			
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -112,7 +118,7 @@
 		   <artifactId>dojo</artifactId>
 		   <version>1.4.2</version>
 		   <type>zip</type>
-		</dependency>   		
+		</dependency>
 
 		<!-- marking dependency as provided to exclude from war file -->
 		<dependency>
@@ -132,7 +138,7 @@
 
 	<build>
 		<finalName>photark</finalName>
-        <outputDirectory>war/WEB-INF/classes</outputDirectory>		
+        <outputDirectory>war/WEB-INF/classes</outputDirectory>
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -159,7 +165,7 @@
                     </classpathContainers>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -195,7 +201,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -215,7 +221,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
