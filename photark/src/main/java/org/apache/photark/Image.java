@@ -34,11 +34,14 @@ import org.apache.photark.util.ImageMetadataScanner;
 public class Image implements Serializable {
     
     private static final long serialVersionUID = 2681872730283844321L;
-    
+	private String id;
+    private String name;
+    private String title;
     private String imageName;
     private Date datePosted;
     private transient InputStream imageStream;
-
+    private String url;
+    private String urlThumb;
     private List<ImageMetadata> imageAttributes;
     
     public Image() {
@@ -72,6 +75,33 @@ public class Image implements Serializable {
         this.imageStream = imageStream;
     }
 
+
+    /**
+     * Set image file name
+     * @param name image file name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+    /**
+     * Get image Id
+     * @return image id
+     */
+    public String getId() {
+        return this.id;
+    }
+	
+    /**
+     * Set image id
+     * @param id image id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
     /**
      * Get image file name
      * @return image file name
@@ -87,6 +117,39 @@ public class Image implements Serializable {
     public Date getDatePosted() {
         return datePosted;
     }
+    
+    /**
+     * Get image title
+     * @return image title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Set image title
+     * @param title image title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Get Image URL
+     * @return the image URL
+     */
+    public String getLocation() {
+        return url;
+    }
+
+    /**
+     * Set Image URL
+     * @param url Image URL
+     */
+    public void setLocation(String location) {
+        this.url = location;
+    }
+
 
     /**
      * Return image content as stream

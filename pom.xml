@@ -210,8 +210,10 @@
             <modules>
                 <module>photark</module>
                 <module>photark-security</module>
-                <module>photark-filesystem</module>                
+                <module>photark-filesystem</module>   
+                <module>photark-flickr</module>                 
                 <module>photark-jcr</module>
+                <module>photark-picasa</module>
                 <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
@@ -230,8 +232,10 @@
                 <module>distribution</module>
                 <module>photark</module>
                 <module>photark-security</module>
-                <module>photark-filesystem</module>                
+                <module>photark-filesystem</module>   
+                <module>photark-flickr</module>                 
                 <module>photark-jcr</module>
+                <module>photark-picasa</module>
                 <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
@@ -250,8 +254,10 @@
                 <module>distribution</module>
                 <module>photark</module>
                 <module>photark-security</module>
-                <module>photark-filesystem</module>                
+                <module>photark-filesystem</module>  
+                <module>photark-flickr</module>                  
                 <module>photark-jcr</module>
+                <module>photark-picasa</module>
                 <module>photark-search</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
