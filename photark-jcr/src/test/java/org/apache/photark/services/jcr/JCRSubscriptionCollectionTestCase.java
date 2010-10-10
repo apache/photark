@@ -21,7 +21,7 @@ package org.apache.photark.services.jcr;
 
 import junit.framework.Assert;
 
-import org.apache.photark.Subscription;
+import org.apache.photark.RemoteAlbum;
 import org.apache.photark.services.SubscriptionCollection;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.apache.tuscany.sca.node.Contribution;
@@ -56,10 +56,10 @@ public class JCRSubscriptionCollectionTestCase {
     
     @Test
     public void testAddSubscription() throws Exception {
-        Subscription subscription = new Subscription();
+        RemoteAlbum subscription = new RemoteAlbum();
         subscription.setTitle("Test 01");
         subscription.setType("flickr");
-        subscription.setUrl("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
+        subscription.setRemoteLocation("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
         
         subscriptions.post(subscription.getTitle(), subscription);
         
@@ -68,10 +68,10 @@ public class JCRSubscriptionCollectionTestCase {
     
     @Test
     public void testUpdateSubscription() throws Exception {
-        Subscription subscription = new Subscription();
+        RemoteAlbum subscription = new RemoteAlbum();
         subscription.setTitle("Test 02");
         subscription.setType("flickr");
-        subscription.setUrl("http://localhost/xxx");
+        subscription.setRemoteLocation("http://localhost/xxx");
         
         try {
             subscriptions.get(subscription.getTitle());
@@ -81,11 +81,11 @@ public class JCRSubscriptionCollectionTestCase {
 
         subscriptions.post(subscription.getTitle(), subscription);
         
-        subscription.setUrl("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
+        subscription.setRemoteLocation("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
         
         subscriptions.post(subscription.getTitle(), subscription);
         
-        Subscription subscritionRead = subscriptions.get(subscription.getTitle());
+        RemoteAlbum subscritionRead = subscriptions.get(subscription.getTitle());
         
         Assert.assertEquals(subscription.getTitle(), subscritionRead.getTitle());
     }
