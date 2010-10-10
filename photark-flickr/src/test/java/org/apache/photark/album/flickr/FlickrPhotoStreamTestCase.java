@@ -17,20 +17,20 @@
  * under the License.
  */
 
-package org.apache.photark.album.picasa;
+package org.apache.photark.album.flickr;
 
 import org.apache.photark.Image;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class PicasaSubscriptionTestCase {
-    private static final String SUBSCRIPTION_URL = "http://picasaweb.google.com/data/feed/api/featured";
-    private static PicasaPhotoStream photoStream;
+public class FlickrPhotoStreamTestCase {
+    private static final String SUBSCRIPTION_URL = "http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom";
+    private static FlickrPhotoStream photoStream;
 
     @BeforeClass
     public static void BeforeClass() {
-        photoStream = new PicasaPhotoStream(SUBSCRIPTION_URL);
+        photoStream = new FlickrPhotoStream(SUBSCRIPTION_URL);
     }
 
     @Test
