@@ -6,15 +6,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.photark.services.filesystem;
@@ -41,52 +41,60 @@ import org.oasisopen.sca.annotation.Scope;
 
 /**
  * File system based gallery
- * 
+ *
  * @version $Rev$ $Date$
  */
 @Scope("COMPOSITE")
 public class FileSystemGallery implements GalleryService {
     private static final Logger logger = Logger.getLogger(FileSystemGallery.class.getName());
-                                                          
+
+    private String galleryLocation;
     private String galleryRoot;
-    private URL galleryURL;
-    private File galleryDirectory;
-    
+    private File   galleryRootDirectory;
+
     private Map<String, Album> albums = new HashMap<String, Album>();
 
 
     public FileSystemGallery(@Property(name="galleryRoot") String galleryRoot) {
         this.galleryRoot = galleryRoot;
     }
-    
+
+    public String getLocation() {
+        return this.galleryLocation;
+    }
+
+    @Property(name="galleryURL", required=false)
+    public void setLocation(String location) {
+        this.galleryLocation = location;
+    }
+
     @Init
     public void init() {
         try {
-            
             if(logger.isLoggable(Level.FINE)) {
                 logger.fine("Initializing FileSystem Gallery");
             }
 
-            galleryURL = this.getClass().getClassLoader().getResource(galleryRoot);
-            if(galleryURL == null) {
+            URL galleryRootURL = this.getClass().getClassLoader().getResource(galleryRoot);
+            if(galleryRootURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
-                galleryURL = this.getClass().getClassLoader().getResource("../../" + galleryRoot);
+                galleryRootURL = this.getClass().getClassLoader().getResource("../../" + galleryRoot);
             }
-            if(galleryURL == null) {
+            if(galleryRootURL == null) {
                 // Workaroud for Google apps Engine
                 String galleryDir = System.getProperty("user.dir") + "/"  + galleryRoot;
-                galleryURL = new java.net.URL("file://" + galleryDir);
+                galleryRootURL = new java.net.URL("file://" + galleryDir);
             }
 
             if(logger.isLoggable(Level.FINE)) {
-                logger.fine("FileSystem Gallery root " + galleryURL);
+                logger.fine("FileSystem Gallery root " + galleryRootURL);
             }
 
-            
-            if(galleryURL != null) {
-                galleryDirectory = new java.io.File(galleryURL.toURI());
-                if (galleryDirectory.isDirectory() && galleryDirectory.exists()) {
-                    java.io.File[] albumDirectoryList = galleryDirectory.listFiles();
+
+            if(galleryRootURL != null) {
+                galleryRootDirectory = new java.io.File(galleryRootURL.toURI());
+                if (galleryRootDirectory.isDirectory() && galleryRootDirectory.exists()) {
+                    java.io.File[] albumDirectoryList = galleryRootDirectory.listFiles();
                     for(java.io.File albumDirectory : albumDirectoryList) {
                         if(! albumDirectory.getName().startsWith(".")) {
                             if(albumDirectory.isDirectory() && albumDirectory.exists()) {
@@ -105,7 +113,7 @@ public class FileSystemGallery implements GalleryService {
     public AlbumList getAlbums() {
         AlbumList albumList = new AlbumList();
 
-        Iterator<Entry<String, Album>> albumIterator = albums.entrySet().iterator();  
+        Iterator<Entry<String, Album>> albumIterator = albums.entrySet().iterator();
         while(albumIterator.hasNext()) {
             Album album = (Album) albumIterator.next().getValue();
             albumList.getAlbums().add(AlbumRef.createAlbumRef(album));
@@ -130,9 +138,9 @@ public class FileSystemGallery implements GalleryService {
         if(newAlbum.getName() == null || newAlbum.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
         }
-        
-        if (galleryDirectory != null) {
-           File newAlbumDirectory = new File(galleryDirectory.getPath() + File.separator + newAlbum.getName());
+
+        if (galleryRootDirectory != null) {
+           File newAlbumDirectory = new File(galleryRootDirectory.getPath() + File.separator + newAlbum.getName());
            if ( ! newAlbumDirectory.mkdir()) {
                throw new PhotarkRuntimeException("Error creating new album directory '" + newAlbumDirectory.getPath() + "'" );
            }
@@ -148,7 +156,7 @@ public class FileSystemGallery implements GalleryService {
         if(! albums.containsKey(album.getName())) {
             throw new InvalidParameterException("Album '" + album.getName() + "' not found");
         }
-        
+
         albums.put(album.getName(), album);
     }
 
@@ -161,24 +169,25 @@ public class FileSystemGallery implements GalleryService {
             throw new InvalidParameterException("Album '" + albumName + "' not found");
         }
 
-        if (galleryDirectory != null) {
-            File newAlbumDirectory = new File(galleryDirectory.getPath() + File.separator + albumName);
+        if (galleryRootDirectory != null) {
+            File newAlbumDirectory = new File(galleryRootDirectory.getPath() + File.separator + albumName);
             if ( ! newAlbumDirectory.delete()) {
                 throw new PhotarkRuntimeException("Error removing album directory '" + albumName + "'" );
             }
          }
-        
+
         albums.remove(albumName);
     }
-    
+
     /**
-     * Process a Album folder and return a Album model 
+     * Process a Album folder and return a Album model
      * @return the album model representing the album folder
      */
     private Album createAlbum(File albumDirectory) {
 
         Album album = new Album();
         album.setName(albumDirectory.getName());
+        album.setLocation("http://localhost:8085/gallery/" + album.getName() );
 
         String[] listPictures = albumDirectory.list(new FileSystemImageFilter(".jpg"));
         for(String image : listPictures) {
@@ -190,6 +199,6 @@ public class FileSystemGallery implements GalleryService {
             album.getImages().add(albumImage);
         }
 
-        return album;   
+        return album;
     }
 }
