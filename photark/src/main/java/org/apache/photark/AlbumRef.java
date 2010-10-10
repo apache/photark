@@ -6,26 +6,32 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.photark;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+
+import org.apache.wink.common.model.atom.AtomLink;
 
 /**
  * A Album Rerefence model object
- * Useful to provide summary set of album 
+ * Useful to provide summary set of album
  * information over the wire
- * 
+ *
  * @version $Rev$ $Date$
  */
 public class AlbumRef implements Serializable {
@@ -33,8 +39,7 @@ public class AlbumRef implements Serializable {
     private static final long serialVersionUID = 5346908464708654247L;
 
     private String albumName;
-    private String coverImageRef;
-    private String albumRef;
+    private List<Link> links = new ArrayList<Link>();
 
     /**
      * Default constructor
@@ -63,32 +68,15 @@ public class AlbumRef implements Serializable {
      * Get cover image reference
      * @return the cover image url reference
      */
-    public String getCoverImageRef() {
-        return coverImageRef;
+    @XmlElement(name="link", namespace="http://www.w3.org/2005/Atom")
+    public List<Link> getLinks() {
+        return this.links;
     }
 
-    /**
-     * Set cover image reference
-     * @param coverImageRef the cover image url reference
-     */
-    public void setCoverImageRef(String coverImageRef) {
-        this.coverImageRef = coverImageRef;
-    }
 
-    /**
-     * Get album ref
-     * @return album ref
-     */
-    public String getRef() {
-        return albumRef;
-    }
-
-    /**
-     * Set album ref
-     * @param albumRef album ref
-     */
-    public void setRef(String albumRef) {
-        this.albumRef = albumRef;
+    @Override
+    public String toString() {
+        return "AlbumRef [albumName=" + albumName + ", links=" + links + "]";
     }
 
     /**
@@ -100,11 +88,13 @@ public class AlbumRef implements Serializable {
         AlbumRef albumRef = new AlbumRef();
 
         albumRef.setName(album.getName());
+        albumRef.getLinks().add(Link.to("album", album.getLocation()));
         if(! album.getImages().isEmpty()) {
-            albumRef.setCoverImageRef(album.getImages().get(0).getLocation());
+            albumRef.getLinks().add(Link.to("cover", album.getImages().get(0).getLocation()));
         }
-        albumRef.setRef(album.getLocation());
+
 
         return albumRef;
     }
+
 }

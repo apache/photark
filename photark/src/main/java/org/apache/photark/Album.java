@@ -103,4 +103,11 @@ public class Album implements Serializable {
     public List<Image> getImages() {
         return images;
     }
+
+    @Override
+    public String toString() {
+        return "Album [name=" + name + ", location=" + location + "]";
+    }
+
+
 }
