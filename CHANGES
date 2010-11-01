@@ -1,2 +1,33 @@
-Changes With Apache PhotArk M2 May 2010
+Changes With Apache PhotArk M3 November 2010
 ==================================================
+
+PhotArk - Version M3
+
+Photark - Version M2
+
+
+** Bug
+    * [PHOTARK-10] - Small issues with album navigation UI.
+    * [PHOTARK-15] - Add RAT profile to build and correct any license issues in current trunk code
+    * [PHOTARK-21] - Repeatedly call populateSelect method in upload.html
+    * [PHOTARK-30] - JDK1.5 compatibility not preserved
+    * [PHOTARK-31] - TopNavigator on the PhotArk website is broken and is pointing to a different project website
+
+** Improvement
+    * [PHOTARK-6]  - Simplify PhotArk UI to use a well known JavaScript Framework.
+    * [PHOTARK-7]  - Move to Latest Tuscany Release
+    * [PHOTARK-9]  - JCR support for photark-webpp
+    * [PHOTARK-12] - Image content should be saved and read from in JCR Repository.
+    * [PHOTARK-13] - rest style uris.
+    * [PHOTARK-23] - Progress Bar support during image upload.
+    * [PHOTARK-25] - auho hide newAlbumNameField in the admin panel.
+
+** New Feature
+    * [PHOTARK-1]  - Provide Administration UI to allow user to create new album.
+    * [PHOTARK-5]  - Add support for deploying PhotArk WebApp to Google AppEngine.
+    * [PHOTARK-11] - simple ui that allow you to create a new album and upload images to it.
+    * [PHOTARK-17] - Provide support for reading image EXIF metadata
+    * [PHOTARK-24] - slide show to PhotArk gallery.
+    * [PHOTARK-26] - Revamp Admin UI to support delete,edit and update albums and pictures.
+    
+    

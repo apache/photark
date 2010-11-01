@@ -1,8 +1,8 @@
-Apache Photark M2 Release Notes.
+Apache Photark M3 Release Notes.
 
 1. Overview
  
-Apache Photark M2 is second Milestone release and fixes over 15 JIRA issues reported by users and the community.
+Apache Photark M3 is the third Milestone release and incorporate various new features such as Search, fixes over 15 JIRA issues reported by users and the community.
 
 2. Installation Prerequisites 
 
@@ -10,7 +10,7 @@ Before installing Apache Photark, make sure the following products,
 with the specified versions, are installed on your system:
 
     * Java 5 Development Kit
-    * Maven 2.0.7 or higher
+    * Maven 2.2.1 or higher
 
 
 3. Specific issues, features, and improvements fixed in this version
