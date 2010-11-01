@@ -54,8 +54,17 @@
             <directory>../photark-webapp/target</directory>
             <outputDirectory>photark-${photark.version}/webapp</outputDirectory>
             <includes>
-                <include>**/*.war</include>
+                <include>**/photark.war</include>
             </includes>
         </fileSet>
+        <!-- Add the photark webapp to bin directory -->
+        <fileSet>
+            <directory>../photark-appengine-webapp/target</directory>
+            <outputDirectory>photark-${photark.version}/webapp</outputDirectory>
+            <includes>
+                <include>**/photark-appengine.war</include>
+            </includes>
+        </fileSet>
+
     </fileSets>
 </assembly>
