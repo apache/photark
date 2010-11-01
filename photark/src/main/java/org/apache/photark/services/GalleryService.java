@@ -6,19 +6,20 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.photark.services;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,7 +35,7 @@ import org.oasisopen.sca.annotation.Remotable;
 
 /**
  * Gallery facade service
- * 
+ *
  * @version $Rev$ $Date$
  */
 @Remotable
@@ -46,20 +47,43 @@ public interface GalleryService {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    AlbumList getAlbums();
-    
+    AlbumList getAlbums() throws PhotarkRuntimeException;
+
+    /**
+     * Retrieve a specific album using the albumId as key
+     * @param albumId album key
+     * @return
+     * @throws PhotarkRuntimeException
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    Album getAlbum(@PathParam("id") String albumId);
+    Album getAlbum(@PathParam("id") String albumId) throws PhotarkRuntimeException;
 
+    /**
+     * Create a new album
+     * @param newAlbum the album to be created
+     * @throws PhotarkRuntimeException
+     */
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     void addAlbum(Album newAlbum) throws PhotarkRuntimeException;
-    
+
+    /**
+     * Update an existing album
+     * @param album the album to be updated
+     * @throws PhotarkRuntimeException
+     */
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     void updateAlbum(Album album) throws PhotarkRuntimeException;
-    
+
+    /**
+     * Delete an existing album
+     * @param albumId the album id
+     * @throws PhotarkRuntimeException
+     */
     @DELETE
-    void removeAlbum(String albumId) throws PhotarkRuntimeException;
-    
+    @Path("{id}")
+    void removeAlbum(@PathParam("id") String albumId) throws PhotarkRuntimeException;
 }
