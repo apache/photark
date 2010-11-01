@@ -17,4 +17,4 @@
 #!/bin/bash
 
 mvn clean install
-appcfg.sh update target/photark
+appcfg.sh update target/photark-appegine
