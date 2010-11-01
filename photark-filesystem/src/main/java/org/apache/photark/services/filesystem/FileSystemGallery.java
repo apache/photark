@@ -59,15 +59,6 @@ public class FileSystemGallery implements GalleryService {
         this.galleryRoot = galleryRoot;
     }
 
-    public String getLocation() {
-        return this.galleryLocation;
-    }
-
-    @Property(name="galleryURL", required=false)
-    public void setLocation(String location) {
-        this.galleryLocation = location;
-    }
-
     @Init
     public void init() {
         try {
@@ -105,9 +96,23 @@ public class FileSystemGallery implements GalleryService {
                     }
                 }
             }
+
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine("Found '" + albums.size() + "' albums in the repository");
+            }
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error initializing FileSystem gallery: " + e.getMessage(), e);
         }
+    }
+
+    public String getLocation() {
+        return this.galleryLocation;
+    }
+
+    @Property(name="galleryURL", required=false)
+    public void setLocation(String location) {
+        this.galleryLocation = location;
     }
 
     public AlbumList getAlbums() {
@@ -142,6 +147,9 @@ public class FileSystemGallery implements GalleryService {
         if (galleryRootDirectory != null) {
            File newAlbumDirectory = new File(galleryRootDirectory.getPath() + File.separator + newAlbum.getName());
            if ( ! newAlbumDirectory.mkdir()) {
+               if(logger.isLoggable(Level.SEVERE)) {
+                   logger.log(Level.SEVERE, "Error creating new album directory '" + newAlbumDirectory.getPath() + "'" );
+               }
                throw new PhotarkRuntimeException("Error creating new album directory '" + newAlbumDirectory.getPath() + "'" );
            }
         }
@@ -154,6 +162,10 @@ public class FileSystemGallery implements GalleryService {
         }
 
         if(! albums.containsKey(album.getName())) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Album '" + album.getName() + "' not found");
+            }
+
             throw new InvalidParameterException("Album '" + album.getName() + "' not found");
         }
 

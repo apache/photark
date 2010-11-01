@@ -114,22 +114,6 @@ public class FileSystemGalleryTestCase {
         Assert.assertEquals(204, response.getResponseCode());
     }
 
-    private String getNewAlbumName() throws IOException, JSONException {
-        String[] albums = readAlbums();
-        String album = albums[albums.length -1 ];
-        String[] tokens = album.split("-");
-        album = tokens[0] + "-" + (Integer.parseInt(tokens[1]) + 1);
-
-        return album;
-    }
-
-    private String getLastAlbumName() throws IOException, JSONException {
-        String[] albums = readAlbums();
-        String album = albums[albums.length -1];
-
-        return album;
-    }
-
     private String[] readAlbums()  throws IOException, JSONException {
         WebConversation wc = new WebConversation();
         WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL);
@@ -153,5 +137,26 @@ public class FileSystemGalleryTestCase {
 
         return albumNameArray;
     }
+
+    private String getNewAlbumName() throws IOException, JSONException {
+        String[] albums = readAlbums();
+        String album = null;
+        if (albums.length == 0) {
+            album = "album-0";
+        } else {
+            album = albums[albums.length -1 ];
+            String[] tokens = album.split("-");
+            album = tokens[0] + "-" + (Integer.parseInt(tokens[1]) + 1);
+        }
+        return album;
+    }
+
+    private String getLastAlbumName() throws IOException, JSONException {
+        String[] albums = readAlbums();
+        String album = albums[albums.length -1];
+
+        return album;
+    }
+
 
 }
