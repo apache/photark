@@ -25,8 +25,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import org.apache.wink.common.model.atom.AtomLink;
-
 /**
  * A Album Rerefence model object
  * Useful to provide summary set of album
