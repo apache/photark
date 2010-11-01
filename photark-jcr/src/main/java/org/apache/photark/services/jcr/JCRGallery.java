@@ -6,24 +6,30 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.photark.services.jcr;
 
 import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jcr.LoginException;
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -32,63 +38,107 @@ import org.apache.photark.AlbumList;
 import org.apache.photark.AlbumRef;
 import org.apache.photark.services.GalleryService;
 import org.apache.photark.services.PhotarkRuntimeException;
-import org.apache.tuscany.sca.data.collection.Entry;
+import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 
 /**
  * JCR based Gallery
- * 
+ *
  * @version $Rev$ $Date$
  */
 @Scope("COMPOSITE")
 public class JCRGallery implements GalleryService {
+    private static final String JCR_ALBUM_ROOT_NODE = "albums";
+
     private static final Logger logger = Logger.getLogger(JCRGallery.class.getName());
 
+    private Map<String, Album> albums = new HashMap<String, Album>();
+
     private JCRRepositoryManager repositoryManager;
-    
-    public JCRAlbumCollection albumCollection;
-    
+
     public JCRGallery(@Reference(name="repositoryManager") JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
-    
-    public AlbumList getAlbums() {
-        //get all albums from the repository
-        Entry<String, Album>[] albumEntries = albumCollection.getAll();
-        
-        AlbumList albums = new AlbumList();
-        //loop trough the entries and create a albumRef for each Album
-        for(Entry<String, Album> albumEntry : albumEntries) {
-            albums.getAlbums().add(AlbumRef.createAlbumRef(albumEntry.getData()));
+
+    @Init
+    public void init() {
+        try {
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine("Initializing JCR Gallery");
+            }
+
+            //get all albums from the repository
+            Node albumRootNode = getAlbumRoot(repositoryManager);
+            NodeIterator albumNodes = albumRootNode.getNodes();
+            while (albumNodes.hasNext()) {
+                Node albumNode = albumNodes.nextNode();
+                if(albumNode != null) {
+                    Album album = fromNode(albumNode);
+                    albums.put(album.getName(), album);
+                }
+            }
+
+            if(logger.isLoggable(Level.FINE)) {
+                logger.fine("Found '" + albums.size() + "' albums in the repository");
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error retrieving list of Albums :" + e.getMessage(), e);
         }
-        return null;
+    }
+
+    public AlbumList getAlbums() {
+        AlbumList albumList = new AlbumList();
+        //loop trough the entries and create a albumRef for each Album
+        Iterator<Entry<String, Album>> albumIterator = albums.entrySet().iterator();
+        while(albumIterator.hasNext()) {
+            Album album = (Album) albumIterator.next().getValue();
+            albumList.getAlbums().add(AlbumRef.createAlbumRef(album));
+        }
+
+        return albumList;
     }
 
     public Album getAlbum(String albumId) {
         if(albumId == null || albumId.isEmpty()) {
             throw new InvalidParameterException("Invalid/Empty album id");
         }
-        
-        Album album = null;
-        try {
-            //find the album based on the albumId
-            Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(albumId);
-            
-            //convert albumNode to a Album object
-            album = fromNode(albumNode);
-        } catch (Exception e) {
-            logger.log(Level.WARNING,"Error retrieving album '" + albumId + "' : " + e.getMessage(), e);
-        } 
 
-        return album;
+        if(! albums.containsKey(albumId)) {
+            throw new InvalidParameterException("Album '" + albumId + "' not found");
+        }
+
+        return albums.get(albumId);
     }
 
     public void addAlbum(Album newAlbum) throws PhotarkRuntimeException {
         if(newAlbum.getName() == null || newAlbum.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
+        }
+
+        try {
+            Node albumRootNode = getAlbumRoot(repositoryManager);
+
+            if(albumRootNode.hasNode(newAlbum.getName())) {
+                throw new PhotarkRuntimeException("Error creating album. Album '" + newAlbum.getName() + "' already exists !");
+            }
+
+            Node albumNode = albumRootNode.addNode(newAlbum.getName());
+            if(albumNode != null) {
+                albumNode.setProperty("name", newAlbum.getName());
+                albumNode.setProperty("description", newAlbum.getDescription());
+                albumNode.setProperty("name", newAlbum.getLocation());
+                repositoryManager.getSession().save();
+            }
+
+            albums.put(newAlbum.getName(), newAlbum);
+
+        } catch(RepositoryException e) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Error creating new album node '" + newAlbum.getName() + "'" );
+            }
+            throw new PhotarkRuntimeException("Error creating new album node '" + newAlbum.getName() + "'" );
         }
     }
 
@@ -96,19 +146,113 @@ public class JCRGallery implements GalleryService {
         if(album.getName() == null || album.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
         }
+
+        if(! albums.containsKey(album.getName())) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Album '" + album.getName() + "' not found");
+            }
+            throw new InvalidParameterException("Album '" + album.getName() + "' not found");
+        }
+
+        try {
+            Node albumRootNode = getAlbumRoot(repositoryManager);
+
+            if(! albumRootNode.hasNode(album.getName())) {
+                if(logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, "Album node '" + album.getName() + "' not found in the JCR repository");
+                }
+
+                throw new PhotarkRuntimeException("Album node '" + album.getName()  + "' not found in the JCR repository");
+            }
+
+            Node albumNode = albumRootNode.getNode(album.getName());
+            albumNode.setProperty("name", album.getName());
+            albumNode.setProperty("description", album.getDescription());
+            albumNode.setProperty("name", album.getLocation());
+            repositoryManager.getSession().save();
+
+            albums.put(album.getName(), album);
+
+        } catch(RepositoryException e) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Error updating album node '" + album.getName() + "'" );
+            }
+            throw new PhotarkRuntimeException("Error updating album node '" + album.getName() + "'" );
+        }
+
+
     }
 
     public void removeAlbum(String albumName) throws PhotarkRuntimeException {
         if(albumName == null || albumName.isEmpty()) {
-            throw new InvalidParameterException("Invalid/Empty album id");
+            throw new InvalidParameterException("Invalid/Empty album name");
+        }
+
+
+        if(! albums.containsKey(albumName)) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Album '" + albumName + "' not found");
+            }
+            throw new InvalidParameterException("Album '" + albumName + "' not found");
+        }
+
+        try {
+            Node albumRootNode = getAlbumRoot(repositoryManager);
+
+            if(! albumRootNode.hasNode(albumName)) {
+                if(logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, "Album node '" + albumName + "' not found in the JCR repository");
+                }
+
+                throw new PhotarkRuntimeException("Album node '" + albumName  + "' not found in the JCR repository");
+            }
+
+            Node albumNode = albumRootNode.getNode(albumName);
+            albumNode.remove();
+            repositoryManager.getSession().save();
+
+            albums.remove(albumName);
+
+        } catch(RepositoryException e) {
+            if(logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Error deleting album node '" + albumName + "'" );
+            }
+            throw new PhotarkRuntimeException("Error deleting album node '" + albumName + "'" );
         }
     }
-        
-    private Album fromNode(Node albumNode) throws RepositoryException {
+
+    private static Album fromNode(Node albumNode) throws RepositoryException {
         Album album = new Album();
         album.setName(albumNode.getName());
         album.setDescription(albumNode.getProperty("description").getString());
-        
+
         return album;
     }
+
+
+    private static Node getAlbumRoot(JCRRepositoryManager repositoryManager) throws PhotarkRuntimeException {
+        Session session = null;
+        Node root = null;
+        Node albumRoot = null;
+        try {
+            session = repositoryManager.getSession();
+            root = session.getRootNode();
+            if (root.hasNode(JCR_ALBUM_ROOT_NODE)) {
+                albumRoot = root.getNode(JCR_ALBUM_ROOT_NODE);
+            } else {
+                albumRoot = root.addNode(JCR_ALBUM_ROOT_NODE);
+                session.save();
+            }
+        } catch (LoginException e) {
+            logger.log(Level.SEVERE, "Error loging in to photark repository :" + e.getMessage(), e);
+            throw new PhotarkRuntimeException("Error loging in to photark repository  :" + e.getMessage(), e);
+        } catch (RepositoryException e) {
+            logger.log(Level.SEVERE, "Error retrieving albums from the repository :" + e.getMessage(), e);
+            throw new PhotarkRuntimeException("Error retrieving albums from the repository :" + e.getMessage(), e);
+        }
+
+        return albumRoot;
+    }
+
+
 }

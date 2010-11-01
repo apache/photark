@@ -7,15 +7,15 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
 -->
 <composite	xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
 		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
@@ -25,23 +25,21 @@
     <!-- Component responsible for providing JCR Management Support -->
     <component name="RepositoryManager">
 		<implementation.java class="org.apache.photark.services.jcr.JCRRepositoryManager"/>
-		<property name="repositoryHome">photark</property>
-	</component> 	
-	
+		<property name="repositoryHome">target/photark</property>
+	</component>
+
 	<component name="SubscriptionComponent">
 		<implementation.java class="org.apache.photark.services.jcr.JCRSubscriptionCollection"/>
 		<reference name="repositoryManager" target="RepositoryManager"/>
 	</component>
 
-	<!--		
 	<component name="GalleryComponent">
 		<implementation.java class="org.apache.photark.services.jcr.JCRGallery"/>
-		<property name="galleryRoot">gallery-root</property> 
 		<service name="GalleryService">
 			<tuscany:binding.rest uri="http://localhost:8085/gallery">
 			    <tuscany:operationSelector.jaxrs />
     		</tuscany:binding.rest>
-   		</service>	
+   		</service>
+   		<reference name="repositoryManager" target="RepositoryManager" />
 	</component>
-	-->
 </composite>
