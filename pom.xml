@@ -215,12 +215,8 @@
                 <module>photark-flickr</module>
                 <module>photark-jcr</module>
                 <module>photark-picasa</module>
-		<module>photark-security</module>
+                <module>photark-security</module>
                 <module>photark-itest</module>
-                <module>photark-ui</module>
-                <module>photark-ui-admin</module>
-                <module>photark-appengine-webapp</module>                
-                <module>photark-webapp</module>
             </modules>
         </profile>
 
@@ -235,10 +231,6 @@
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
                 <module>photark-security</module>
-                <module>photark-ui</module>
-                <module>photark-ui-admin</module>
-                <module>photark-appengine-webapp</module>                
-                <module>photark-webapp</module>
             </modules>
         </profile>
 
@@ -253,11 +245,6 @@
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
                 <module>photark-security</module>
-                <module>photark-ui</module>
-                <module>photark-ui-admin</module>
-                <module>photark-ui-test</module>                
-                <module>photark-appengine-webapp</module>                
-                <module>photark-webapp</module>
             </modules>
         </profile>
         <!-- ====================================================================== -->
