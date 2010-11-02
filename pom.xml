@@ -16,7 +16,8 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
---><project>
+-->
+<project>
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache</groupId>
@@ -214,7 +215,8 @@
                 <module>photark-flickr</module>
                 <module>photark-jcr</module>
                 <module>photark-picasa</module>
-				<module>photark-security</module>
+		<module>photark-security</module>
+                <module>photark-itest</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-appengine-webapp</module>                
@@ -232,7 +234,7 @@
                 <module>photark</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
-				<module>photark-security</module>
+                <module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-appengine-webapp</module>                
@@ -250,7 +252,7 @@
                 <module>photark</module>
                 <module>photark-filesystem</module>                
                 <module>photark-jcr</module>
-				<module>photark-security</module>
+                <module>photark-security</module>
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-test</module>                
