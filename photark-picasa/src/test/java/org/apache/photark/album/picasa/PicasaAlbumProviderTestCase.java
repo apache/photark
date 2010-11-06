@@ -19,31 +19,42 @@
 
 package org.apache.photark.album.picasa;
 
+import java.util.List;
+
+import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
-import org.apache.tuscany.sca.data.collection.Entry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class PicasaPhotoStreamTestCase {
+public class PicasaAlbumProviderTestCase {
     private static final String SUBSCRIPTION_URL = "http://picasaweb.google.com/data/feed/api/featured";
-    private static PicasaPhotoStream photoStream;
+    private static PicasaPhotoStreamProvider picasaAlbumProvider;
 
     @BeforeClass
     public static void BeforeClass() {
-        photoStream = new PicasaPhotoStream(SUBSCRIPTION_URL);
+        picasaAlbumProvider = new PicasaPhotoStreamProvider();
     }
 
     @Test
-    public void testDiscoverAlbums() {
-        Entry<String, Image>[] images = photoStream.getAll();
+    public void testDiscoverAlbums() throws Exception {
+        List<Image> images = picasaAlbumProvider.getImages(createAlbumConfig());
 
-        for(Entry<String, Image> image : images) {
-            Image i = image.getData();
-
+        for(Image image : images) {
             System.out.println(">>>>>>>>>>>>>");
-            System.out.println(">> ID       : " + i.getId());
-            System.out.println(">> Title    : " + i.getTitle());
-            System.out.println(">> Location : " + i.getLocation());
+            System.out.println(">> ID       : " + image.getId());
+            System.out.println(">> Title    : " + image.getTitle());
+            System.out.println(">> Location : " + image.getLocation());
         }
+    }
+
+
+    private static AlbumConfig createAlbumConfig() {
+        AlbumConfig album = new AlbumConfig();
+        album.setId("24662369");
+        album.setName("NASA Goddard");
+        album.setType(picasaAlbumProvider.getProviderType());
+        album.setUrl(SUBSCRIPTION_URL);
+
+        return album;
     }
 }

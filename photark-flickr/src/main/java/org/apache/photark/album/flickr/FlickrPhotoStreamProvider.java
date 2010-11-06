@@ -35,23 +35,21 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
-import org.apache.tuscany.sca.data.collection.Collection;
-import org.apache.tuscany.sca.data.collection.Entry;
-import org.apache.tuscany.sca.data.collection.NotFoundException;
+import org.apache.photark.providers.PhotoStreamProvider;
+import org.apache.photark.services.PhotarkRuntimeException;
 
-public class FlickrPhotoStream implements Collection<String, Image> {
-    private static final Logger logger = Logger.getLogger(FlickrPhotoStream.class.getName());
+public class FlickrPhotoStreamProvider implements PhotoStreamProvider {
+    private static final String PROVIDER_ID = "urn::flickr";
+
+    private static final Logger logger = Logger.getLogger(FlickrPhotoStreamProvider.class.getName());
 
     private static final Parser abderaParser = Abdera.getNewParser();
 
-    private final String feedURI;
-
     private HttpClient httpClient;
 
-    public FlickrPhotoStream(String feedURI) {
-        this.feedURI = feedURI;
-
+    public FlickrPhotoStreamProvider() {
         // Create an HTTP client
         HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
         connectionManager.getParams().setDefaultMaxConnectionsPerHost(10);
@@ -59,10 +57,13 @@ public class FlickrPhotoStream implements Collection<String, Image> {
         httpClient = new HttpClient(connectionManager);
     }
 
-    @SuppressWarnings("unchecked")
-    public Entry<String, Image>[] getAll() {
-        List<Entry<String, Image>> images = null;
-        GetMethod getMethod = new GetMethod(feedURI);
+    public String getProviderType() {
+        return PROVIDER_ID;
+    }
+
+    public List<Image> getImages(AlbumConfig album) throws PhotarkRuntimeException {
+        List<Image> images = new ArrayList<Image>();
+        GetMethod getMethod = new GetMethod(album.getUrl());
 
         try {
             httpClient.executeMethod(getMethod);
@@ -78,45 +79,77 @@ public class FlickrPhotoStream implements Collection<String, Image> {
                      throw new IllegalArgumentException("Error parsing feed: " + e.getMessage());
                  }
 
-                 images = new ArrayList<Entry<String, Image>>();
                  for (org.apache.abdera.model.Entry feedEntry : feed.getEntries()) {
                      Image image = fromEntry(feedEntry);
-                     images.add(new Entry<String, Image>(image.getName(), image));
+                     images.add(image);
                 }
 
             } else {
-                throw new IllegalArgumentException("Invalid photo stream uri:" + feedURI);
+                throw new IllegalArgumentException("Invalid photo stream uri:" + album.getUrl());
             }
         } catch (IOException ioe) {
-            logger.log(Level.WARNING, "Error retrieving photo stream from '" + feedURI + "' :" +  ioe.getMessage(), ioe);
+            if(logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  ioe.getMessage(), ioe);
+            }
         } catch (HTTPException he) {
-            logger.log(Level.WARNING, "Error retrieving photo stream from '" + feedURI + "' :" +  he.getMessage(), he);
+            if(logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  he.getMessage(), he);
+            }
         }
 
-        Entry<String, Image>[] imageArray = new Entry[images.size()];
-        images.toArray(imageArray);
-        return imageArray;
+        return images;
     }
 
-    public Image get(String key) throws NotFoundException {
+
+    public Image getImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+        Image image = null;
+        GetMethod getMethod = new GetMethod(album.getUrl() + "/" + Id);
+
+        try {
+            httpClient.executeMethod(getMethod);
+            int status = getMethod.getStatusCode();
+
+            // Read the Atom entry
+            if (status == 200) {
+                Document<org.apache.abdera.model.Feed> doc = abderaParser.parse(new InputStreamReader(getMethod.getResponseBodyAsStream()));
+                org.apache.abdera.model.Feed feed = null;
+                try {
+                    feed = doc.getRoot();
+                 } catch(Exception e) {
+                     throw new IllegalArgumentException("Error parsing feed: " + e.getMessage());
+                 }
+
+                 if(!feed.getEntries().isEmpty()) {
+                     image = fromEntry(feed.getEntries().get(0));
+                 }
+            } else {
+                throw new IllegalArgumentException("Invalid photo stream uri:" + album.getUrl());
+            }
+        } catch (IOException ioe) {
+            if(logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  ioe.getMessage(), ioe);
+            }
+        } catch (HTTPException he) {
+            if(logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  he.getMessage(), he);
+            }
+        }
+
+        return image;
+    }
+
+    public String addImage(AlbumConfig album, Image image) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public String post(String key, Image value) {
+    public void updateImage(AlbumConfig album, Image image)  throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void put(String key, Image value) throws NotFoundException {
+    public void deleteImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void delete(String key) throws NotFoundException {
-        throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
-    }
-
-    public Entry<String, Image>[] query(String query) {
-        throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
-    }
 
     private static Image fromEntry(org.apache.abdera.model.Entry entry) {
 

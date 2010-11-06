@@ -19,31 +19,41 @@
 
 package org.apache.photark.album.flickr;
 
+import java.util.List;
+
+import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
-import org.apache.tuscany.sca.data.collection.Entry;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FlickrPhotoStreamTestCase {
+public class FlickrAlbumProviderTestCase {
     private static final String SUBSCRIPTION_URL = "http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom";
-    private static FlickrPhotoStream photoStream;
+    private static FlickrPhotoStreamProvider flickrAlbumProvider;
 
     @BeforeClass
     public static void BeforeClass() {
-        photoStream = new FlickrPhotoStream(SUBSCRIPTION_URL);
+        flickrAlbumProvider = new FlickrPhotoStreamProvider();
     }
 
     @Test
-    public void testDiscoverAlbums() {
-        Entry<String, Image>[] images = photoStream.getAll();
+    public void testDiscoverAlbums() throws Exception {
+        List<Image> images = flickrAlbumProvider.getImages(createAlbumConfig());
 
-        for(Entry<String, Image> image : images) {
-            Image i = image.getData();
-
+        for(Image image : images) {
             System.out.println(">>>>>>>>>>>>>");
-            System.out.println(">> ID       : " + i.getId());
-            System.out.println(">> Title    : " + i.getTitle());
-            System.out.println(">> Location : " + i.getLocation());
+            System.out.println(">> ID       : " + image.getId());
+            System.out.println(">> Title    : " + image.getTitle());
+            System.out.println(">> Location : " + image.getLocation());
         }
+    }
+
+    private static AlbumConfig createAlbumConfig() {
+        AlbumConfig album = new AlbumConfig();
+        album.setId("24662369");
+        album.setName("NASA Goddard");
+        album.setType(flickrAlbumProvider.getProviderType());
+        album.setUrl(SUBSCRIPTION_URL);
+
+        return album;
     }
 }
