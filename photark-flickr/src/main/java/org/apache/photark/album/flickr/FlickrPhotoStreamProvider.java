@@ -35,10 +35,10 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
 import org.apache.photark.providers.PhotoStreamProvider;
 import org.apache.photark.services.PhotarkRuntimeException;
+import org.apache.photark.subscription.SubscriptionConfig;
 
 public class FlickrPhotoStreamProvider implements PhotoStreamProvider {
     private static final String PROVIDER_ID = "urn::flickr";
@@ -61,7 +61,7 @@ public class FlickrPhotoStreamProvider implements PhotoStreamProvider {
         return PROVIDER_ID;
     }
 
-    public List<Image> getImages(AlbumConfig album) throws PhotarkRuntimeException {
+    public List<Image> getImages(SubscriptionConfig album) throws PhotarkRuntimeException {
         List<Image> images = new ArrayList<Image>();
         GetMethod getMethod = new GetMethod(album.getUrl());
 
@@ -101,7 +101,7 @@ public class FlickrPhotoStreamProvider implements PhotoStreamProvider {
     }
 
 
-    public Image getImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public Image getImage(SubscriptionConfig album, String Id) throws PhotarkRuntimeException {
         Image image = null;
         GetMethod getMethod = new GetMethod(album.getUrl() + "/" + Id);
 
@@ -138,15 +138,15 @@ public class FlickrPhotoStreamProvider implements PhotoStreamProvider {
         return image;
     }
 
-    public String addImage(AlbumConfig album, Image image) throws PhotarkRuntimeException {
+    public String addImage(SubscriptionConfig album, Image image) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void updateImage(AlbumConfig album, Image image)  throws PhotarkRuntimeException {
+    public void updateImage(SubscriptionConfig album, Image image)  throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void deleteImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public void deleteImage(SubscriptionConfig album, String Id) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 

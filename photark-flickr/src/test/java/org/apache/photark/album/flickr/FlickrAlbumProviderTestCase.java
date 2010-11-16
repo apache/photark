@@ -21,8 +21,8 @@ package org.apache.photark.album.flickr;
 
 import java.util.List;
 
-import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -47,8 +47,8 @@ public class FlickrAlbumProviderTestCase {
         }
     }
 
-    private static AlbumConfig createAlbumConfig() {
-        AlbumConfig album = new AlbumConfig();
+    private static SubscriptionConfig createAlbumConfig() {
+        SubscriptionConfig album = new SubscriptionConfig();
         album.setId("24662369");
         album.setName("NASA Goddard");
         album.setType(flickrAlbumProvider.getProviderType());

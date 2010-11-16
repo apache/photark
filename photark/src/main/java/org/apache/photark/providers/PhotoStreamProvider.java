@@ -21,21 +21,14 @@ package org.apache.photark.providers;
 
 import java.util.List;
 
-import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
 import org.apache.photark.services.PhotarkRuntimeException;
+import org.apache.photark.subscription.SubscriptionConfig;
 
 public interface PhotoStreamProvider {
 
     String getProviderType();
 
-    List<Image> getImages(AlbumConfig album) throws PhotarkRuntimeException;
+    List<Image> getImages(SubscriptionConfig config) throws PhotarkRuntimeException;
 
-    Image getImage(AlbumConfig album, String Id) throws PhotarkRuntimeException;
-
-    String addImage(AlbumConfig album, Image image) throws PhotarkRuntimeException;
-
-    void updateImage(AlbumConfig album, Image image)  throws PhotarkRuntimeException;
-
-    void deleteImage(AlbumConfig album, String Id) throws PhotarkRuntimeException;
 }

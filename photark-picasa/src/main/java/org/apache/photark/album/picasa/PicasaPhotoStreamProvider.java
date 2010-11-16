@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
 import org.apache.photark.providers.PhotoStreamProvider;
 import org.apache.photark.services.PhotarkRuntimeException;
+import org.apache.photark.subscription.SubscriptionConfig;
 
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.photos.AlbumFeed;
@@ -51,7 +51,7 @@ public class PicasaPhotoStreamProvider implements PhotoStreamProvider {
         return PROVIDER_ID;
     }
 
-    public List<Image> getImages(AlbumConfig album) throws PhotarkRuntimeException {
+    public List<Image> getImages(SubscriptionConfig album) throws PhotarkRuntimeException {
         PicasawebService picasaService = null;
         List<Image> images = new ArrayList<Image>();
 
@@ -81,7 +81,7 @@ public class PicasaPhotoStreamProvider implements PhotoStreamProvider {
         return images;
     }
 
-    public Image getImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public Image getImage(SubscriptionConfig album, String Id) throws PhotarkRuntimeException {
         PicasawebService picasaService = null;
         Image image = null;
 
@@ -110,20 +110,20 @@ public class PicasaPhotoStreamProvider implements PhotoStreamProvider {
         return image;
     }
 
-    public String addImage(AlbumConfig album, Image image) throws PhotarkRuntimeException {
+    public String addImage(SubscriptionConfig album, Image image) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void updateImage(AlbumConfig album, Image image)  throws PhotarkRuntimeException {
+    public void updateImage(SubscriptionConfig album, Image image)  throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void deleteImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public void deleteImage(SubscriptionConfig album, String Id) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
 
-    private static PicasawebService createPicasaService(AlbumConfig album) {
+    private static PicasawebService createPicasaService(SubscriptionConfig album) {
         if(logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Initializing Google services to retrieve Picasa photo stream");
         }

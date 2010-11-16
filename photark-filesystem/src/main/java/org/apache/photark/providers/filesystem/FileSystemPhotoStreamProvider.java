@@ -20,6 +20,7 @@
 package org.apache.photark.providers.filesystem;
 
 import java.io.File;
+
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
@@ -28,10 +29,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.photark.AlbumConfig;
 import org.apache.photark.Image;
 import org.apache.photark.providers.PhotoStreamProvider;
 import org.apache.photark.services.PhotarkRuntimeException;
+import org.apache.photark.subscription.SubscriptionConfig;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.oasisopen.sca.annotation.Property;
 
 public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
@@ -49,17 +51,17 @@ public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
         return PROVIDER_ID;
     }
 
-    public List<Image> getImages(AlbumConfig album) throws PhotarkRuntimeException {
+    public List<Image> getImages(SubscriptionConfig config) throws PhotarkRuntimeException {
         List<Image> images = new ArrayList<Image>();
 
         File albumFolder = null;
         try {
-            albumFolder = getAlbumFolder(album);
+            albumFolder = getAlbumFolder(config);
         } catch (IOException e) {
             if(logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  e.getMessage(), e);
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + config.getUrl() + "' :" +  e.getMessage(), e);
             }
-            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + album.getUrl() + "' :" +  e.getMessage(), e);
+            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + config.getUrl() + "' :" +  e.getMessage(), e);
         }
 
         String[] listPictures = albumFolder.list(new ImageFilter(".jpg"));
@@ -67,7 +69,7 @@ public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
             Image image = new Image();
             image.setId(pictureName);
             image.setName(pictureName);
-            image.setLocation("http://localhost:8085/gallery/" + album.getName() + "/" + pictureName);
+            image.setLocation("http://localhost:8085/gallery/" + config.getName() + "/" + pictureName);
 
             images.add(image);
         }
@@ -75,17 +77,17 @@ public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
         return images;
     }
 
-    public Image getImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public Image getImage(SubscriptionConfig config, String Id) throws PhotarkRuntimeException {
         Image image = null;
 
         File albumFolder = null;
         try {
-            albumFolder = getAlbumFolder(album);
+            albumFolder = getAlbumFolder(config);
         } catch (IOException e) {
             if(logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "' :" +  e.getMessage(), e);
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + config.getUrl() + "' :" +  e.getMessage(), e);
             }
-            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + album.getUrl() + "' :" +  e.getMessage(), e);
+            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + config.getUrl() + "' :" +  e.getMessage(), e);
         }
 
         String[] listPictures = albumFolder.list(new ImageFilter(".jpg"));
@@ -94,37 +96,37 @@ public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
                 image = new Image();
                 image.setId(pictureName);
                 image.setName(pictureName);
-                image.setLocation("http://localhost:8085/gallery/" + album.getName() + "/" + pictureName);
+                image.setLocation("http://localhost:8085/gallery/" + config.getName() + "/" + pictureName);
             }
         }
 
         if(image == null) {
             if(logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Error retrieving photo stream from '" + album.getUrl() + "'");
+                logger.log(Level.WARNING, "Error retrieving photo stream from '" + config.getUrl() + "'");
             }
-            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + album.getUrl() + "'");
+            throw new PhotarkRuntimeException("Error retrieving photo stream from '" + config.getUrl() + "'");
         }
 
         return image;
     }
 
-    public String addImage(AlbumConfig album, Image image) throws PhotarkRuntimeException {
+    public String addImage(SubscriptionConfig album, Image image) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void updateImage(AlbumConfig album, Image image)  throws PhotarkRuntimeException {
+    public void updateImage(SubscriptionConfig album, Image image)  throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    public void deleteImage(AlbumConfig album, String Id) throws PhotarkRuntimeException {
+    public void deleteImage(SubscriptionConfig album, String Id) throws PhotarkRuntimeException {
         throw new java.lang.UnsupportedOperationException("Operation not supported in album subscriptions");
     }
 
-    private File getAlbumFolder(AlbumConfig album) throws IOException {
+    private File getAlbumFolder(SubscriptionConfig config) throws IOException {
 
-        String albumFolderName = galleryRoot + File.pathSeparator + album.getName();
+        String albumFolderName = galleryRoot + File.pathSeparator + config.getName();
         try {
-            URL albumFolderURL = this.getClass().getClassLoader().getResource(album.getName());
+            URL albumFolderURL = this.getClass().getClassLoader().getResource(config.getName());
             if(albumFolderURL == null) {
                 // Accomodate for J2EE classpath that starts in WEB-INF\classes
                 albumFolderURL = this.getClass().getClassLoader().getResource("../../" + albumFolderName);
@@ -149,7 +151,7 @@ public class FileSystemPhotoStreamProvider implements PhotoStreamProvider {
                 }
             }
         } catch (Exception e) {
-            throw new IOException("Error retrieving photo stream from '" + album.getUrl() + "' :" +  e.getMessage(), e);
+            throw new IOException("Error retrieving photo stream from '" + config.getUrl() + "' :" +  e.getMessage(), e);
         }
 
         return null;
