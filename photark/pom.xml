@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.photark</groupId>
 		<artifactId>photark-parent</artifactId>
-		<version>1.0-incubating-SNAPSHOT</version>
+		<version>M3-incubating</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>photark</artifactId>
