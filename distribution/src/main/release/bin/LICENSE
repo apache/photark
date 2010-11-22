@@ -241,38 +241,39 @@ The following components come under Apache Software License 2.0
  poi-3.2-FINAL.jar
  poi-scratchpad-3.2-FINAL.jar
  sanselan-0.97-incubator.jar
- tuscany-assembly-2.0-M5.jar
- tuscany-assembly-xml-2.0-M5.jar
- tuscany-assembly-xsd-2.0-M5.jar
- tuscany-binding-http-2.0-M5.jar
- tuscany-binding-http-runtime-2.0-M5.jar
- tuscany-binding-jsonrpc-2.0-M5.jar
- tuscany-binding-jsonrpc-runtime-2.0-M5.jar
- tuscany-binding-sca-runtime-2.0-M5.jar
- tuscany-builder-2.0-M5.jar
- tuscany-common-java-2.0-M5.jar
- tuscany-common-xml-2.0-M5.jar
- tuscany-contribution-2.0-M5.jar
- tuscany-core-2.0-M5.jar
- tuscany-core-databinding-2.0-M5.jar
- tuscany-core-spi-2.0-M5.jar
- tuscany-data-api-2.0-M5.jar
- tuscany-databinding-2.0-M5.jar
- tuscany-databinding-jaxb-2.0-M5.jar
- tuscany-databinding-json-2.0-M5.jar
- tuscany-deployment-2.0-M5.jar
- tuscany-extensibility-2.0-M5.jar
- tuscany-host-http-2.0-M5.jar
- tuscany-host-webapp-2.0-M5.jar
- tuscany-implementation-java-2.0-M5.jar
- tuscany-implementation-java-runtime-2.0-M5.jar
- tuscany-interface-java-2.0-M5.jar
- tuscany-interface-java-jaxws-2.0-M5.jar
- tuscany-monitor-2.0-M5.jar
- tuscany-node-api-2.0-M5.jar
- tuscany-node-impl-2.0-M5.jar
- tuscany-sca-api-2.0-M5.jar
- tuscany-xsd-2.0-M5.jar
+ tuscany-assembly-2.0-M5.1.jar
+ tuscany-assembly-xml-2.0-M5.1.jar
+ tuscany-assembly-xsd-2.0-M5.1.jar
+ tuscany-binding-http-2.0-M5.1.jar
+ tuscany-binding-http-runtime-2.0-M5.1.jar
+ tuscany-binding-jsonrpc-2.0-M5.1.jar
+ tuscany-binding-jsonrpc-runtime-2.0-M5.1.jar
+ tuscany-binding-sca-runtime-2.0-M5.1.jar
+ tuscany-builder-2.0-M5.1.jar
+ tuscany-common-http-2.0-M5.1.jar
+ tuscany-common-java-2.0-M5.1.jar
+ tuscany-common-xml-2.0-M5.1.jar
+ tuscany-contribution-2.0-M5.1.jar
+ tuscany-core-2.0-M5.1.jar
+ tuscany-core-databinding-2.0-M5.1.jar
+ tuscany-core-spi-2.0-M5.1.jar
+ tuscany-data-api-2.0-M5.1.jar
+ tuscany-databinding-2.0-M5.1.jar
+ tuscany-databinding-jaxb-2.0-M5.1.jar
+ tuscany-databinding-json-2.0-M5.1.jar
+ tuscany-deployment-2.0-M5.1.jar
+ tuscany-extensibility-2.0-M5.1.jar
+ tuscany-host-http-2.0-M5.1.jar
+ tuscany-host-webapp-2.0-M5.1.jar
+ tuscany-implementation-java-2.0-M5.1.jar
+ tuscany-implementation-java-runtime-2.0-M5.1.jar
+ tuscany-interface-java-2.0-M5.1.jar
+ tuscany-interface-java-jaxws-2.0-M5.1.jar
+ tuscany-monitor-2.0-M5.1.jar
+ tuscany-node-api-2.0-M5.1.jar
+ tuscany-node-impl-2.0-M5.1.jar
+ tuscany-sca-api-2.0-M5.1.jar
+ tuscany-xsd-2.0-M5.1.jar
  wstx-asl-3.2.4.jar
  xercesImpl-2.8.1.jar
  XmlSchema-1.4.3.jar
