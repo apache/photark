@@ -1,0 +1,52 @@
+Apache PhotArk
+Copyright (c) 2008 - 2010 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes/uses XmlSchema developed at 
+The Apache Software Foundation (http://ws.apache.org/commons/XmlSchema)
+ Portions Copyright 2006 International Business Machines Corp.
+
+This software contains SLF4J libraries. Copyright (c) 2004-2008 QOS.ch
+
+This product includes/uses software, AOP alliance (http://aopalliance.sourceforge.net)
+License: Public Domain 
+
+This product includes/uses JSON-RPC-Java (http://oss.metaparadigm.com/jsonrpc/)
+
+This product includes software from the GlassFish project (https://glassfish.dev.java.net/)
+    Copyright (c) 2006, Sun Microsystems, Inc.
+      
+This product includes/uses dojotoolkit (http://dojotoolkit.org/)
+ Copyright (c) 2005, The Dojo Foundation. All rights reserved.
+
+This product also includes software under the BSD license
+with the following copyright:
+ Copyright (c) 2006, Sun Microsystems, Inc. All rights reserved.
+
+This product also includes software under the Service Component Architecture specification license
+(see the LICENSE file contained in this distribution) with the following copyright
+
+(C) Copyright BEA Systems, Inc., Cape Clear Software, International Business Machines Corp, Interface21, IONA Technologies,
+37 Oracle, Primeton Technologies, Progress Software, Red Hat, Rogue Wave Software, SAP AG., Siemens AG., Software AG., Sybase
+38 Inc., TIBCO Software Inc., 2005, 2007. All rights reserved.
+
+This product also includes software under the Service Component Architecture specification license
+(see the LICENSE file contained in this distribution) with the following copyright
+
+(C) Copyright BEA Systems, Inc., Cape Clear Software, International Business Machines Corp, Interface21, IONA
+Technologies, Oracle, Primeton Technologies, Progress Software, Red Hat, Rogue Wave Software, SAP AG., Siemens
+AG., Software AG., Sun Microsystems, Inc., Sybase Inc., TIBCO Software Inc., 2005, 2008. All rights reserved.
+
+This product also includes software under the W3C(r) Software License
+(see the LICENSE file contained in this distribution), with the following
+copyright:
+
+Copyright (c) 2004 World Wide Web Consortium (Massachusetts Institute of Technology, 
+European Research Consortium for Informatics and Mathematics, Keio University). 
+All Rights Reserved. This work is distributed under the W3C(r) Software License [1] 
+in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+    [1] http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
