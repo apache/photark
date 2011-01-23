@@ -30,8 +30,8 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.photark.RemoteAlbum;
 import org.apache.photark.services.SubscriptionCollection;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.oasisopen.sca.annotation.Destroy;
@@ -53,7 +53,7 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
     
     private JCRRepositoryManager repositoryManager;
     
-    private Map<String, RemoteAlbum> subscriptions = new HashMap<String, RemoteAlbum>();
+    private Map<String, SubscriptionConfig> subscriptions = new HashMap<String, SubscriptionConfig>();
 
     public JCRSubscriptionCollection() {
         
@@ -76,7 +76,7 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
                     continue;
                 }
 
-                RemoteAlbum subscription = fromNode(subscriptionNode);
+                SubscriptionConfig subscription = fromNode(subscriptionNode);
                 if (!subscriptions.containsKey(subscription.getTitle())) {
                     subscriptions.put(subscription.getTitle(),subscription);
                 }
@@ -93,17 +93,17 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
 
     }
     
-    public Entry<String, RemoteAlbum>[] getAll() {
-        Entry<String, RemoteAlbum>[] entries = new Entry[subscriptions.size()];
+    public Entry<String, SubscriptionConfig>[] getAll() {
+        Entry<String, SubscriptionConfig>[] entries = new Entry[subscriptions.size()];
         int i = 0;
-        for (Map.Entry<String, RemoteAlbum> e: subscriptions.entrySet()) {
-            entries[i++] = new Entry<String, RemoteAlbum>(e.getKey(), e.getValue());
+        for (Map.Entry<String, SubscriptionConfig> e: subscriptions.entrySet()) {
+            entries[i++] = new Entry<String, SubscriptionConfig>(e.getKey(), e.getValue());
         }
         return entries;
     }
 
-    public RemoteAlbum get(String key) throws NotFoundException {
-        RemoteAlbum subscription = subscriptions.get(key);
+    public SubscriptionConfig get(String key) throws NotFoundException {
+        SubscriptionConfig subscription = subscriptions.get(key);
         if (subscription == null) {
             throw new NotFoundException(key);
         } else {
@@ -112,7 +112,7 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
 
     }
 
-    public String post(String key, RemoteAlbum subscription) {
+    public String post(String key, SubscriptionConfig subscription) {
         if (subscription.getTitle() == null && subscription.getTitle().length() == 0) {
             key = "subscription-" + UUID.randomUUID().toString();
             subscription.setTitle(key);
@@ -141,7 +141,7 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
         return key;
     }
 
-    public void put(String key, RemoteAlbum subscription) throws NotFoundException {
+    public void put(String key, SubscriptionConfig subscription) throws NotFoundException {
         try {
             Session session = repositoryManager.getSession();
             Node rootNode = getSubscriptionRootNode(session);
@@ -183,7 +183,7 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
         }     
     }
 
-    public Entry<String, RemoteAlbum>[] query(String query) {
+    public Entry<String, SubscriptionConfig>[] query(String query) {
         throw new UnsupportedOperationException("Not implemented");
     }
     
@@ -210,13 +210,13 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
         return rootNode;
     }
     
-    private RemoteAlbum fromNode(Node subscriptionNode) {
-        RemoteAlbum subscription = null;
+    private SubscriptionConfig fromNode(Node subscriptionNode) {
+        SubscriptionConfig subscription = null;
         try {
-            subscription = new RemoteAlbum();
+            subscription = new SubscriptionConfig();
             subscription.setTitle(subscriptionNode.getProperty("title").getValue().toString());
             subscription.setType(subscriptionNode.getProperty("type").getValue().toString());
-            subscription.setRemoteLocation(subscriptionNode.getProperty("url").getValue().toString());
+            subscription.setUrl(subscriptionNode.getProperty("url").getValue().toString());
         } catch(Exception e) {
             logger.log(Level.WARNING, "Can't read subscription node :" + e.getMessage(), e);
         }
@@ -224,11 +224,11 @@ public class JCRSubscriptionCollection implements SubscriptionCollection {
         return subscription;
     }
     
-    private void fromSubscription(Node subscriptionNode, RemoteAlbum subscription) {
+    private void fromSubscription(Node subscriptionNode, SubscriptionConfig subscription) {
         try {
             subscriptionNode.setProperty("title", subscription.getTitle());
             subscriptionNode.setProperty("type", subscription.getType());
-            subscriptionNode.setProperty("url", subscription.getRemoteLocation());
+            subscriptionNode.setProperty("url", subscription.getUrl());
         } catch(Exception e) {
             logger.log(Level.WARNING, "Can't save subscription node :" + e.getMessage(), e);
         }

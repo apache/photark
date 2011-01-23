@@ -21,8 +21,8 @@ package org.apache.photark.services.jcr;
 
 import junit.framework.Assert;
 
-import org.apache.photark.RemoteAlbum;
 import org.apache.photark.services.SubscriptionCollection;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.apache.tuscany.sca.data.collection.NotFoundException;
 import org.apache.tuscany.sca.node.Contribution;
 import org.apache.tuscany.sca.node.ContributionLocationHelper;
@@ -56,10 +56,10 @@ public class JCRSubscriptionCollectionTestCase {
     
     @Test
     public void testAddSubscription() throws Exception {
-        RemoteAlbum subscription = new RemoteAlbum();
+        SubscriptionConfig subscription = new SubscriptionConfig();
         subscription.setTitle("Test 01");
         subscription.setType("flickr");
-        subscription.setRemoteLocation("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
+        subscription.setUrl("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
         
         subscriptions.post(subscription.getTitle(), subscription);
         
@@ -68,10 +68,10 @@ public class JCRSubscriptionCollectionTestCase {
     
     @Test
     public void testUpdateSubscription() throws Exception {
-        RemoteAlbum subscription = new RemoteAlbum();
+        SubscriptionConfig subscription = new SubscriptionConfig();
         subscription.setTitle("Test 02");
         subscription.setType("flickr");
-        subscription.setRemoteLocation("http://localhost/xxx");
+        subscription.setUrl("http://localhost/xxx");
         
         try {
             subscriptions.get(subscription.getTitle());
@@ -81,11 +81,11 @@ public class JCRSubscriptionCollectionTestCase {
 
         subscriptions.post(subscription.getTitle(), subscription);
         
-        subscription.setRemoteLocation("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
+        subscription.setUrl("http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom");
         
         subscriptions.post(subscription.getTitle(), subscription);
         
-        RemoteAlbum subscritionRead = subscriptions.get(subscription.getTitle());
+        SubscriptionConfig subscritionRead = subscriptions.get(subscription.getTitle());
         
         Assert.assertEquals(subscription.getTitle(), subscritionRead.getTitle());
     }

@@ -19,9 +19,9 @@
 
 package org.apache.photark.services;
 
-import org.apache.photark.RemoteAlbum;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.apache.tuscany.sca.data.collection.Collection;
 
-public interface SubscriptionCollection extends Collection<String, RemoteAlbum>{
+public interface SubscriptionCollection extends Collection<String, SubscriptionConfig>{
 
 }

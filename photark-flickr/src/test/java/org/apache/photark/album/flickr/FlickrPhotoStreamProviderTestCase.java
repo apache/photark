@@ -26,18 +26,18 @@ import org.apache.photark.subscription.SubscriptionConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FlickrAlbumProviderTestCase {
+public class FlickrPhotoStreamProviderTestCase {
     private static final String SUBSCRIPTION_URL = "http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom";
-    private static FlickrPhotoStreamProvider flickrAlbumProvider;
+    private static FlickrPhotoStreamProvider flickrPhotoStreamProvider;
 
     @BeforeClass
     public static void BeforeClass() {
-        flickrAlbumProvider = new FlickrPhotoStreamProvider();
+        flickrPhotoStreamProvider = new FlickrPhotoStreamProvider();
     }
 
     @Test
     public void testDiscoverAlbums() throws Exception {
-        List<Image> images = flickrAlbumProvider.getImages(createAlbumConfig());
+        List<Image> images = flickrPhotoStreamProvider.getImages(createSubcriptionConfig());
 
         for(Image image : images) {
             System.out.println(">>>>>>>>>>>>>");
@@ -47,11 +47,11 @@ public class FlickrAlbumProviderTestCase {
         }
     }
 
-    private static SubscriptionConfig createAlbumConfig() {
+    private static SubscriptionConfig createSubcriptionConfig() {
         SubscriptionConfig album = new SubscriptionConfig();
         album.setId("24662369");
         album.setName("NASA Goddard");
-        album.setType(flickrAlbumProvider.getProviderType());
+        album.setType(flickrPhotoStreamProvider.getProviderType());
         album.setUrl(SUBSCRIPTION_URL);
 
         return album;

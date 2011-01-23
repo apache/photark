@@ -17,7 +17,9 @@
  * under the License.
  */
 
-package org.apache.photark;
+package org.apache.photark.subscription;
+
+import org.apache.photark.Album;
 
 /**
  * Model representing a subscription where images are loded from
@@ -25,13 +27,32 @@ package org.apache.photark;
  *
  * @version $Rev$ $Date$
  */
-public class RemoteAlbum extends Album {
+public class SubscriptionConfig extends Album {
 
     private static final long serialVersionUID = 1839829824832424269L;
 
+    private String id;
     private String title;
     private String type;
-    private String remoteLocation;
+    private String url;
+    private String username;
+    private String password;
+
+    /**
+     * Get subscription ID
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Set subscription ID
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Get subscription title
@@ -74,8 +95,8 @@ public class RemoteAlbum extends Album {
      *
      * @return the subscription url
      */
-    public String getRemoteLocation() {
-        return remoteLocation;
+    public String getUrl() {
+        return url;
     }
 
     /**
@@ -83,13 +104,45 @@ public class RemoteAlbum extends Album {
      *
      * @param url the subscription url
      */
-    public void setRemoteLocation(String url) {
-        this.remoteLocation = url;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * Get subscription username for authentication/authorization
+     * @return
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Set subscription username for authentication/authorization
+     * @param username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Get subscription password for authentication/authorization
+     * @return
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Set subscription password for authentication/authorization
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return "Subscription [title=" + title + ", type=" + type + ", remoteLocation=" + remoteLocation + "]";
+        return "Subscription [title=" + title + ", type=" + type + ", remoteLocation=" + url + "]";
     }
 
 
