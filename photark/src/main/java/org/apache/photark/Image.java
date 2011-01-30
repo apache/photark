@@ -21,7 +21,6 @@ package org.apache.photark;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +44,7 @@ public class Image implements Serializable {
     private String urlThumb;
 
     private List<ImageMetadata> imageAttributes = new ArrayList<ImageMetadata>();
-    
+
     private Set<String> tags = new HashSet<String>();
 
     /**
@@ -71,7 +70,7 @@ public class Image implements Serializable {
         this.title = title;
         this.datePosted = datePosted;
     }
-    
+
     public Set<String> getTags() {
     	return this.tags;
     }

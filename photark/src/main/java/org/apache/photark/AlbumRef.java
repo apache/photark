@@ -26,7 +26,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * A Album Rerefence model object
+ * A Album Reference model object
  * Useful to provide summary set of album
  * information over the wire
  *
