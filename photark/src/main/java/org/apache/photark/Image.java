@@ -38,6 +38,7 @@ public class Image implements Serializable {
     private String id;
     private String name;
     private String title;
+    private String description;
     private Date datePosted;
 
     private String url;
@@ -127,6 +128,14 @@ public class Image implements Serializable {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

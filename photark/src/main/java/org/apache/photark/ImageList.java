@@ -23,25 +23,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Aggregate a list of album references,
- * useful to produce the proper json/xml output
- * for gallery set of albums, without the full
- * details of the album model object itself
- *
- * @version $Rev$ $Date$
- */
-public class AlbumList implements Serializable {
+public class ImageList implements Serializable {
+    private static final long serialVersionUID = -2629958440102925366L;
 
-    private static final long serialVersionUID = 2578709033197276816L;
-
-    private List<AlbumRef> albumRefs = new ArrayList<AlbumRef>();
+    private List<ImageRef> imageRefs = new ArrayList<ImageRef>();
 
     /**
      * Retrieve a list of albums
      * @return the list of album references
      */
-    public List<AlbumRef> getAlbums() {
-        return this.albumRefs;
+    public List<ImageRef> getImages() {
+        return this.imageRefs;
     }
 }

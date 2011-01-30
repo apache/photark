@@ -6,20 +6,24 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
- * under the License.    
+ * under the License.
  */
 
 package org.apache.photark;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Summary info for Images
@@ -29,29 +33,8 @@ public class ImageRef implements Serializable {
 
     private static final long serialVersionUID = -3663988501067415961L;
 
-    private String name;
     private String title;
-
-    private String url;
-    private String urlThumb;
-
-    private String imageRef;
-
-    /**
-     * Get image name
-     * @return image name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set image name
-     * @param name image name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    private List<Link> links = new ArrayList<Link>();
 
     /**
      * Get image title
@@ -70,50 +53,32 @@ public class ImageRef implements Serializable {
     }
 
     /**
-     * Get image location
-     * @return image location
+     * Get cover image reference
+     * @return the cover image url reference
      */
-    public String getLocation() {
-        return url;
+    @XmlElement(name="link", namespace="http://www.w3.org/2005/Atom")
+    public List<Link> getLinks() {
+        return this.links;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ImageRef [title=" + title + ", links=" + links + "]";
     }
 
     /**
-     * Set image location
-     * @param location image location
+     * Utility method to create an ImageRef from an Image
+     * @param album
+     * @return
      */
-    public void setLocation(String location) {
-        this.url = location;
-    }
+    public static ImageRef createImageRef(Image image) {
+        ImageRef imageRef = new ImageRef();
 
-    /**
-     * Get thumbnail image location
-     * @return thumbnail image location
-     */
-    public String getThumbnailLocation() {
-        return urlThumb;
-    }
+        imageRef.setTitle(image.getTitle());
+        imageRef.getLinks().add(Link.to("thumbnail", image.getThumbnailLocation()));
+        imageRef.getLinks().add(Link.to("url", image.getLocation()));
 
-    /**
-     * Set thumbnail image location
-     * @param thumbnailLocation thumbnail image location
-     */
-    public void setThumbnailLocation(String thumbnailLocation) {
-        this.urlThumb = thumbnailLocation;
-    }
-
-    /**
-     * Get image reference
-     * @return image reference
-     */
-    public String getImageRef() {
         return imageRef;
-    }
-
-    /**
-     * Set image reference
-     * @param imageRef image reference
-     */
-    public void setImageRef(String imageRef) {
-        this.imageRef = imageRef;
     }
 }
