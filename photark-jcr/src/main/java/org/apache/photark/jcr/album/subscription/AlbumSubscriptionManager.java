@@ -1,30 +1,37 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.photark.jcr.album.subscription;
+
+import java.util.logging.Logger;
 
 import org.apache.photark.Image;
 import org.apache.photark.album.flickr.FlickrPhotoStream;
 import org.apache.photark.album.picasa.PicasaPhotoStream;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.jcr.services.JCRAlbumImpl;
-import org.apache.photark.jcr.services.JCRGalleryImpl;
 import org.apache.photark.services.gallery.RemoteAlbumSubscription;
 import org.apache.photark.services.gallery.RemoteGallery;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Remotable;
 import org.oasisopen.sca.annotation.Scope;
-import org.oasisopen.sca.annotation.Service;
-import org.apache.tuscany.sca.data.collection.Entry;
 
-
-import java.util.logging.Logger;
-
-/**
- * Created by IntelliJ IDEA.
- * User: subash
- * Date: Jan 31, 2011
- * Time: 2:11:15 PM
- * To change this template use File | Settings | File Templates.
- */
 @Remotable
 @Scope("COMPOSITE")
 public class AlbumSubscriptionManager implements RemoteAlbumSubscription {

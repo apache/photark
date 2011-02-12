@@ -1,37 +1,47 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.photark.jcr.services;
 
-import org.apache.photark.services.gallery.GalleryListener;
-import org.apache.photark.services.gallery.RemoteGallery;
+import static org.apache.photark.security.utils.Constants.ALBUM_VIEW_IMAGES_PERMISSION;
+import static org.apache.photark.security.utils.Constants.GUEST;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.jcr.*;
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.security.authorization.services.AccessManager;
 import org.apache.photark.services.album.Album;
-import org.apache.photark.services.gallery.BaseGalleryImpl;
-import org.apache.photark.services.gallery.Gallery;
-import org.oasisopen.sca.annotation.*;
+import org.apache.photark.services.gallery.GalleryListener;
+import org.apache.photark.services.gallery.RemoteGallery;
+import org.oasisopen.sca.annotation.AllowsPassByReference;
+import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Property;
+import org.oasisopen.sca.annotation.Reference;
+import org.oasisopen.sca.annotation.Scope;
 
-import static org.apache.photark.security.utils.Constants.*;
-
-
-/**
- * Created by IntelliJ IDEA.
- * User: subash
- * Date: Jan 27, 2011
- * Time: 4:43:03 PM
- * To change this template use File | Settings | File Templates.
- */
 @Scope("COMPOSITE")
 public class JCRRemoteGalleryImpl implements RemoteGallery {
 

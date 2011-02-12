@@ -19,11 +19,20 @@
 
 package org.apache.photark.jcr.services;
 
+import static org.apache.photark.security.utils.Constants.ACCESS_LIST;
+import static org.apache.photark.security.utils.Constants.ALBUM_ADD_IMAGES_PERMISSION;
+import static org.apache.photark.security.utils.Constants.ALBUM_CREATE_PERMISSION;
+import static org.apache.photark.security.utils.Constants.ALBUM_DELETE_IMAGES_PERMISSION;
+import static org.apache.photark.security.utils.Constants.ALBUM_EDIT_ALBUM_DESCRIPTION_PERMISSION;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,14 +53,12 @@ import org.apache.photark.jcr.JCRRepositoryManager;
 import org.apache.photark.jcr.util.ArchiveFileExtractor;
 import org.apache.photark.security.authorization.AccessList;
 import org.apache.photark.security.authorization.services.AccessManager;
-import org.apache.photark.security.authorization.services.SecurityServiceImpl;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.Gallery;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
-import static org.apache.photark.security.utils.Constants.*;
 
 /**
  * Servlet responsible for receiving image uploads

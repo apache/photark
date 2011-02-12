@@ -28,9 +28,7 @@ if (! photark.constants) {
 photark.constants.contextRoot = "/photark/";
 photark.constants.adminContextRoot = "/photark/admin/";
 
-//photark.constants.FlickerAlbumSubscription = photark.constants.contextRoot + "FlickerAlbumSubscription?smd";
 photark.constants.RemoteAlbumSubscription = photark.constants.contextRoot + "RemoteAlbumSubscriptionManager?smd";
-//photark.constants.PicasaAlbumSubscription = photark.constants.contextRoot + "PicasaAlbumSubscription?smd";
 photark.constants.GalleryServiceEndpoint = photark.constants.contextRoot + "GalleryService?smd";
 photark.constants.RemoteGalleryServiceEndpoint = photark.constants.contextRoot + "JCRRemoteGallery?smd";
 photark.constants.SearchServiceEndpoint = photark.constants.contextRoot + "SearchService?smd";

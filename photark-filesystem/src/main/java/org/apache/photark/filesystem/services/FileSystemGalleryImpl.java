@@ -19,14 +19,9 @@
 
 package org.apache.photark.filesystem.services;
 
-import java.io.File;
-import java.net.URL;
-import java.util.logging.Logger;
-
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.gallery.BaseGalleryImpl;
 import org.apache.photark.services.gallery.Gallery;
-import org.oasisopen.sca.annotation.Init;
 
 public class FileSystemGalleryImpl extends BaseGalleryImpl implements Gallery {
     private static final java.util.logging.Logger logger =
@@ -84,7 +79,7 @@ public class FileSystemGalleryImpl extends BaseGalleryImpl implements Gallery {
     }
 
     public boolean hasAlbum(String albumName) {
-        return false; 
+        return false;
     }
 
     public void deleteAlbum(String albumName) {
@@ -92,6 +87,6 @@ public class FileSystemGalleryImpl extends BaseGalleryImpl implements Gallery {
 	}
 
     public Album[] getAlbumsToSetPermission(String securityToken) {
-        return new Album[0]; 
+        return new Album[0];
     }
 }

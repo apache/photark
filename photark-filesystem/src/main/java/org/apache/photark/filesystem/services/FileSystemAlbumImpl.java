@@ -19,15 +19,6 @@
 
 package org.apache.photark.filesystem.services;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.photark.Image;
-import org.apache.photark.services.album.Album;
-import org.apache.photark.services.album.ImageFilter;
-import org.oasisopen.sca.annotation.Init;
-import org.oasisopen.sca.annotation.Property;
 
 public class FileSystemAlbumImpl implements org.apache.photark.services.album.Album {
 	private String name;
