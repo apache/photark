@@ -44,13 +44,22 @@ public class JCRAlbumImpl implements Album {
 
     private String gallery;
     private String name;
+    private String type;
     private String location;
     private boolean initialized;
     private static Map<String, Album> albums = new HashMap<String, Album>();
 
-    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name ) {
+    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name) {
         if (!albums.containsKey(name)) {
-            albums.put(name, new JCRAlbumImpl(repositoryManager,name ));
+            albums.put(name, new JCRAlbumImpl(repositoryManager, name));
+        }
+        return albums.get(name);
+    }
+
+    public synchronized static Album createAlbum(JCRRepositoryManager repositoryManager, String name, String type) { // Adhere to new structure
+
+        if (!albums.containsKey(name)) {
+            albums.put(name, new JCRAlbumImpl(repositoryManager, name, type));
         }
         return albums.get(name);
     }
@@ -58,12 +67,20 @@ public class JCRAlbumImpl implements Album {
     public JCRAlbumImpl(JCRRepositoryManager repositoryManager, String name) {
         this.repositoryManager = repositoryManager;
         this.name = name;
+        this.type = "local";   // temporary
+    }
+
+    public JCRAlbumImpl(JCRRepositoryManager repositoryManager, String name, String type) {
+
+        this.repositoryManager = repositoryManager;
+        this.name = name;
+        this.type = type;
     }
 
     /**
      * Initialize the gallery service
-     *   - During initialization, check for local images and create a JCR album 
-     *     which is usefull for sample gallery shiped in the sample application.
+     * - During initialization, check for local images and create a JCR album
+     * which is usefull for sample gallery shiped in the sample application.
      */
     @Init
     public synchronized void init() {
@@ -82,7 +99,8 @@ public class JCRAlbumImpl implements Album {
                     if (album.isDirectory() && album.exists()) {
                         String[] listPictures = album.list(new ImageFilter(".jpg"));
                         if (listPictures != null && listPictures.length > 0) {
-                            Node albumNode = getAlbumNode(name);
+//                            Node albumNode = getAlbumNode(name);
+                            Node albumNode = getAlbumNode();              // this line added to adhere to new structure
                             for (String image : listPictures) {
                                 if (!albumNode.hasNode(image)) {
                                     Node picNode = albumNode.addNode(image);
@@ -122,6 +140,10 @@ public class JCRAlbumImpl implements Album {
         this.location = null;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public String getName() {
         return name;
     }
@@ -133,22 +155,17 @@ public class JCRAlbumImpl implements Album {
     }
 
     public String getDescription() {
-        String description="";
+        String description = "";
         if (!initialized) {
             init();
         }
         try {
-            Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
+            Node albumNode = getAlbumNode();
             if (albumNode.hasProperty("description")) {
                 description = albumNode.getProperty("description").getString();
-            } /*else {
-                logger.info("description of album " + name + " not found");
-            } */
+            }
 
         } catch (Exception e) {
-            // FIXME: ignore for now
             e.printStackTrace();
         } finally {
             //repositoryManager.releaseSession();
@@ -159,14 +176,11 @@ public class JCRAlbumImpl implements Album {
     @Property
     public void setDescription(String description) {
         try {
-            Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
+            Node albumNode = getAlbumNode();
             albumNode.setProperty("description", description);
-            session.save();
         } catch (RepositoryException e) {
             e.printStackTrace();
-        }  finally {
+        } finally {
             //repositoryManager.releaseSession();
         }
 
@@ -190,23 +204,15 @@ public class JCRAlbumImpl implements Album {
             init();
         }
         List<String> pictures = new ArrayList<String>();
-        try {
-            Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
-            NodeIterator nodes = albumNode.getNodes();
 
+        try {
+            NodeIterator nodes = getAlbumNode().getNodes();
             while (nodes.hasNext()) {
                 Node node = nodes.nextNode();
-                if (node.getPath().equals("/jcr:system")||node.getPath().equals("/userStore"))
-                    continue;
                 pictures.add(node.getProperty("location").getString());
             }
-        } catch (Exception e) {
-            // FIXME: ignore for now
-            e.printStackTrace();
-        } finally {
-            //repositoryManager.releaseSession();
+        } catch (RepositoryException e) {
+
         }
 
         String[] pictureArray = new String[pictures.size()];
@@ -214,17 +220,44 @@ public class JCRAlbumImpl implements Album {
         return pictureArray;
     }
 
+    private Node getAlbumNode() {       
+
+        Node albumNode = null;
+
+        try {
+            Session session = repositoryManager.getSession();
+            Node root = session.getRootNode().getNode("albums");
+
+            if (this.type.equals("local")) {                        // returns a local album node or if not exists create a new album node
+                if (root.getNode("local").hasNode(name)) {
+                    albumNode = root.getNode("local").getNode(name);
+                } else {
+                    albumNode = root.getNode("local").addNode(name);
+                }
+
+            } else if (this.type.equals("remote")) {                   // returns a remote album node or if not exists create a new album node
+                if (root.getNode("remote").hasNode(name)) {
+                    albumNode = root.getNode("remote").getNode(name);
+                } else {
+                    albumNode = root.getNode("remote").addNode(name);
+                }
+
+            }
+            session.save();
+        } catch (Exception e) {
+
+        }
+        return albumNode;
+    }
+
     public void removeNodes() {
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
+            Node root = session.getRootNode().getNode("albums").getNode("local");
             NodeIterator nodes = root.getNodes();
             while (nodes.hasNext()) {
                 Node node = nodes.nextNode();
-                if (node.getPath().equals("/jcr:system"))
-                    continue;
-                else
-                    node.remove();
+                node.remove();
             }
             session.save();
         } catch (Exception e) {
@@ -236,20 +269,27 @@ public class JCRAlbumImpl implements Album {
 
     }
 
-    public void addPicture(Image picture) {
+    public void addPicture(Image picture) {    // Adhered to new structure
+
         try {
+
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
-            Node picNode = albumNode.addNode(picture.getName());
-            picture.getImageAsStream();
+            String location = "";
+            if (this.type.equals("local")) {
+                location = picture.getName();
+            } else if (this.type.equals("remote")) {
+                location = picture.getLocation();
+            }
+            Node picNode = getAlbumNode().addNode(picture.getName());
             picNode.setProperty("imageContent", picture.getImageAsStream());
             picNode.setProperty("name", picture.getName());
-            picNode.setProperty("location", picture.getName());
+            picNode.setProperty("location", location);
             session.save();
+
+
         } catch (RepositoryException e) {
             e.printStackTrace();
-        }  finally {
+        } finally {
             //repositoryManager.releaseSession();
         }
     }
@@ -257,14 +297,14 @@ public class JCRAlbumImpl implements Album {
     public void deletePicture(Image picture) {
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
-            Node picNode = albumNode.addNode(picture.getName());
+
+            Node albumNode = getAlbumNode();
+            Node picNode = albumNode.getNode(picture.getName());
             picNode.remove();
             session.save();
         } catch (RepositoryException e) {
             e.printStackTrace();
-        }  finally {
+        } finally {
             //repositoryManager.releaseSession();
         }
     }
@@ -275,7 +315,7 @@ public class JCRAlbumImpl implements Album {
         ownerList.add(owner);
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
+            Node root = session.getRootNode().getNode("albums").getNode(type);
             Node albumNode = root.getNode(name);
             if (albumNode.hasProperty("owners")) {
                 for (Value ownerValue : albumNode.getProperty("owners").getValues()) {
@@ -304,7 +344,7 @@ public class JCRAlbumImpl implements Album {
         }
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
+            Node root = session.getRootNode().getNode("albums").getNode(type);
             if (root.hasNode(name)) {
                 Node albumNode = root.getNode(name);
                 if (albumNode.hasProperty("owners")) {
@@ -329,24 +369,24 @@ public class JCRAlbumImpl implements Album {
 
     /**
      * This method deletes the picture node.
-     * @param  pictureName
-     * 
+     *
+     * @param pictureName
      */
     public void deletePicture(String pictureName) {
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
-            Node albumNode = root.getNode(name);
-            if(albumNode.hasNode(pictureName)){
+
+            Node albumNode = getAlbumNode();
+            if (albumNode.hasNode(pictureName)) {
                 Node picNode = albumNode.getNode(pictureName);
                 picNode.remove();
                 session.save();
-            }else{
+            } else {
                 logger.info("image " + pictureName + " not found");
-            }    	            
+            }
         } catch (RepositoryException e) {
             e.printStackTrace();
-        }  finally {
+        } finally {
             //repositoryManager.releaseSession();
         }
     }
@@ -354,7 +394,7 @@ public class JCRAlbumImpl implements Album {
     /**
      * This method create new album node in case it does not exists in
      * repository or return older album node otherwise.
-     * 
+     *
      * @param
      * @return
      * @throws RepositoryException

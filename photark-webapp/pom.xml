@@ -140,6 +140,18 @@
 			<scope>runtime</scope>
 		</dependency>
 
+        <dependency>
+           <groupId>org.apache.photark</groupId>
+           <artifactId>photark-picasa</artifactId>
+           <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+           <groupId>org.apache.photark</groupId>
+           <artifactId>photark-flickr</artifactId>
+           <version>1.0-incubating-SNAPSHOT</version>
+        </dependency>
+
 		<dependency>
 		   <groupId>org.dojotoolkit</groupId>
 		   <artifactId>dojo</artifactId>

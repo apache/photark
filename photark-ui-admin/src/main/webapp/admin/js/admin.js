@@ -56,6 +56,8 @@ function populateSelect() {
         for (var pos = 0; pos < albums.length; pos++) {
             selectAlbum.options[selectAlbum.options.length] = new Option(albums[pos].name, albums[pos].name, false, false);
         }
+        selectAlbum.options[selectAlbum.options.length] = new Option("New-Remote-Album", "New-Remote-Album", false, false);
+
         dojo.byId("selectAlbum").value = albumName;
         if (currentView == "AlbumOnload" || currentView == "Album") {
             manageAlbumFields();
@@ -138,7 +140,39 @@ function manageAlbumFields() {
         dojo.byId("btnAlbumDesc").style.display = "none";
         dojo.byId("deleteAlbum").style.display = "none";
         dojo.byId("albumDescriptionDiv").innerHTML = "<textarea cols='20' rows='5' class='textarea' name='albumDescription' id='albumDescription'></textarea>";
+
+        dojo.byId("remoteAlb_type").style.display = "none";
+        dojo.byId("remoteAlb_passwd").style.display = "none";
+        dojo.byId("remoteAlb_uname").style.display = "none";
+        dojo.byId("remoteAlb_url").style.display = "none";
+        dojo.byId("import_submit").style.display = "none";
+
+    } else if(albumName =="New-Remote-Album") {
+
+         document.getElementById('albumCoverDiv').innerHTML = "<table id='albumCover' style='width:200px;' border='0' cellspacing='0' cellpadding='1'></table>";
+
+         dojo.byId("newAlbumName").style.display = "";
+         dojo.byId("remoteAlb_passwd").style.display = "";
+         dojo.byId("remoteAlb_uname").style.display = "";
+         dojo.byId("remoteAlb_url").style.display = "";
+         dojo.byId("import_submit").style.display = "";
+         dojo.byId("remoteAlb_type").style.display = "";
+
+         dojo.byId("deleteAlbum").style.display = "none";
+         dojo.byId("albumDescriptionDiv").innerHTML = "<textarea cols='20' rows='5' class='textarea' name='albumDescription' id='albumDescription'></textarea>";
+         dojo.byId("btnUploader").style.display = "none";
+         dojo.byId("btnUpload").style.display = "none";
+         dojo.byId("btnAlbumDesc").style.display = "none";
+         dojo.byId("newAlbumLabel").style.display = "";
+         dojo.byId("filesDiv").style.display = "none";
+
     } else {
+
+         dojo.byId("remoteAlb_type").style.display = "none";
+         dojo.byId("remoteAlb_passwd").style.display = "none";
+         dojo.byId("remoteAlb_uname").style.display = "none";
+         dojo.byId("remoteAlb_url").style.display = "none";
+         dojo.byId("import_submit").style.display = "none";
 
         dojo.byId("newAlbumName").style.display = "none";
         dojo.byId("newAlbumLabel").style.display = "none";

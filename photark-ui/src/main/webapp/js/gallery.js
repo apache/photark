@@ -31,15 +31,24 @@ var show_slide_slow  = new Image(31,31); show_slide_slow.src = "images/show_slid
 var show_slide_slow_on  = new Image(31,31); show_slide_slow_on.src = "images/show_slide_slow_on.gif";
 
 var gallery;
+var remoteGallery;
 var searchService;
 var galleryName;
+
 var galleryAlbums;
+var remoteGalleryAlbums;
+
 var albumTags;
 var albumCovers = new Array();
+var remoteAlbumCovers = new Array();
+
 var albumName;
 var albumItems;
 var albumPos = 0;
 var pos = 0;
+var rpos = 0;
+var remoteFlag = 0;
+
 var slideShowSpeed=0;
 var timer;
 var userId;
@@ -81,11 +90,16 @@ function getJSONAccessList() {
 function initServices(){
   	searchService = new dojo.rpc.JsonService( photark.constants.SearchServiceEndpoint );
     gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
+    remoteGallery = new dojo.rpc.JsonService(photark.constants.RemoteGalleryServiceEndpoint);
+
 }
 
 function initGallery() {
     try {
         gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(gallery_getAlbumsResponse);
+       remoteGallery.getAlbumsToUser(SECURITY_TOKEN,"remote").addCallback(remote_gallery_getAlbumsResponse);
+
+
     } catch(exception) {
         alert(exception);
         // logout();
@@ -117,6 +131,22 @@ function displayLoginLinks  (response) {
 
 }
 
+function remote_gallery_getAlbumsResponse(albums, exception) {
+
+    if(exception) {
+       // alert(exception.msg);
+       // return;
+         logout();
+    }
+    remoteGalleryAlbums = albums;
+
+    for(i=0; i< remoteGalleryAlbums.length; i++)
+    {
+       //gallery.getAlbumCover(galleryAlbums[i].name).addCallback(gallery_getAlbumCoverResponse);
+         remoteGallery.getAlbumCoverToUser(remoteGalleryAlbums[i].name,SECURITY_TOKEN,"remote").addCallback(remote_gallery_getAlbumCoverResponse);
+    }
+}
+
 function gallery_getAlbumsResponse(albums, exception) {
     if(exception) {
        // alert(exception.msg);
@@ -132,6 +162,21 @@ function gallery_getAlbumsResponse(albums, exception) {
     }
 }
 
+
+function remote_gallery_getAlbumCoverResponse(cover, exception) {
+    if(exception){
+//        alert(exception.msg);
+//        return;
+         logout();
+    }
+    remoteAlbumCovers[rpos] = cover;
+    rpos += 1;
+    if(remoteAlbumCovers.length == remoteGalleryAlbums.length)
+    {
+        initializeRemoteGallery();
+        displayRemoteGallery();
+    }
+}
 
 function gallery_getAlbumCoverResponse(cover, exception) {
     if(exception){
@@ -218,6 +263,36 @@ function addTag() {
 	 
 }
 
+function initializeRemoteGallery() {
+    var table=document.getElementById('remoteTableGallery');
+    var lastRow = table.rows.length;
+    for (i = 0; i < remoteGalleryAlbums.length; i++) {
+        var row = table.insertRow(lastRow++);
+        var column = row.insertCell(0);
+
+        if (remoteAlbumCovers[i] != null) {
+
+            var albumName = remoteGalleryAlbums[i].name;
+            var img = document.createElement("img");
+            img.src = remoteAlbumCovers[i];
+            var img_html = "<img src=" + img.src + " class=\"slideImage\" width=180px ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\"/>";
+            var html = "<a href=\"javascript:initializeRemoteAlbum('" + albumName + "', null)\">" + img_html + "</a>";
+            column.innerHTML = html;
+
+            column = row.insertCell(1);
+            column.innerHTML = "<div style=\"width:500\">"+remoteGalleryAlbums[i].description+"</div>";
+
+            row = table.insertRow(lastRow++);
+            column = row.insertCell(0)
+            column.innerHTML = albumName;
+
+            row = table.insertRow(lastRow++);
+            column = row.insertCell(0)
+            column.innerHTML = "<img src=\"images/space.gif\" class=\"slideImage\" width=\"10\" height=\"10\" ondragstart=\"return false\" onselectstart=\"return false\" oncontextmenu=\"return false\" galleryimg=\"no\" usemap=\"#imagemap\" alt=\"\">";
+        }
+   }
+}
+
 function initializeGallery() {
     var table=document.getElementById('tableGallery');
     var lastRow = table.rows.length;
@@ -248,6 +323,13 @@ function initializeGallery() {
    }
 }
 
+function displayRemoteGallery() {
+    setVisibility('gallery',true);
+    setVisibility('album',false);
+    setVisibility('search',false);
+}
+
+
 function displayGallery() {
     setVisibility('gallery',true);
     setVisibility('album',false);
@@ -267,6 +349,18 @@ function initializeAlbum(albumName,imageName) {
    	   	albumTags = new Array();
    	   	gallery.getAlbumPicturesToUser(albumName,SECURITY_TOKEN).addCallback(gallery_getAlbumPicturesResponse);
     	  
+    } catch(exception) {
+        alert(e);
+    }
+}
+
+function initializeRemoteAlbum(albumName,imageName) {
+    try {
+        this.albumName = albumName;
+   	   	albumImageToBeLoaded = imageName;
+   	   	albumTags = new Array();
+   	   	remoteGallery.getAlbumPicturesToUser(albumName,SECURITY_TOKEN,"remote").addCallback(gallery_getRemoteAlbumPicturesResponse);
+
     } catch(exception) {
         alert(e);
     }
@@ -388,9 +482,43 @@ function gallery_getAlbumPicturesResponse(items, exception) {
     showAlbum();
 }
 
+function gallery_getRemoteAlbumPicturesResponse(items, exception) {
+    if(exception) {
+       // alert(exception.msg);
+        displayGallery();
+         logout();
+      //  return;
+    }
+    albumItems = items;
+    albumPos = 0;
+
+    if (albumImageToBeLoaded != null) {
+
+    	for (i = 0 ; i < items.length ; i++) {
+
+    		if (items[i] == albumImageToBeLoaded) {
+    			albumPos = i;
+    			albumImageToBeLoaded = null;
+
+    		}
+
+    	}
+
+    }
+
+    showRemoteAlbum();
+}
+
 function showAlbum() {
     if(albumItems.length > 0) {
         showImage(albumPos);
+    }
+    displayAlbum();
+}
+
+function showRemoteAlbum() {
+    if(albumItems.length > 0) {
+        showRemoteImage(albumPos);
     }
     displayAlbum();
 }
@@ -410,20 +538,44 @@ function showImage(albumPos) {
     }
     img.src = window.location.href + "gallery/"+ this.albumName +"/" + albumItems[albumPos];
     loadTags(albumPos);
+    remoteFlag = 0;
     return false;
 }
+
+function showRemoteImage(albumPos) {
+    var img = document.createElement("img");
+    img.onload = function(evt) {
+        document.getElementById("albumImage").src = this.src;
+        document.getElementById("albumImage").width=this.width;
+        document.getElementById("albumImage").height=this.height;
+    }
+    img.src = albumItems[albumPos];
+    remoteFlag = 1;
+    loadTags(albumPos);
+    return false;
+}
+
 
 function goNext() {
     if(albumPos < albumItems.length - 1) {
         albumPos++;
+        if(remoteFlag ==1) {
+        showRemoteImage(albumPos);
+        } else {
         showImage(albumPos);
+        }
     }
 }
 
 function goPrevious() {
     if(albumPos > 0) {
         albumPos--;
+        if(remoteFlag ==1) {
+        showRemoteImage(albumPos);
+        } else {
         showImage(albumPos);
+        }
+
     }
 }
 
@@ -514,6 +666,10 @@ function startTimer(time){
     }else{
         albumPos=1;
     }
+    if(remoteFlag == 1) {
+    showRemoteImage(albumPos);
+    } else {
     showImage(albumPos);
+    }
     timer=setTimeout("startTimer("+time+")",time);
 }

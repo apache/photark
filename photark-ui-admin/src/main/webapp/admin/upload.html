@@ -73,9 +73,24 @@
                             </div>
                         </td>
                         <td>
+                         <div id="remoteAlb_type"> Select Remote Album
+                              <select  id="selectRemoteAlbum" name="selectRemoteAlbum" >
+                                <option value="Subscribe-Picasa">Picasa</option>
+                                <option value="Subscribe-Flicker">Flicker</option>
+                              </select>
+                            </div>
+                            <div id="remoteAlb_url">Album Url <input type='text' name="remote_alburl" id='remote_alburl'  size='25' value=''>
+                            </div>
+                            <div id="remoteAlb_uname">Username<input type='text' name="remote_albuname" id='remote_albuname' size='25' value=''>
+                            </div>
+                            <div id="remoteAlb_passwd">Password <input type='password' name="remote_albpasswd" id='remote_albpasswd' size='25' value=''>
+                        </div>
                             <label for="albumDescriptionDiv">Album Description</label>
 
                             <div id="albumDescriptionDiv">
+                            </div> <br>
+                             <div id="import_submit" class="uploadBtn btn" onClick="doImportRemoteAlbums();">
+                             Subscribe  
                             </div>
                         </td>
                     </tr>

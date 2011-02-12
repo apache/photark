@@ -23,7 +23,7 @@ import org.apache.photark.Image;
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+ // <user password="aaa" roles="photark-admin" username="aaa"/>
 public class FlickrSubscriptionTestCase {
     private static final String SUBSCRIPTION_URL = "http://api.flickr.com/services/feeds/photos_public.gne?id=24662369@N07&lang=en-us&format=atom";
     private static FlickrPhotoStream photoStream;

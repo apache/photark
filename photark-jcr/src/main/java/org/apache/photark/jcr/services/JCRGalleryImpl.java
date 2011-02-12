@@ -57,6 +57,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     @Reference(name = "repositoryManager")
     protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
+        initBaseJCRStructure();
     }
 
 
@@ -68,6 +69,34 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     public JCRGalleryImpl(String name) {
         super(name);
     }
+
+           private void initBaseJCRStructure() {
+           try {
+               Session session = repositoryManager.getSession();
+               Node baseRoot = session.getRootNode();
+               Node rootNode;
+
+               if (!baseRoot.hasNode("albums")) {
+                   rootNode = baseRoot.addNode("albums");
+               } else {
+                   rootNode = baseRoot.getNode("albums");
+               }
+
+               if (!rootNode.hasNode("remote")) {
+                  rootNode.addNode("remote");
+               }
+
+               if (!rootNode.hasNode("local")) {
+                   rootNode.addNode("local");
+               }
+
+           } catch (RepositoryException e) {
+               e.printStackTrace();
+           } finally {
+
+           }
+
+       }
 
     @Init
     public void init() {
@@ -119,7 +148,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     private void getAlbumsFromJcrRepository() {
         try {
             Session session = repositoryManager.getSession();
-            Node rootNode = session.getRootNode();
+            Node rootNode = session.getRootNode().getNode("albums").getNode("local");
             NodeIterator albumNodes = rootNode.getNodes();
             while (albumNodes.hasNext()) {
                 Node albumNode = albumNodes.nextNode();
@@ -142,7 +171,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     public void addAlbum(String albumName) {
         try {
             Session session = repositoryManager.getSession();
-            Node rootNode = session.getRootNode();
+            Node rootNode = session.getRootNode().getNode("albums").getNode("local");
             if (rootNode.hasNode(albumName)) {
                 logger.info("This album is already in gallery");
                 return;
@@ -165,7 +194,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     public boolean hasAlbum(String albumName) {
         try {
             Session session = repositoryManager.getSession();
-            Node rootNode = session.getRootNode();
+            Node rootNode = session.getRootNode().getNode("albums").getNode("local");
             if (rootNode.hasNode(albumName)) {
                 //   logger.info("This album is already in gallery");
                 return true;
@@ -181,7 +210,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
     public void deleteAlbum(String albumName) {
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
+            Node root = session.getRootNode().getNode("albums").getNode("local");;
             if (root.hasNode(albumName)) {
                 Node albumNode = root.getNode(albumName);
                 Album album = JCRAlbumImpl.createAlbum(repositoryManager, albumName);

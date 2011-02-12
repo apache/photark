@@ -83,6 +83,7 @@
 			<binding.sca name="local"/>
 		</reference> 
 		<reference name="accessmanager" target="AccessManager"/>
+
 	</component>
 	
     <!-- Component responsible for providing JCR Management Support -->
@@ -138,6 +139,34 @@
 			<binding.sca name="local"/>
 		</reference>	
 		
-	</component>    
+	</component>
+
+
+
+    <component name="RemoteAlbumSubscriptionManager">
+		<implementation.java class="org.apache.photark.jcr.album.subscription.AlbumSubscriptionManager"/>
+
+		<service name="RemoteAlbumSubscription">
+   			<interface.java interface="org.apache.photark.services.gallery.RemoteAlbumSubscription"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/RemoteAlbumSubscriptionManager"/>
+   		</service>
+     <reference name="repositoryManager" target="RepositoryManager"/>
+     <reference name="jcrRemoteGallery" target="RemoteGallery"/>
+	</component>
+
+    <component name="RemoteGallery">
+   		<implementation.java class="org.apache.photark.jcr.services.JCRRemoteGalleryImpl"/>
+   		<property name="name">gallery</property>
+   		<service name="RemoteGallery">
+   			<interface.java interface="org.apache.photark.services.gallery.RemoteGallery"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/JCRRemoteGallery"/>
+   		</service>
+   		<reference name="repositoryManager" target="RepositoryManager"/>
+   		<reference name="listeners" target="SearchService"/>
+   	    <reference name="accessmanager" target="AccessManager"/>
+    </component>
+    
 	
 </composite>

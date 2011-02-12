@@ -157,7 +157,7 @@ public class PicasaPhotoStream implements Collection<String, Image> {
         // http://code.google.com/apis/picasaweb/docs/2.0/developers_guide_java.html
 
         image.setId(photo.getGphotoId());
-        image.setName(photo.getTitle().getPlainText());
+        image.setName(photo.getGphotoId());
         image.setTitle(photo.getTitle().getPlainText());
         image.setLocation(photo.getMediaContents().get(0).getUrl());
 

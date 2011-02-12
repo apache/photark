@@ -132,6 +132,7 @@ public class FlickrPhotoStream implements Collection<String, Image> {
         image.setId(id.substring(id.lastIndexOf("/") + 1));
         image.setTitle(entry.getTitle());
         image.setLocation(entry.getEnclosureLinkResolvedHref().toString());
+        image.setName(id.substring(id.lastIndexOf("/") + 1));
 
         return image;
     }

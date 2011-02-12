@@ -30,6 +30,8 @@ public interface Gallery extends GalleryListener ,GallerySecurity{
     
     void addAlbum(String albumName);
 
+//    void addAlbum(String albumName, String albumType);
+
     boolean hasAlbum(String albumName);
     
     void deleteAlbum(String albumName);

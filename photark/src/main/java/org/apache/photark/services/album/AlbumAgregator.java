@@ -27,7 +27,7 @@ import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 
 public class AlbumAgregator implements Album {
-    private static String NAME = "Aggregated Album";
+    private static String NAME = "Album Aggregator";
 
     private List<String> pictures = new ArrayList<String>();
 

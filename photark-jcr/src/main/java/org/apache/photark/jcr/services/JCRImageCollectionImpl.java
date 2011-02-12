@@ -82,7 +82,7 @@ public class JCRImageCollectionImpl implements ImageCollection {
         InputStream inStream = null;
         try {
             Session session = repositoryManager.getSession();
-            Node root = session.getRootNode();
+            Node root = session.getRootNode().getNode("albums").getNode("local");
             Node albumNode = root.getNode(albumName);
             String image = stringArray[1];
             Node picNode = albumNode.getNode(image);

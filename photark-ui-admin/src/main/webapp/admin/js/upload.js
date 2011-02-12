@@ -47,7 +47,7 @@ var setProgressbar = function(currentVal,totalVal){
     });
 };
 
-dojo.addOnLoad( function(){
+dojo.addOnLoad( function() {
 	var fileUploaderConfig = {
 		isDebug:false,
 		hoverClass:"uploadHover",
@@ -75,6 +75,32 @@ dojo.addOnLoad( function(){
 		},fileUploaderConfig), "btnUploader");
 
 
+
+        doImportRemoteAlbums = function() {
+
+        var selectAlbums = dojo.byId("selectRemoteAlbum");
+        var selectedAlb =  selectAlbums.value;
+        var remoteAlbumName = dojo.byId("newAlbumName").value;
+        var albumDescription = dojo.byId("albumDescription").value;
+    	var alburl= dojo.byId("remote_alburl").value;
+	    var albuname= dojo.byId("remote_albuname").value;
+	    var albpasswd= dojo.byId("remote_albpasswd").value;
+
+       if((alburl == "") || (remoteAlbumName == "") ) {
+        alert("Album name and album url fileds are required to proceed !!. Please fill the required fields.");
+       } else if(selectedAlb != null) {
+            var albumSubService =  new dojo.rpc.JsonService(photark.constants.RemoteAlbumSubscription);
+            albumSubService.addRemoteAlbum(alburl,remoteAlbumName,albumDescription,selectedAlb,albuname,albpasswd).addCallback(gallery_getRemoteAlbumsSubscriptionResponse);
+       }
+       }
+
+       gallery_getRemoteAlbumsSubscriptionResponse = function(pimages, exception) {
+        if(exception) {
+        logout();
+        }
+            alert("Remote Album Successfully Created..You have Added "+pimages.length+" Images");
+       }
+
 		doUpload = function(){
 			console.log("doUpload");
 			displayProgress();
@@ -98,7 +124,7 @@ dojo.addOnLoad( function(){
 					dojo.byId("progressBar").style.display="none";
 				} else {
 					//add new album to list of albums
-					selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
+                    selectAlbum.options[selectAlbum.options.length] =  new Option(albumName, albumName, false, false);
 					//upload the files
 					setProgressbar(0,1);
 					uploader.upload({albumName:albumName, albumDescription:albumDescription, securityToken:securityToken});

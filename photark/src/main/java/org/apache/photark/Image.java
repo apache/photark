@@ -38,6 +38,7 @@ public class Image implements Serializable {
     private String name;
     private String title;
     private String imageName;
+    private String imageType = "local";
     private Date datePosted;
     private transient InputStream imageStream;
     private String url;
@@ -82,6 +83,7 @@ public class Image implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+        this.imageName = name;
     }
 
     
@@ -150,6 +152,21 @@ public class Image implements Serializable {
         this.url = location;
     }
 
+    /**
+     * Set the Image type, whether remote or local
+     */
+    public void setType(String imageType){
+        this.imageType = imageType;
+    }
+
+    /**
+     *   Returns Image type as a String
+     * @return  Image Type
+     */
+    public String getType(){
+    return imageType;
+    }
+
 
     /**
      * Return image content as stream
@@ -164,8 +181,8 @@ public class Image implements Serializable {
      * @return list of image metadata attributes
      */
     public List<ImageMetadata> getImageMetadata() {
-        if(imageAttributes == null) {
-            imageAttributes = ImageMetadataScanner.scanImageMetadata(imageName, imageStream);
+        if((imageAttributes == null) && (imageType.equals("local"))) {
+       imageAttributes = ImageMetadataScanner.scanImageMetadata(imageName, imageStream);
         }
         return imageAttributes;
     }
