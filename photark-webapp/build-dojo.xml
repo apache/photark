@@ -55,14 +55,14 @@
         	   encoding="native-encoding">
             <patternset>
 
-                <include name="dojo-release-${dojo.version}/dojo/**"/>
-                <exclude name="dojo-release-${dojo.version}/dojo/tests/**"/>
-                <include name="dojo-release-${dojo.version}/dijit/**"/>
-                <include name="dojo-release-${dojo.version}/dojox/**"/>
-                <exclude name="dojo-release-${dojo.version}/util/**"/>
+                <include name="dojo-${dojo.version}/dojo/**"/>
+                <exclude name="dojo-${dojo.version}/dojo/tests/**"/>
+                <include name="dojo-${dojo.version}/dijit/**"/>
+                <include name="dojo-${dojo.version}/dojox/**"/>
+                <exclude name="dojo-${dojo.version}/util/**"/>
             </patternset>
         </unzip>
-        <move file="${basedir}/target/dojo-unpack-temp/dojo-release-${dojo.version}"
+        <move file="${basedir}/target/dojo-unpack-temp/dojo-${dojo.version}"
               tofile="${unpack.location}"
               verbose="true"/>
         <delete dir="${basedir}/target/dojo-unpack-temp/"/>

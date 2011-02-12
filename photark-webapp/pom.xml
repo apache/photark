@@ -140,12 +140,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- dependency>
+		<dependency>
 		   <groupId>org.dojotoolkit</groupId>
 		   <artifactId>dojo</artifactId>
-		   <version>1.5</version>
+		   <version>1.5.0</version>
 		   <type>zip</type>
-		</dependency-->
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
