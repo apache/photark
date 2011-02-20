@@ -96,8 +96,16 @@ function initServices(){
 
 function initGallery() {
     try {
+        //following if condition is for a script error that arises in IE 7/8/9
+        if (SECURITY_TOKEN = 'undefined') {
+            dojo.require("dojo._base.xhr");
+            dojo.require("dojo.rpc.JsonService");
+            getJSONAccessList();
+            populateUserInfo();
+            initServices();
+        }
         gallery.getAlbumsToUser(SECURITY_TOKEN).addCallback(gallery_getAlbumsResponse);
-       remoteGallery.getAlbumsToUser(SECURITY_TOKEN,"remote").addCallback(remote_gallery_getAlbumsResponse);
+        remoteGallery.getAlbumsToUser(SECURITY_TOKEN, "remote").addCallback(remote_gallery_getAlbumsResponse);
 
 
     } catch(exception) {
