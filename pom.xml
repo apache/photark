@@ -29,10 +29,10 @@
     <!-- Project description and basic configuration                            -->
     <!-- ====================================================================== -->
     <groupId>org.apache.photark</groupId>
-    <artifactId>photark-parent</artifactId>
+    <artifactId>photark-rest</artifactId>
     <version>1.0-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Apache PhotArk</name>
+    <name>Apache PhotArk - REST Branch</name>
 
     <organization>
         <name>The Apache Software Foundation</name>
