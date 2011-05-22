@@ -219,6 +219,7 @@
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
                 <module>photark-appengine-webapp</module>                
+                <module>photark-face-recognition</module>
                 <module>photark-webapp</module>
             </modules>
         </profile>
@@ -240,7 +241,8 @@
                 <module>photark-ui</module>
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
-                <module>photark-appengine-webapp</module>                
+                <module>photark-appengine-webapp</module>
+                <module>photark-face-recognition</module>
                 <module>photark-webapp</module>
             </modules>
         </profile>
@@ -263,7 +265,8 @@
                 <module>photark-ui-admin</module>
                 <module>photark-ui-security</module>
                 <module>photark-ui-test</module>                
-                <module>photark-appengine-webapp</module>                
+                <module>photark-appengine-webapp</module>
+                <module>photark-face-recognition</module>
                 <module>photark-webapp</module>
             </modules>
         </profile>
