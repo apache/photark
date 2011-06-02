@@ -29,13 +29,13 @@
 	<name>Apache PhotArk Face Recognition Implementation</name>
 
 	<dependencies>
-        
-                <dependency>
+                                   
+        <dependency>
 			<groupId>org.apache.photark</groupId>
-			<artifactId>photark-picasa</artifactId>
+			<artifactId>photark-jcr</artifactId>
 			<version>1.0-incubating-SNAPSHOT</version>
 		</dependency>
-		
+
         <!-- Tuscany Dependencies -->
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
@@ -98,11 +98,11 @@
 			<scope>test</scope>
 		</dependency>
 
-            <!--dependency>
-	        	<groupId>org.face4j</groupId>
-		        <artifactId>face4j-core</artifactId>
-		        <version>1.5.1</version>
-         	</dependency -->
+        <dependency>
+            <groupId>com.github.mhendred.face4j</groupId>
+            <artifactId>face4j-core</artifactId>
+            <version>1.5.3</version>
+        </dependency>
 
 	</dependencies>
 
