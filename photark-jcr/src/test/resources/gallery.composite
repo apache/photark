@@ -34,7 +34,7 @@
 	</component>
 
 	<component name="GalleryComponent">
-		<implementation.java class="org.apache.photark.services.jcr.JCRGallery"/>
+		<implementation.java class="org.apache.photark.services.jcr.JCRGalleryService"/>
 		<service name="GalleryService">
 			<tuscany:binding.rest uri="http://localhost:8085/gallery">
 			    <tuscany:operationSelector.jaxrs />

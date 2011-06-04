@@ -51,16 +51,16 @@ import org.oasisopen.sca.annotation.Scope;
  * @version $Rev$ $Date$
  */
 @Scope("COMPOSITE")
-public class JCRGallery implements GalleryService {
+public class JCRGalleryService implements GalleryService {
     private static final String JCR_ALBUM_ROOT_NODE = "albums";
 
-    private static final Logger logger = Logger.getLogger(JCRGallery.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRGalleryService.class.getName());
 
     private Map<String, Album> albums = new HashMap<String, Album>();
 
     private JCRRepositoryManager repositoryManager;
 
-    public JCRGallery(@Reference(name="repositoryManager") JCRRepositoryManager repositoryManager) {
+    public JCRGalleryService(@Reference(name="repositoryManager") JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
@@ -147,27 +147,27 @@ public class JCRGallery implements GalleryService {
         }
     }
 
-    public void updateAlbum(Album album) throws PhotarkRuntimeException {
+    public void updateAlbum(String albumId, Album album) throws PhotarkRuntimeException {
         if(album.getName() == null || album.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
         }
 
-        if(! albums.containsKey(album.getName())) {
+        if(! albums.containsKey(albumId)) {
             if(logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, "Album '" + album.getName() + "' not found");
+                logger.log(Level.SEVERE, "Album '" + albumId + "' not found");
             }
-            throw new InvalidParameterException("Album '" + album.getName() + "' not found");
+            throw new InvalidParameterException("Album '" + albumId + "' not found");
         }
 
         try {
             Node albumRootNode = getAlbumRoot(repositoryManager);
 
-            if(! albumRootNode.hasNode(album.getName())) {
+            if(! albumRootNode.hasNode(albumId)) {
                 if(logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE, "Album node '" + album.getName() + "' not found in the JCR repository");
+                    logger.log(Level.SEVERE, "Album node '" + albumId + "' not found in the JCR repository");
                 }
 
-                throw new PhotarkRuntimeException("Album node '" + album.getName()  + "' not found in the JCR repository");
+                throw new PhotarkRuntimeException("Album node '" + albumId  + "' not found in the JCR repository");
             }
 
             Node albumNode = albumRootNode.getNode(album.getName());
@@ -184,45 +184,43 @@ public class JCRGallery implements GalleryService {
             }
             throw new PhotarkRuntimeException("Error updating album node '" + album.getName() + "'" );
         }
-
-
     }
 
-    public void removeAlbum(String albumName) throws PhotarkRuntimeException {
-        if(albumName == null || albumName.isEmpty()) {
+    public void removeAlbum(String albumId) throws PhotarkRuntimeException {
+        if(albumId == null || albumId.isEmpty()) {
             throw new InvalidParameterException("Invalid/Empty album name");
         }
 
 
-        if(! albums.containsKey(albumName)) {
+        if(! albums.containsKey(albumId)) {
             if(logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, "Album '" + albumName + "' not found");
+                logger.log(Level.SEVERE, "Album '" + albumId + "' not found");
             }
-            throw new InvalidParameterException("Album '" + albumName + "' not found");
+            throw new InvalidParameterException("Album '" + albumId + "' not found");
         }
 
         try {
             Node albumRootNode = getAlbumRoot(repositoryManager);
 
-            if(! albumRootNode.hasNode(albumName)) {
+            if(! albumRootNode.hasNode(albumId)) {
                 if(logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE, "Album node '" + albumName + "' not found in the JCR repository");
+                    logger.log(Level.SEVERE, "Album node '" + albumId + "' not found in the JCR repository");
                 }
 
-                throw new PhotarkRuntimeException("Album node '" + albumName  + "' not found in the JCR repository");
+                throw new PhotarkRuntimeException("Album node '" + albumId  + "' not found in the JCR repository");
             }
 
-            Node albumNode = albumRootNode.getNode(albumName);
+            Node albumNode = albumRootNode.getNode(albumId);
             albumNode.remove();
             repositoryManager.getSession().save();
 
-            albums.remove(albumName);
+            albums.remove(albumId);
 
         } catch(RepositoryException e) {
             if(logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, "Error deleting album node '" + albumName + "'" );
+                logger.log(Level.SEVERE, "Error deleting album node '" + albumId + "'" );
             }
-            throw new PhotarkRuntimeException("Error deleting album node '" + albumName + "'" );
+            throw new PhotarkRuntimeException("Error deleting album node '" + albumId + "'" );
         }
     }
 
@@ -299,7 +297,7 @@ public class JCRGallery implements GalleryService {
         if(image.getId() == null || image.getId().isEmpty()) {
             throw new InvalidParameterException("Image has no id");
         }
-        
+
         if(image.getName() == null || image.getName().isEmpty()) {
             throw new InvalidParameterException("Image has no name");
         }
@@ -338,7 +336,7 @@ public class JCRGallery implements GalleryService {
     }
 
     public void removeImage(String albumName, String imageId) throws PhotarkRuntimeException {
-        
+
         if(imageId == null || imageId.isEmpty()) {
             throw new InvalidParameterException("Invalid/Empty album name");
         }
