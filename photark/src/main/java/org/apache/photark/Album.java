@@ -48,6 +48,10 @@ public class Album implements Serializable {
 
     }
 
+    public String getId() {
+        return this.getName();
+    }
+
     /**
      * Get album name
      * @return album name
