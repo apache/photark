@@ -19,30 +19,15 @@
 
 package org.apache.photark.album.filesystem;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
+import java.net.URL;
 import java.util.List;
 
-import junit.framework.Assert;
-
-import org.apache.tuscany.sca.node.Contribution;
-import org.apache.tuscany.sca.node.ContributionLocationHelper;
-import org.apache.tuscany.sca.node.Node;
-import org.apache.tuscany.sca.node.NodeFactory;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.AfterClass;
+import org.apache.photark.Image;
+import org.apache.photark.providers.filesystem.FileSystemPhotoStreamProvider;
+import org.apache.photark.subscription.SubscriptionConfig;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.meterware.httpunit.GetMethodWebRequest;
-import com.meterware.httpunit.PostMethodWebRequest;
-import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebRequest;
-import com.meterware.httpunit.WebResponse;
 
 /**
  * Verify various operations for the FileSystem Gallery
@@ -50,110 +35,38 @@ import com.meterware.httpunit.WebResponse;
  * @version $Rev$ $Date$
  */
 public class FileSystemProviderTestCase {
-    private static final String GALLERY_SERVICE_URL = "http://localhost:8085/gallery";
+    private static final String GALLERY_ROOT = "gallery-root";
+    private static final String ALBUM_1 = GALLERY_ROOT + File.separatorChar + "album-1";
+    private static final String ALBUM_2 = GALLERY_ROOT + File.separatorChar + "album-2";
 
-    private static Node node;
+    private static FileSystemPhotoStreamProvider fileSystemPhotoStreamProvider;
 
     @BeforeClass
     public static void BeforeClass() {
-        try {
-            String contribution = ContributionLocationHelper.getContributionLocation("gallery.composite");
-            node = NodeFactory.newInstance().createNode("gallery.composite", new Contribution("gallery", contribution));
-            node.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+        fileSystemPhotoStreamProvider = new FileSystemPhotoStreamProvider();
+    }
+
+
+    @Test
+    public void testDiscoverAlbums() throws Exception {
+        List<Image> images = fileSystemPhotoStreamProvider.getImages(createSubcriptionConfig(ALBUM_1));
+
+        for(Image image : images) {
+            System.out.println(">>>>>>>>>>>>>");
+            System.out.println(">> ID       : " + image.getId());
+            System.out.println(">> Title    : " + image.getTitle());
+            System.out.println(">> Location : " + image.getLocation());
         }
     }
 
-    @AfterClass
-    public static void AfterClass() {
-        node.stop();
-    }
+    private static SubscriptionConfig createSubcriptionConfig(String albumName) {
+        URL albumURL = FileSystemProviderTestCase.class.getClassLoader().getResource(albumName);
 
-    @Test
-    public void testGetAlbums() throws IOException, JSONException {
-        String[] albums = readAlbums();
-
-        Assert.assertNotNull(albums);
-    }
-
-    @Test
-    public void testAddAlbums() throws IOException, JSONException {
-        String[] albums = readAlbums();
-        int albumSize = albums.length;
-
-        addAlbum();
-
-        albums = readAlbums();
-
-        Assert.assertEquals(albumSize + 1, albums.length);
-    }
-
-    @Test
-    public void testRemoveAlbums() throws IOException, JSONException {
-        WebConversation wc = new WebConversation();
-        WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL + "/" + getLastAlbumName());
-        ((GetMethodWebRequest) request).setMethod("DELETE");
-        WebResponse response = wc.getResource(request);
-
-        Assert.assertEquals(200, response.getResponseCode());
-    }
-
-
-    private void addAlbum() throws IOException, JSONException {
-        JSONObject jsonAlbum = new JSONObject();
-        jsonAlbum.put("name", getNewAlbumName());
-        jsonAlbum.put("location", "http://localhost:8080/gallery/album/Boston");
-        jsonAlbum.put("description", "Some description goes here");
-
-        WebConversation wc = new WebConversation();
-        WebRequest request   = new PostMethodWebRequest(GALLERY_SERVICE_URL, new ByteArrayInputStream(jsonAlbum.toString().getBytes("UTF-8")),"application/json");
-        request.setHeaderField("Content-Type", "application/json");
-        WebResponse response = wc.getResource(request);
-
-        Assert.assertEquals(204, response.getResponseCode());
-    }
-
-    private String[] readAlbums()  throws IOException, JSONException {
-        WebConversation wc = new WebConversation();
-        WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL);
-        WebResponse response = wc.getResource(request);
-
-        JSONObject jsonResponse = new JSONObject(response.getText());
-
-        //for debug purposes
-        System.out.println(">>>" + jsonResponse.toString());
-
-        JSONArray albums = (org.json.JSONArray) jsonResponse.get("albums");
-        List<String> albumNames = new ArrayList<String>();
-        for(int pos=0; pos<albums.length(); pos++) {
-            JSONObject album = (JSONObject) albums.get(pos);
-            albumNames.add( album.getString("name"));
-        }
-
-        String[] albumNameArray = new String[albumNames.size()];
-        albumNames.toArray(albumNameArray);
-        Arrays.sort(albumNameArray, String.CASE_INSENSITIVE_ORDER);
-
-        return albumNameArray;
-    }
-
-    private String getNewAlbumName() throws IOException, JSONException {
-        String[] albums = readAlbums();
-        String album = null;
-        if (albums.length == 0) {
-            album = "album-0";
-        } else {
-            album = albums[albums.length -1 ];
-            String[] tokens = album.split("-");
-            album = tokens[0] + "-" + (Integer.parseInt(tokens[1]) + 1);
-        }
-        return album;
-    }
-
-    private String getLastAlbumName() throws IOException, JSONException {
-        String[] albums = readAlbums();
-        String album = albums[albums.length -1];
+        SubscriptionConfig album = new SubscriptionConfig();
+        album.setId("24662369");
+        album.setName("Album 1");
+        album.setType(fileSystemPhotoStreamProvider.getProviderType());
+        album.setUrl(albumURL.toString());
 
         return album;
     }
