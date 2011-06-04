@@ -1,6 +1,7 @@
 package org.apache.photark.services.jcr;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,13 +18,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
+import com.meterware.httpunit.protocol.UploadFileSpec;
 
 public class JCRGalleryTestCase {
     private static final String GALLERY_SERVICE_URL = "http://localhost:8085/gallery";
@@ -73,6 +77,19 @@ public class JCRGalleryTestCase {
         //System.out.println(">>>" + jsonResponse.toString());
 
         Assert.assertEquals(albumSize + 1, albums.length);
+    }
+
+    @Test
+    @Ignore
+    public void testUploadImage() throws IOException, JSONException, SAXException {
+        WebConversation wc = new WebConversation();
+        WebRequest request = new PostMethodWebRequest(ALBUM_SERVICE_URL + "/" + getLastAlbumName() + "/images");
+
+        File image = new File("gallery-root/IMG_0735.jpg");
+        final UploadFileSpec ufs = new UploadFileSpec(image,"image/jpeg");
+        request.setParameter("document", new UploadFileSpec[]{ufs});
+
+        WebResponse response = wc.getResponse(request);
     }
 
     @Test
