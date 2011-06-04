@@ -27,6 +27,7 @@ import com.meterware.httpunit.WebResponse;
 
 public class JCRGalleryTestCase {
     private static final String GALLERY_SERVICE_URL = "http://localhost:8085/gallery";
+    private static final String ALBUM_SERVICE_URL = GALLERY_SERVICE_URL + "/albums";
 
     private static Node node;
 
@@ -77,7 +78,7 @@ public class JCRGalleryTestCase {
     @Test
     public void testRemoveAlbums() throws IOException, JSONException {
         WebConversation wc = new WebConversation();
-        WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL + "/" + getLastAlbumName());
+        WebRequest request = new GetMethodWebRequest(ALBUM_SERVICE_URL + "/" + getLastAlbumName());
         ((GetMethodWebRequest) request).setMethod("DELETE");
         WebResponse response = wc.getResource(request);
 
@@ -91,7 +92,7 @@ public class JCRGalleryTestCase {
         jsonAlbum.put("description", "Some description to my album : " + albumName);
 
         WebConversation wc = new WebConversation();
-        WebRequest request   = new PostMethodWebRequest(GALLERY_SERVICE_URL, new ByteArrayInputStream(jsonAlbum.toString().getBytes("UTF-8")),"application/json");
+        WebRequest request   = new PostMethodWebRequest(ALBUM_SERVICE_URL, new ByteArrayInputStream(jsonAlbum.toString().getBytes("UTF-8")),"application/json");
         request.setHeaderField("Content-Type", "application/json");
         WebResponse response = wc.getResource(request);
 
@@ -100,7 +101,7 @@ public class JCRGalleryTestCase {
 
     private String[] readAlbums()  throws IOException, JSONException {
         WebConversation wc = new WebConversation();
-        WebRequest request = new GetMethodWebRequest(GALLERY_SERVICE_URL);
+        WebRequest request = new GetMethodWebRequest(ALBUM_SERVICE_URL);
         WebResponse response = wc.getResource(request);
 
         JSONObject jsonResponse = new JSONObject(response.getText());

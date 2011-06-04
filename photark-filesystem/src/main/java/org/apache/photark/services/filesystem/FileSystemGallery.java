@@ -156,7 +156,7 @@ public class FileSystemGallery implements GalleryService {
         this.albums.put(newAlbum.getName(), newAlbum);
     }
 
-    public void updateAlbum(Album album)  throws PhotarkRuntimeException {
+    public void updateAlbum(String albumId, Album album)  throws PhotarkRuntimeException {
         if(album.getName() == null || album.getName().isEmpty()) {
             throw new InvalidParameterException("Album has no name");
         }

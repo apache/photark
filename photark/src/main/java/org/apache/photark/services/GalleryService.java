@@ -46,6 +46,7 @@ public interface GalleryService {
      * @return
      */
     @GET
+    @Path("/albums")
     @Produces(MediaType.APPLICATION_JSON)
     AlbumList getAlbums() throws PhotarkRuntimeException;
 
@@ -57,7 +58,7 @@ public interface GalleryService {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id}")
+    @Path("/albums/{id}")
     Album getAlbum(@PathParam("id") String albumId) throws PhotarkRuntimeException;
 
     /**
@@ -66,6 +67,7 @@ public interface GalleryService {
      * @throws PhotarkRuntimeException
      */
     @POST
+    @Path("/albums")
     @Consumes(MediaType.APPLICATION_JSON)
     void addAlbum(Album newAlbum) throws PhotarkRuntimeException;
 
@@ -75,8 +77,9 @@ public interface GalleryService {
      * @throws PhotarkRuntimeException
      */
     @PUT
+    @Path("/albums/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    void updateAlbum(Album album) throws PhotarkRuntimeException;
+    void updateAlbum(@PathParam("id") String albumId, Album album) throws PhotarkRuntimeException;
 
     /**
      * Delete an existing album
@@ -84,6 +87,6 @@ public interface GalleryService {
      * @throws PhotarkRuntimeException
      */
     @DELETE
-    @Path("{id}")
+    @Path("/albums/{id}")
     void removeAlbum(@PathParam("id") String albumId) throws PhotarkRuntimeException;
 }
