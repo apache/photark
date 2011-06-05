@@ -23,14 +23,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.jcr.*;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.apache.photark.Image;
 import org.apache.photark.jcr.JCRRepositoryManager;
-import org.apache.photark.security.authorization.Permission;
 import org.apache.photark.services.album.Album;
 import org.apache.photark.services.album.ImageFilter;
 import org.oasisopen.sca.annotation.Destroy;
@@ -220,7 +226,7 @@ public class JCRAlbumImpl implements Album {
         return pictureArray;
     }
 
-    private Node getAlbumNode() {       
+    private Node getAlbumNode() {
 
         Node albumNode = null;
 
