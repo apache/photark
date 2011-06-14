@@ -33,6 +33,7 @@ var show_slide_slow_on  = new Image(31,31); show_slide_slow_on.src = "images/sho
 var gallery;
 var remoteGallery;
 var searchService;
+var faceService;
 var galleryName;
 
 var galleryAlbums;
@@ -55,6 +56,9 @@ var userId;
 var SECURITY_TOKEN;
 var permissions = new Array();
 var albumImageToBeLoaded = null;
+
+var FACE_API_KEY = "";
+var FACE_API_SECRET = "";
 
 dojo.addOnLoad(function() {
     dojo.require("dojo._base.xhr");
@@ -91,6 +95,8 @@ function initServices(){
   	searchService = new dojo.rpc.JsonService( photark.constants.SearchServiceEndpoint );
     gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
     remoteGallery = new dojo.rpc.JsonService(photark.constants.RemoteGalleryServiceEndpoint);
+    faceService = new dojo.rpc.JsonService(photark.constants.FaceRecognitionService);
+//  faceService.createNewDefaultFaceClient(FACE_API_KEY,FACE_API_SECRET).addCallback(face_callback);
 
 }
 
@@ -270,6 +276,17 @@ function addTag() {
 	showTags(imageTags);
 	 
 }
+
+function face_callback(items, exception) {
+    if(exception) {
+       // alert(exception.msg);
+        displayGallery();
+         logout();
+      //  return;
+    }
+
+}
+
 
 function initializeRemoteGallery() {
     var table=document.getElementById('remoteTableGallery');

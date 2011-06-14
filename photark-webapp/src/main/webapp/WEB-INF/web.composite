@@ -167,6 +167,16 @@
    		<reference name="listeners" target="SearchService"/>
    	    <reference name="accessmanager" target="AccessManager"/>
     </component>
+
+    <component name="FaceRecognitionService">
+		<implementation.java class="org.apache.photark.face.services.FaceRecognitionServiceImpl"/>
+
+		<service name="FaceRecognitionService">
+   			<interface.java interface="org.apache.photark.face.services.FaceRecognitionService"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/FaceRecognitionService"/>
+   		</service>
+	</component>
     
 	
 </composite>

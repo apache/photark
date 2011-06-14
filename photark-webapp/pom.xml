@@ -69,6 +69,12 @@
 			<type>war</type>
 		</dependency>
 
+        <dependency>
+			<groupId>org.apache.photark</groupId>
+			<artifactId>photark-face-recognition</artifactId>
+			<version>1.0-incubating-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.tuscany.sca</groupId>
 			<artifactId>tuscany-host-webapp</artifactId>

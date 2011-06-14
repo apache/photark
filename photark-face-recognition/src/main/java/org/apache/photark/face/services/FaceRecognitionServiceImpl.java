@@ -26,7 +26,6 @@ import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
 import com.github.mhendred.face4j.response.TrainResponse;
 import com.github.mhendred.face4j.response.UsersResponse;
-import org.apache.photark.jcr.JCRRepositoryManager;
 import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Remotable;
@@ -35,123 +34,184 @@ import org.oasisopen.sca.annotation.Scope;
 import java.io.File;
 import java.util.List;
 
-@Remotable
 @Scope("COMPOSITE")
 public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 
     private DefaultFaceClient defaultFaceClient;
-    private String apiKey = "";
-    private String apiSecret = "";
 
-    @Init
-    public void init() {
-        defaultFaceClient = new DefaultFaceClient(apiKey, apiSecret);
-
-    }
-
+    /**
+     * @see {@link FaceRecognitionService#removeTags(String)}
+     */
     public List<RemovedTag> removeTags(String tids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.removeTags(tids);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#train(String)}
+     */
     public TrainResponse train(String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.train(uids);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#addTag(String,float,float,int,int,String,String,String)}
+     */
     public void addTag(String url, float x, float y, int width, int height, String uid, String label, String taggerId) throws FaceClientException, FaceServerException {
         defaultFaceClient.addTag(url, x, y, width, height, uid, label, taggerId);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#getTags(String,String,String,String,boolean,int)}
+     */
     public List<Photo> getTags(String urls, String uids, String order, String filter, boolean together, int limit) throws FaceClientException, FaceServerException {
         return defaultFaceClient.getTags(urls, uids, order, filter, together, limit);
     }
 
-    public List<Photo> getTags(String pids, String urls, String uids, String order, String filter, boolean together, int limit) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#getTagsWithPIDs(String,String,String,String,String,boolean,int)}
+     */
+    public List<Photo> getTagsWithPIDs(String pids, String urls, String uids, String order, String filter, boolean together, int limit) throws FaceClientException, FaceServerException {
         return defaultFaceClient.getTags(pids, urls, uids, order, filter, together, limit);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#saveTags(String,String,String)}
+     */
     public List<SavedTag> saveTags(String tids, String uid, String label) throws FaceClientException, FaceServerException {
         return defaultFaceClient.saveTags(tids, uid, label);
     }
 
-    public Photo recognize(File imageFile, String uids) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#recognizeFromFile(File,String)}
+     */
+    public Photo recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.recognize(imageFile, uids);
     }
 
-    public List<Photo> recognize(String urls, String uids) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#recognizeFromUrls(String,String)}
+     */
+    public List<Photo> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.recognize(urls, uids);
     }
 
-    public Photo detect(File imageFile) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#detectFromFile(File)}
+     */
+    public Photo detectFromFile(File imageFile) throws FaceClientException, FaceServerException {
         return defaultFaceClient.detect(imageFile);
     }
 
-    public List<Photo> detect(String urls) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#detectFromUrls(String)}
+     */
+    public List<Photo> detectFromUrls(String urls) throws FaceClientException, FaceServerException {
         return defaultFaceClient.detect(urls);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#status(String)}
+     */
     public List<UserStatus> status(String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.status(uids);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#facebookGet(String)}
+     */
     public List<Photo> facebookGet(String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.facebookGet(uids);
     }
 
-    public GroupResponse group(String urls, String uids) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#groupFromUrls(String,String)}
+     */
+    public GroupResponse groupFromUrls(String urls, String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.group(urls, uids);
     }
 
-    public GroupResponse group(File imageFile, String uids) throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#groupFromFile(File,String)}
+     */
+    public GroupResponse groupFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException {
         return defaultFaceClient.group(imageFile, uids);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#users(String)}
+     */
     public UsersResponse users(String namespaces) throws FaceClientException, FaceServerException {
         return defaultFaceClient.users(namespaces);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#getLimits()}
+     */
     public LimitsResponse getLimits() throws FaceClientException, FaceServerException {
         return defaultFaceClient.getLimits();
     }
 
-    public List<Namespace> namespaces() throws FaceClientException, FaceServerException {
+    /**
+     * @see {@link FaceRecognitionService#getAllNamespaces()}
+     */
+    public List<Namespace> getAllNamespaces() throws FaceClientException, FaceServerException {
         return defaultFaceClient.namespaces();
     }
 
+    /**
+     * @see {@link FaceRecognitionService#getNamespace(String)}
+     */
     public Namespace getNamespace(String namespace) throws FaceClientException, FaceServerException {
         return defaultFaceClient.getNamespace(namespace);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#setFacebookOauth2(String,String)}
+     */
     public void setFacebookOauth2(String fbUserId, String oauthToken) {
         defaultFaceClient.setFacebookOauth2(fbUserId, oauthToken);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#setTwitterOauth(String,String,String)}
+     */
     public void setTwitterOauth(String oauthUser, String oauthSecret, String oauthToken) {
         defaultFaceClient.setTwitterOauth(oauthUser, oauthSecret, oauthToken);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#clearFacebookCreds()}
+     */
     public void clearFacebookCreds() {
         defaultFaceClient.clearFacebookCreds();
     }
 
+    /**
+     * @see {@link FaceRecognitionService#clearTwitterCreds()}
+     */
     public void clearTwitterCreds() {
         defaultFaceClient.clearTwitterCreds();
     }
 
+    /**
+     * @see {@link FaceRecognitionService#setAggressive(boolean)}
+     */
     public void setAggressive(boolean isAggressive) {
         defaultFaceClient.setAggressive(isAggressive);
     }
 
+    /**
+     * @see {@link FaceRecognitionService#isAggressive()}
+     */
     public boolean isAggressive() {
         return defaultFaceClient.isAggressive();
     }
 
-    public void setFaceDotComAPIKeySecret(String apiKey, String apiSecret) {
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-    }
-
+    /**
+     * @see {@link FaceRecognitionService#createNewDefaultFaceClient(String,String)}
+     */
     public void createNewDefaultFaceClient(String apiKey, String apiSecret) {
-        defaultFaceClient = new DefaultFaceClient(apiKey,apiSecret);
+        defaultFaceClient = new DefaultFaceClient(apiKey, apiSecret);
     }
 
 }

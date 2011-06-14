@@ -28,6 +28,7 @@ if (! photark.constants) {
 photark.constants.contextRoot = "/photark/";
 photark.constants.adminContextRoot = "/photark/admin/";
 
+photark.constants.FaceRecognitionService = photark.constants.contextRoot + "FaceRecognitionService?smd";
 photark.constants.RemoteAlbumSubscription = photark.constants.contextRoot + "RemoteAlbumSubscriptionManager?smd";
 photark.constants.GalleryServiceEndpoint = photark.constants.contextRoot + "GalleryService?smd";
 photark.constants.RemoteGalleryServiceEndpoint = photark.constants.contextRoot + "JCRRemoteGallery?smd";
