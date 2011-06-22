@@ -20,8 +20,6 @@
 <contribution xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
               xmlns:photark="http://org.apache.photoark">
    <export.java package="org.apache.photark.face.services"/>
-   <export.java package="com.github.mhendred.face4j.exception"/>
-   <export.java package="com.github.mhendred.face4j.model"/>
-   <export.java package="om.github.mhendred.face4j.response"/>
+    <export.java package="org.apache.photark.face.services.applications.facebook"/>
 
 </contribution>

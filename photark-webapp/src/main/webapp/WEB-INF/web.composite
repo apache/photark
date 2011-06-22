@@ -177,6 +177,17 @@
    			<tuscany:binding.jsonrpc uri="/FaceRecognitionService"/>
    		</service>
 	</component>
+
+     <component name="FacebookFriendFinder">
+		<implementation.java class="org.apache.photark.face.services.applications.facebook.FacebookFriendFinderImpl"/>
+
+		<service name="FacebookFriendFinder">
+   			<interface.java interface="org.apache.photark.face.services.applications.facebook.FacebookFriendFinder"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/FacebookFriendFinder"/>
+   		</service>
+        <reference name="faceRecognitionService" target="FaceRecognitionService"/>
+	</component>
     
 	
 </composite>
