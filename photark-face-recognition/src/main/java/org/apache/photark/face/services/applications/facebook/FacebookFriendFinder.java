@@ -1,5 +1,6 @@
 package org.apache.photark.face.services.applications.facebook;
 
+import org.apache.tuscany.sca.data.collection.Entry;
 import org.oasisopen.sca.annotation.Remotable;
 
 /**
@@ -12,7 +13,7 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface FacebookFriendFinder {
 
-    public String[] getAllMyFBFriendsInThisPicture(String pathToFile);
+    public Entry<String, String>[] getAllMyFBFriendsInThisPicture(String pathToFile);
 
     public void setFacebookAuth(String facebookId, String fbAccessToken);
 
