@@ -39,75 +39,72 @@ import org.apache.photark.social.message.MessageManagerImpl;
 import org.junit.Test;
 
 public class MessageManagerTestCase {
-	@Test
-	public void testMessageManagerImpl() throws IOException,
-			PhotArkSocialException, LoginException, RepositoryException {
-		JCRRepositoryManager repositoryManager = new JCRRepositoryManager();
-		String dir = "socialtest";
-		File homeDir = File.createTempFile(dir, "");
-		if (homeDir.exists()) {
-			homeDir.delete();
-		}
-		homeDir.mkdir();
-		repositoryManager.setRepositoryHome(dir);
-		MessageManager msgManager = new MessageManagerImpl(repositoryManager);
-		// Test creating message collection
-		MessageCollection msgColl1 = new MessageCollection();
-		msgColl1.setId("INBOX");
-		msgColl1.setTitle("INBOX");
-		msgColl1.setTotalCount(10);
-		msgColl1.setLastUpdated(new Date());
-		msgManager.createMessageCollection("userm", msgColl1);
-		MessageCollection msgColl3 = new MessageCollection();
-		msgColl3.setId("OUTBOX");
-		msgColl3.setTitle("OUTBOX");
-		msgColl3.setTotalCount(2);
-		msgColl3.setLastUpdated(new Date());
-		msgManager.createMessageCollection("userm", msgColl3);
-		// Test retrieving message collection
-		List<MessageCollection> msgCollList = msgManager.getMessageCollections(
-				"userm", null, null);
-		Assert.assertNotNull(msgCollList);
-		Assert.assertEquals(2, msgCollList.size());
-		MessageCollection msgColl2 = msgCollList.get(0);
-		Assert.assertNotNull(msgColl2);
-		Assert.assertEquals(10, msgColl2.getTotalCount());
-		Assert.assertEquals("INBOX", msgColl2.getId());
-		msgColl2 = msgCollList.get(1);
-		Assert.assertNotNull(msgColl2);
-		Assert.assertEquals("OUTBOX", msgColl2.getId());
-		Assert.assertEquals(msgColl3.getLastUpdated(),
-				msgColl2.getLastUpdated());
-		// Test deleting message collection
-		msgManager.deleteMessageCollection("userm", "OUTBOX");
-		msgCollList = msgManager.getMessageCollections("userm", null, null);
-		Assert.assertNotNull(msgCollList);
-		Assert.assertEquals(1, msgCollList.size());
-		msgColl2 = msgCollList.get(0);
-		Assert.assertNotNull(msgColl2);
-		Assert.assertEquals("INBOX", msgColl2.getId());
+    @Test
+    public void testMessageManagerImpl() throws IOException, PhotArkSocialException, LoginException,
+        RepositoryException {
+        JCRRepositoryManager repositoryManager = new JCRRepositoryManager();
+        String dir = "socialtest";
+        File homeDir = File.createTempFile(dir, "");
+        if (homeDir.exists()) {
+            homeDir.delete();
+        }
+        homeDir.mkdir();
+        repositoryManager.setRepositoryHome(dir);
+        MessageManager msgManager = new MessageManagerImpl(repositoryManager);
+        // Test creating message collection
+        MessageCollection msgColl1 = new MessageCollection();
+        msgColl1.setId("INBOX");
+        msgColl1.setTitle("INBOX");
+        msgColl1.setTotalCount(10);
+        msgColl1.setLastUpdated(new Date());
+        msgManager.createMessageCollection("userm", msgColl1);
+        MessageCollection msgColl3 = new MessageCollection();
+        msgColl3.setId("OUTBOX");
+        msgColl3.setTitle("OUTBOX");
+        msgColl3.setTotalCount(2);
+        msgColl3.setLastUpdated(new Date());
+        msgManager.createMessageCollection("userm", msgColl3);
+        // Test retrieving message collection
+        List<MessageCollection> msgCollList = msgManager.getMessageCollections("userm", null, null);
+        Assert.assertNotNull(msgCollList);
+        Assert.assertEquals(2, msgCollList.size());
+        MessageCollection msgColl2 = msgCollList.get(0);
+        Assert.assertNotNull(msgColl2);
+        Assert.assertEquals(10, msgColl2.getTotalCount());
+        Assert.assertEquals("INBOX", msgColl2.getId());
+        msgColl2 = msgCollList.get(1);
+        Assert.assertNotNull(msgColl2);
+        Assert.assertEquals("OUTBOX", msgColl2.getId());
+        Assert.assertEquals(msgColl3.getLastUpdated(), msgColl2.getLastUpdated());
+        // Test deleting message collection
+        msgManager.deleteMessageCollection("userm", "OUTBOX");
+        msgCollList = msgManager.getMessageCollections("userm", null, null);
+        Assert.assertNotNull(msgCollList);
+        Assert.assertEquals(1, msgCollList.size());
+        msgColl2 = msgCollList.get(0);
+        Assert.assertNotNull(msgColl2);
+        Assert.assertEquals("INBOX", msgColl2.getId());
 
-		// Test creating & retrieving messages
-		Message msg1 = new Message();
-		msg1.setBody("test message 1");
-		msg1.setTitle("Title");
-		msg1.setStatus("pending");
-		msgManager.createMessage("userm", "INBOX", msg1);
-		List<String> msgIds = new ArrayList<String>();
-		msgIds.add("0");
-		List<Message> msgList = msgManager.getMessages("userm", "INBOX", null,
-				msgIds, null);
-		Assert.assertNotNull(msgList);
-		Assert.assertEquals(msgIds.size(), msgList.size());
-		Message msg2 = msgList.get(0);
-		Assert.assertNotNull(msg2);
-		Assert.assertEquals(msg1.getTitle(), msg2.getTitle());
-		Assert.assertEquals(msg1.getBody(), msg2.getBody());
-		// Test deleting messages
-		msgManager.deleteMessages("userm", "INBOX", msgIds);
-		msgList = msgManager.getMessages("userm", "INBOX", null, msgIds, null);
-		Assert.assertNotNull(msgList);
-		Assert.assertEquals(0, msgList.size());
+        // Test creating & retrieving messages
+        Message msg1 = new Message();
+        msg1.setBody("test message 1");
+        msg1.setTitle("Title");
+        msg1.setStatus("pending");
+        msgManager.createMessage("userm", "INBOX", msg1);
+        List<String> msgIds = new ArrayList<String>();
+        msgIds.add("0");
+        List<Message> msgList = msgManager.getMessages("userm", "INBOX", null, msgIds, null);
+        Assert.assertNotNull(msgList);
+        Assert.assertEquals(msgIds.size(), msgList.size());
+        Message msg2 = msgList.get(0);
+        Assert.assertNotNull(msg2);
+        Assert.assertEquals(msg1.getTitle(), msg2.getTitle());
+        Assert.assertEquals(msg1.getBody(), msg2.getBody());
+        // Test deleting messages
+        msgManager.deleteMessages("userm", "INBOX", msgIds);
+        msgList = msgManager.getMessages("userm", "INBOX", null, msgIds, null);
+        Assert.assertNotNull(msgList);
+        Assert.assertEquals(0, msgList.size());
 
-	}
+    }
 }

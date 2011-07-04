@@ -87,7 +87,8 @@ public interface ActivityManager {
      * @return array of Activity data objects
      * @throws PhotArkSocialException
      */
-    Activity[] getActivities(String[] userIds, String groupId, Set<String> fields, FilterOptions filters) throws PhotArkSocialException;
+    Activity[] getActivities(String[] userIds, String groupId, Set<String> fields, FilterOptions filters)
+        throws PhotArkSocialException;
 
     /**
      * Retrieves array of Activity data objects matching the given input
@@ -101,8 +102,11 @@ public interface ActivityManager {
      * @return array of Activity data objects
      * @throws PhotArkSocialException
      */
-    Activity[] getActivities(String userId, String groupId, Set<String> fields, FilterOptions filters, String[] activityIds)
-        throws PhotArkSocialException;
+    Activity[] getActivities(String userId,
+                             String groupId,
+                             Set<String> fields,
+                             FilterOptions filters,
+                             String[] activityIds) throws PhotArkSocialException;
 
     /**
      * Retrieves an Activity data object matching the given input parameters
@@ -114,6 +118,7 @@ public interface ActivityManager {
      * @return an Activity data object matching the given input parameters
      * @throws PhotArkSocialException
      */
-    public Activity getActivity(String userId, String groupId, Set<String> fields, String activityId) throws PhotArkSocialException;
+    public Activity getActivity(String userId, String groupId, Set<String> fields, String activityId)
+        throws PhotArkSocialException;
 
 }

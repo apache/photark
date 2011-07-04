@@ -27,9 +27,7 @@ public interface RelationshipManager {
     public static final String RELATIONHIP_FRIEND_REQUEST_PENDING = "friend request pending";
     public static final String RELATIONHIP_FRIEND_REQUEST_RECEIVED = "friend request received";
     public static final String RELATIONHIP_NONE = "none";
-    
-    
-    
+
     /**
      * Returns the relationship status between two users
      * 

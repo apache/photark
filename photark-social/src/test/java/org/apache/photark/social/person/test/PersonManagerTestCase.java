@@ -38,39 +38,38 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class PersonManagerTestCase {
-	@Test
-	public void testPersonManagerImpl() throws IOException,
-			PhotArkSocialException, LoginException, RepositoryException {
-		JCRRepositoryManager repositoryManager = new JCRRepositoryManager();
-		String dir = "socialtest";
-		File homeDir = File.createTempFile(dir, "");
-		homeDir.delete();
-		homeDir.mkdir();
-		repositoryManager.setRepositoryHome(dir);
-		PersonManager pm = new PersonManagerImpl(repositoryManager);
-		Person person = new Person();
-		person.setId("testuser1");
-		person.setDisplayName("TestUser1");
-		person.setFirstName("test");
-		person.setLastName("user1");
-		Calendar calendar = new GregorianCalendar(10, 9, 10);
-		person.setBirthday(calendar.getTime());
-		List<String> activities = new ArrayList<String>();
-		activities.add("Movies");
-		activities.add("Cricket");
-		person.setActivities(activities);
-		pm.savePerson("testuser1", person);
-		Person person2 = pm.getPerson("testuser1");
-		Assert.assertNotNull(person2);
-		Assert.assertEquals("testuser1", person2.getId());
-		Assert.assertEquals(person.getDisplayName(), person2.getDisplayName());
-		Assert.assertNotNull(person2.getBirthday());
-		Assert.assertEquals(calendar.getTime(), person2.getBirthday());
-		Assert.assertNotNull(person2.getActivities());
-		Assert.assertEquals("Movies", person2.getActivities().get(0));
-		pm.removePerson("testuser1");
-		person2 = pm.getPerson("testuser1");
-		Assert.assertNull(person2);
+    @Test
+    public void testPersonManagerImpl() throws IOException, PhotArkSocialException, LoginException, RepositoryException {
+        JCRRepositoryManager repositoryManager = new JCRRepositoryManager();
+        String dir = "socialtest";
+        File homeDir = File.createTempFile(dir, "");
+        homeDir.delete();
+        homeDir.mkdir();
+        repositoryManager.setRepositoryHome(dir);
+        PersonManager pm = new PersonManagerImpl(repositoryManager);
+        Person person = new Person();
+        person.setId("testuser1");
+        person.setDisplayName("TestUser1");
+        person.setFirstName("test");
+        person.setLastName("user1");
+        Calendar calendar = new GregorianCalendar(10, 9, 10);
+        person.setBirthday(calendar.getTime());
+        List<String> activities = new ArrayList<String>();
+        activities.add("Movies");
+        activities.add("Cricket");
+        person.setActivities(activities);
+        pm.savePerson("testuser1", person);
+        Person person2 = pm.getPerson("testuser1");
+        Assert.assertNotNull(person2);
+        Assert.assertEquals("testuser1", person2.getId());
+        Assert.assertEquals(person.getDisplayName(), person2.getDisplayName());
+        Assert.assertNotNull(person2.getBirthday());
+        Assert.assertEquals(calendar.getTime(), person2.getBirthday());
+        Assert.assertNotNull(person2.getActivities());
+        Assert.assertEquals("Movies", person2.getActivities().get(0));
+        pm.removePerson("testuser1");
+        person2 = pm.getPerson("testuser1");
+        Assert.assertNull(person2);
 
-	}
+    }
 }

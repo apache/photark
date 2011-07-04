@@ -76,7 +76,8 @@ public interface MessageManager {
      * @return a list of message collections corresponding to the given user
      * @throws PhotArkSocialException
      */
-    List<MessageCollection> getMessageCollections(String userId, Set<String> fileds, FilterOptions filters) throws PhotArkSocialException;
+    List<MessageCollection> getMessageCollections(String userId, Set<String> fileds, FilterOptions filters)
+        throws PhotArkSocialException;
 
     /**
      * Returns a list of messages that correspond to the passed in data
@@ -89,8 +90,11 @@ public interface MessageManager {
      * @return a list of messages that correspond to the passed in data
      * @throws PhotArkSocialException
      */
-    List<Message> getMessages(String userId, String msgCollId, Set<String> fields, List<String> msgIds, FilterOptions filters)
-        throws PhotArkSocialException;
+    List<Message> getMessages(String userId,
+                              String msgCollId,
+                              Set<String> fields,
+                              List<String> msgIds,
+                              FilterOptions filters) throws PhotArkSocialException;
 
     /**
      * Modifies/Updates a specific message with new data

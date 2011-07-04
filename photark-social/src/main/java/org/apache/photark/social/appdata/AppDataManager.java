@@ -66,5 +66,6 @@ public interface AppDataManager {
      * @param values
      * @throws PhotArkSocialException
      */
-    void updatePersonData(String userId, String groupId, String appId, Set<String> fields, Map<String, String> values) throws PhotArkSocialException;
+    void updatePersonData(String userId, String groupId, String appId, Set<String> fields, Map<String, String> values)
+        throws PhotArkSocialException;
 }
