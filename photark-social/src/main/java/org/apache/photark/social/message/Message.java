@@ -1,5 +1,5 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
+[ * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -28,7 +28,7 @@ public class Message {
     private String id; // unique ID of this message
     private String inReplyTo; // ID of the message for which this message is a
                               // reply/comment
-    private List<String> recepients; // list of person IDs
+    private List<String> recipients; // list of person IDs
     private List<String> replies; // list of message IDs which are replies for
                                   // this message
     private String senderId; // ID of the person who sent the message
@@ -63,11 +63,11 @@ public class Message {
     }
 
     public List<String> getRecepients() {
-        return recepients;
+        return recipients;
     }
 
     public void setRecepients(List<String> recepients) {
-        this.recepients = recepients;
+        this.recipients = recepients;
     }
 
     public List<String> getReplies() {
