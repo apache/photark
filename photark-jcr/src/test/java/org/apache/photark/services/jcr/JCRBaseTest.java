@@ -45,6 +45,7 @@ import com.meterware.httpunit.WebResponse;
 
 public class JCRBaseTest {
     protected static final String GALLERY_SERVICE_URL = "http://localhost:8085/gallery";
+    protected static final String GALLERY_UPLOAD_SERVICE_URL = "http://localhost:8085/upload";
     protected static final String ALBUM_SERVICE_URL = GALLERY_SERVICE_URL + "/albums";
 
     private static Node node;
@@ -66,8 +67,12 @@ public class JCRBaseTest {
     }
 
     protected void addAlbum() throws IOException, JSONException {
-        JSONObject jsonAlbum = new JSONObject();
         String albumName = getNewAlbumName();
+        addAlbum(albumName);
+    }
+
+    protected void addAlbum(String albumName) throws IOException, JSONException {
+        JSONObject jsonAlbum = new JSONObject();
         jsonAlbum.put("name", albumName);
         jsonAlbum.put("description", "Some description to my album : " + albumName);
 
@@ -76,9 +81,9 @@ public class JCRBaseTest {
         request.setHeaderField("Content-Type", "application/json");
         WebResponse response = wc.getResource(request);
 
-        Assert.assertEquals(204, response.getResponseCode());
+        Assert.assertEquals(204, response.getResponseCode());        
     }
-
+    
     protected String[] readAlbums()  throws IOException, JSONException {
         WebConversation wc = new WebConversation();
         WebRequest request = new GetMethodWebRequest(ALBUM_SERVICE_URL);

@@ -21,8 +21,11 @@ package org.apache.photark.services;
 
 import java.io.InputStream;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.oasisopen.sca.annotation.Remotable;
@@ -31,11 +34,12 @@ import org.oasisopen.sca.annotation.Remotable;
  * @version $Rev$ $Date$
  */
 @Remotable
-public interface ImageService {
+public interface ImageUploadService {
 
     @POST
-    @Path("/images")
-    void uploadImage(InputStream imageStream);
+    @Path("/albums/{albumId}/images")
+    @Consumes(MediaType.MEDIA_TYPE_WILDCARD)
+    void uploadImage(@PathParam("albumId") String albumId, InputStream imageStream);
 
 
     Response getImage(String imageKey);

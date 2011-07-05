@@ -24,21 +24,22 @@ import java.util.logging.Logger;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.photark.services.ImageService;
+import org.apache.photark.services.ImageUploadService;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 
 @Scope("COMPOSITE")
-public class JCRImageService implements ImageService {
-    private static final Logger logger = Logger.getLogger(JCRImageService.class.getName());
+public class JCRImageUploadService implements ImageUploadService {
+    private static final Logger logger = Logger.getLogger(JCRImageUploadService.class.getName());
 
     private static String supportedImageTypes[] = {".jpg", ".jpeg", ".png", ".gif"};
 
     @Reference(name="repositoryManager")
     private JCRRepositoryManager repositoryManager;
 
-    public void uploadImage(InputStream imageStream) {
-        // TODO Auto-generated method stub
+    public void uploadImage(String albumId, InputStream imageStream) {
+        
+        System.out.println(">>> Inside upload image");
 
     }
 

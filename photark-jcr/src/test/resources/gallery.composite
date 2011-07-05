@@ -42,4 +42,14 @@
    		</service>
    		<reference name="repositoryManager" target="RepositoryManager" />
 	</component>
+	
+		<component name="ImageUploadComponent">
+		<implementation.java class="org.apache.photark.services.jcr.JCRImageUploadService"/>
+		<service name="ImageUploadService">
+			<tuscany:binding.rest uri="http://localhost:8085/upload">
+			    <tuscany:operationSelector.jaxrs />
+    		</tuscany:binding.rest>
+   		</service>
+   		<reference name="repositoryManager" target="RepositoryManager" />
+	</component>
 </composite>

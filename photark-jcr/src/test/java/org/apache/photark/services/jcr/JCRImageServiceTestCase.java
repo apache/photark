@@ -19,36 +19,43 @@
 
 package org.apache.photark.services.jcr;
 
-import static org.apache.photark.services.jcr.JCRBaseTest.ALBUM_SERVICE_URL;
-
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import junit.framework.Assert;
 
 import org.json.JSONException;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
 import com.meterware.httpunit.protocol.UploadFileSpec;
 
 public class JCRImageServiceTestCase extends JCRBaseTest {
-   
-
 
     @Test
-    @Ignore
+    //@Ignore
     public void testUploadImage() throws IOException, JSONException, SAXException {
+        //addAlbum("uploads");
+        
         WebConversation wc = new WebConversation();
-        WebRequest request = new PostMethodWebRequest(ALBUM_SERVICE_URL + "/" + getLastAlbumName() + "/images");
+        //PostMethodWebRequest request = new PostMethodWebRequest(ALBUM_SERVICE_URL + "/" + getLastAlbumName() + "/images", true);
+        PostMethodWebRequest request = new PostMethodWebRequest(GALLERY_UPLOAD_SERVICE_URL+ "/albums/uploads/images", true);
 
-        File image = new File("gallery-root/IMG_0735.jpg");
-        final UploadFileSpec ufs = new UploadFileSpec(image,"image/jpeg");
-        request.setParameter("document", new UploadFileSpec[]{ufs});
+        
+        URL imageURL = JCRImageServiceTestCase.class.getResource("/gallery-home/album-1/IMG_0735.jpg");
+        File image = new File(imageURL.getPath());
+        final UploadFileSpec ufs[] = {new UploadFileSpec(image,"image/jpeg")};
+        request.setParameter("image", ufs);
+        request.selectFile("image",image);
 
         WebResponse response = wc.getResponse(request);
+        
+        System.out.println(">>" + response.getResponseCode());
+        
+        Assert.assertTrue(response.getResponseCode() == 204);
     }
 }
