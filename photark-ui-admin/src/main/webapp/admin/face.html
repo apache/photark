@@ -1,0 +1,118 @@
+.<!--
+    * Licensed to the Apache Software Foundation (ASF) under one
+    * or more contributor license agreements.  See the NOTICE file
+    * distributed with this work for additional information
+    * regarding copyright ownership.  The ASF licenses this file
+    * to you under the Apache License, Version 2.0 (the
+    * "License"); you may not use this file except in compliance
+    * with the License.  You may obtain a copy of the License at
+    *
+    *   http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing,
+    * software distributed under the License is distributed on an
+    * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    * KIND, either express or implied.  See the License for the
+    * specific language governing permissions and limitations
+    * under the License.
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>Apache PhotArk - Face Recognition</title>
+
+    <script type="text/javascript" src="../dojo/dojo.js"
+            djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
+    <script type="text/javascript" src="js/face.js"></script>
+    <link rel="stylesheet" type="text/css" href="../dijit/themes/tundra/tundra.css"/>
+    <link href="css/upload.css" rel="stylesheet"/>
+
+
+</head>
+
+<body>
+<div align="center">
+    <div id="adminDiv">
+        <div style="float:right;width:50%;font-size:0.8em;text-align:right;padding-top:5px;padding-right:10px;">
+            <div><span id="loginName"></span>&nbsp;&nbsp;<span><a href="../" style="color:black;">Gallery</a></span>&nbsp;&nbsp;<span><a
+                    href="../upload.html" style="color:black;">Face Recognition</a></span>&nbsp;&nbsp;<span><a
+                    href="../logout/" style="color:black;">Logout</a></span></div>
+        </div>
+        <div id="newAlbum">
+            <fieldset id="newAlbumDetails" style="text-align:left;">
+                <legend>Face Recognition Applications</legend>
+                <div style="clear:both"></div>
+                <ol>
+                    <li>
+                        <label id="selectFaceAppLabel" for="selectFaceApp">Select Face Application</label>
+                        <select id="selectFaceApp" name="selectFaceApp" autoComplete="true" onChange="manageFields();">
+                            <option value="General-Face-Recognition">General-Face-Recognition</option>
+                            <option value="FaceBook-Friend-Finder">FaceBook-Friend-Finder</option>
+                        </select>
+
+                    </li>
+                    <li>
+                        <table border="0" align="center">
+                            <tr>
+                                <td>
+                                    <div id="albumCoverDiv">
+
+                                    </div>
+                                </td>
+                                <td>
+
+
+                                    <div id="imageFilePath">Copy Image File Path*&nbsp;<input type='text'
+                                                                                              name="imageFilePathInput"
+                                                                                              id='imageFilePathInput'
+                                                                                              size='25' value=''>
+                                    </div>
+                                    <div id="or">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or
+                                    </div>
+                                    <div id="imageUrl">Copy Image Url*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                                            type='text' name="imageUrlInput" id='imageUrlInput' size='25' value=''>
+                                    </div>
+                                    <div></div>
+                                    <div id="train_uname">Train User Name*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                                            type='text' name="train_uname_input" id='train_uname_input' size='25'
+                                            value=''>
+                                    </div>
+                                    <div id="train_label">User Label(Optional)&nbsp;&nbsp;&nbsp;&nbsp;<input type='text'
+                                                                                                             name="train_label_input"
+                                                                                                             id='train_label_input'
+                                                                                                             size='25'
+                                                                                                             value=''>
+                                    </div>
+
+                                    <br>
+
+                                    <div id="import_submit" class="uploadBtn btn" onClick="">
+                                        Train User
+                                    </div>
+                                    <div id="authFBLabel" align="left"><br/>Before train users, first you should
+                                        Authenticate Facebook Friend Finder App
+                                        <div id="authFB" class="uploadBtn btn" onClick="facebookAuth();">Authenticate
+                                            Facebook
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+                        </table>
+                    </li>
+
+                </ol>
+            </fieldset>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

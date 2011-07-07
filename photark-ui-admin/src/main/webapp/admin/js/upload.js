@@ -86,7 +86,7 @@ dojo.addOnLoad( function() {
 	    var albuname= dojo.byId("remote_albuname").value;
 	    var albpasswd= dojo.byId("remote_albpasswd").value;
 
-       if((alburl == "") || (remoteAlbumName == "") ) {
+       if((alburl == "") || (remoteAlbumName == "")) {
         alert("Album name and album url fileds are required to proceed !!. Please fill the required fields.");
        } else if(selectedAlb != null) {
             var albumSubService =  new dojo.rpc.JsonService(photark.constants.RemoteAlbumSubscription);
