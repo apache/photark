@@ -17,11 +17,12 @@
  * under the License.
  */
 
-package org.apache.photark.social.person;
+package org.apache.photark.social.services;
 
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.Person;
+import org.apache.photark.social.PhotArkSocialException;
 
-public interface PersonManager {
+public interface PersonService {
     /**
      * Persists the Person data object
      * 

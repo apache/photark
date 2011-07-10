@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.message;
+package org.apache.photark.social.services.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,23 +36,26 @@ import javax.jcr.Value;
 
 import org.apache.photark.services.PhotarkRuntimeException;
 import org.apache.photark.services.jcr.JCRRepositoryManager;
+import org.apache.photark.social.Message;
+import org.apache.photark.social.MessageCollection;
 import org.apache.photark.social.PhotArkSocialConstants;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.MessageService;
 import org.apache.photark.social.util.FilterOptions;
 import org.apache.photark.social.util.PhotArkSocialUtil;
 
-public class MessageManagerImpl implements MessageManager {
+public class JCRMessageServiceImpl implements MessageService {
     private JCRRepositoryManager repositoryManager;
-    private static final Logger logger = Logger.getLogger(MessageManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRMessageServiceImpl.class.getName());
     private static final String JCR_MESSAGE_ROOT_NODE = "message";
     private static final String NEXT_MESSAGE_ID = "nextMessageId";
     private boolean updateColl = false;
 
-    public MessageManagerImpl() {
+    public JCRMessageServiceImpl() {
 
     }
 
-    public MessageManagerImpl(JCRRepositoryManager repositoryManager) {
+    public JCRMessageServiceImpl(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 

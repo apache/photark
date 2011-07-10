@@ -29,10 +29,10 @@ import javax.jcr.RepositoryException;
 import junit.framework.Assert;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
-import org.apache.photark.social.activity.Activity;
-import org.apache.photark.social.activity.ActivityManager;
-import org.apache.photark.social.activity.ActivityManagerImpl;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.Activity;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.ActivityService;
+import org.apache.photark.social.services.impl.JCRActivityServiceImpl;
 import org.junit.Test;
 
 public class ActivityManagerTestCase {
@@ -46,7 +46,7 @@ public class ActivityManagerTestCase {
         homeDir.delete();
         homeDir.mkdir();
         repositoryManager.setRepositoryHome(dir);
-        ActivityManager activityManager = new ActivityManagerImpl(repositoryManager);
+        ActivityService activityManager = new JCRActivityServiceImpl(repositoryManager);
         // Test save activity & get activity methods
         Activity activity1 = new Activity();
         activity1.setId("1");

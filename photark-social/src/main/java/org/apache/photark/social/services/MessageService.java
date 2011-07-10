@@ -17,15 +17,17 @@
  * under the License.
  */
 
-package org.apache.photark.social.message;
+package org.apache.photark.social.services;
 
 import java.util.List;
 import java.util.Set;
 
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.Message;
+import org.apache.photark.social.MessageCollection;
+import org.apache.photark.social.PhotArkSocialException;
 import org.apache.photark.social.util.FilterOptions;
 
-public interface MessageManager {
+public interface MessageService {
 
     /**
      * Posts a message to the user's specified message collection, to be sent to

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.message;
+package org.apache.photark.social;
 
 import java.util.Date;
 import java.util.List;

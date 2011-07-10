@@ -30,10 +30,10 @@ import javax.jcr.LoginException;
 import javax.jcr.RepositoryException;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
-import org.apache.photark.social.exception.PhotArkSocialException;
-import org.apache.photark.social.person.Person;
-import org.apache.photark.social.person.PersonManager;
-import org.apache.photark.social.person.PersonManagerImpl;
+import org.apache.photark.social.Person;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.PersonService;
+import org.apache.photark.social.services.impl.JCRPersonServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,7 +46,7 @@ public class PersonManagerTestCase {
         homeDir.delete();
         homeDir.mkdir();
         repositoryManager.setRepositoryHome(dir);
-        PersonManager pm = new PersonManagerImpl(repositoryManager);
+        PersonService pm = new JCRPersonServiceImpl(repositoryManager);
         Person person = new Person();
         person.setId("testuser1");
         person.setDisplayName("TestUser1");

@@ -31,11 +31,11 @@ import javax.jcr.RepositoryException;
 import junit.framework.Assert;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
-import org.apache.photark.social.exception.PhotArkSocialException;
-import org.apache.photark.social.message.Message;
-import org.apache.photark.social.message.MessageCollection;
-import org.apache.photark.social.message.MessageManager;
-import org.apache.photark.social.message.MessageManagerImpl;
+import org.apache.photark.social.Message;
+import org.apache.photark.social.MessageCollection;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.MessageService;
+import org.apache.photark.social.services.impl.JCRMessageServiceImpl;
 import org.junit.Test;
 
 public class MessageManagerTestCase {
@@ -50,7 +50,7 @@ public class MessageManagerTestCase {
         }
         homeDir.mkdir();
         repositoryManager.setRepositoryHome(dir);
-        MessageManager msgManager = new MessageManagerImpl(repositoryManager);
+        MessageService msgManager = new JCRMessageServiceImpl(repositoryManager);
         // Test creating message collection
         MessageCollection msgColl1 = new MessageCollection();
         msgColl1.setId("INBOX");

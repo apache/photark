@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.activity;
+package org.apache.photark.social;
 
 import java.util.Date;
 

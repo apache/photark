@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.activity;
+package org.apache.photark.social.services.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,22 +35,24 @@ import javax.jcr.Session;
 
 import org.apache.photark.services.PhotarkRuntimeException;
 import org.apache.photark.services.jcr.JCRRepositoryManager;
+import org.apache.photark.social.Activity;
 import org.apache.photark.social.PhotArkSocialConstants;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.ActivityService;
 import org.apache.photark.social.util.FilterOptions;
 import org.apache.photark.social.util.PhotArkSocialUtil;
 
-public class ActivityManagerImpl implements ActivityManager {
+public class JCRActivityServiceImpl implements ActivityService {
     private JCRRepositoryManager repositoryManager;
-    private static final Logger logger = Logger.getLogger(ActivityManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRActivityServiceImpl.class.getName());
     private static final String JCR_ACTIVITY_ROOT_NODE = "activity";
     private static final String NEXT_ACTIVITY_ID = "nextActivityId";
 
-    public ActivityManagerImpl() throws IOException {
+    public JCRActivityServiceImpl() throws IOException {
         repositoryManager = new JCRRepositoryManager();
     }
 
-    public ActivityManagerImpl(JCRRepositoryManager repositoryManager) {
+    public JCRActivityServiceImpl(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 

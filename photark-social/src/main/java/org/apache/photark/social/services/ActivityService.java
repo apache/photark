@@ -17,14 +17,15 @@
  * under the License.
  */
 
-package org.apache.photark.social.activity;
+package org.apache.photark.social.services;
 
 import java.util.Set;
 
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.Activity;
+import org.apache.photark.social.PhotArkSocialException;
 import org.apache.photark.social.util.FilterOptions;
 
-public interface ActivityManager {
+public interface ActivityService {
 
     /**
      * creates an Activity data object with the given fields

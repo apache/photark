@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.person;
+package org.apache.photark.social.services.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,20 +32,22 @@ import javax.jcr.Value;
 
 import org.apache.photark.services.PhotarkRuntimeException;
 import org.apache.photark.services.jcr.JCRRepositoryManager;
+import org.apache.photark.social.Person;
 import org.apache.photark.social.PhotArkSocialConstants;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.PersonService;
 import org.apache.photark.social.util.PhotArkSocialUtil;
 
-public class PersonManagerImpl implements PersonManager {
+public class JCRPersonServiceImpl implements PersonService {
     private JCRRepositoryManager repositoryManager;
 
-    private static final Logger logger = Logger.getLogger(PersonManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRPersonServiceImpl.class.getName());
 
-    public PersonManagerImpl() throws IOException {
+    public JCRPersonServiceImpl() throws IOException {
         repositoryManager = new JCRRepositoryManager();
     }
 
-    public PersonManagerImpl(JCRRepositoryManager repositoryManager) {
+    public JCRPersonServiceImpl(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.person.relationship;
+package org.apache.photark.social.services.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,16 +32,17 @@ import javax.jcr.Value;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
 import org.apache.photark.social.PhotArkSocialConstants;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.RelationshipService;
 import org.apache.photark.social.util.PhotArkSocialUtil;
 
-public class RelationshipManagerImpl implements RelationshipManager {
+public class JCRRelationshipServiceImpl implements RelationshipService {
 
     private JCRRepositoryManager repositoryManager;
 
-    private static final Logger logger = Logger.getLogger(RelationshipManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRRelationshipServiceImpl.class.getName());
 
-    public RelationshipManagerImpl() throws IOException {
+    public JCRRelationshipServiceImpl() throws IOException {
         repositoryManager = new JCRRepositoryManager();
     }
 

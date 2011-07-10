@@ -17,11 +17,11 @@
  * under the License.
  */
 
-package org.apache.photark.social.person.relationship;
+package org.apache.photark.social.services;
 
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
 
-public interface RelationshipManager {
+public interface RelationshipService {
 
     public static final String RELATIONSHIP_FRIEND = "friend";
     public static final String RELATIONHIP_FRIEND_REQUEST_PENDING = "friend request pending";

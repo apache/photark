@@ -25,13 +25,13 @@ import java.io.IOException;
 import junit.framework.Assert;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
+import org.apache.photark.social.Person;
 import org.apache.photark.social.PhotArkSocialConstants;
-import org.apache.photark.social.exception.PhotArkSocialException;
-import org.apache.photark.social.person.Person;
-import org.apache.photark.social.person.PersonManager;
-import org.apache.photark.social.person.PersonManagerImpl;
-import org.apache.photark.social.person.relationship.RelationshipManager;
-import org.apache.photark.social.person.relationship.RelationshipManagerImpl;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.PersonService;
+import org.apache.photark.social.services.RelationshipService;
+import org.apache.photark.social.services.impl.JCRPersonServiceImpl;
+import org.apache.photark.social.services.impl.JCRRelationshipServiceImpl;
 import org.junit.Test;
 
 public class RelationshipManagerTestCase {
@@ -45,8 +45,8 @@ public class RelationshipManagerTestCase {
         }
         homeDir.mkdir();
         repositoryManager.setRepositoryHome(dir);
-        RelationshipManager relationshipManager = new RelationshipManagerImpl();
-        PersonManager pm = new PersonManagerImpl(repositoryManager);
+        RelationshipService relationshipManager = new JCRRelationshipServiceImpl();
+        PersonService pm = new JCRPersonServiceImpl(repositoryManager);
         Person person = new Person();
         person.setId("user1");
         person.setDisplayName("TestUser1");

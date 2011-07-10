@@ -32,9 +32,9 @@ import javax.jcr.RepositoryException;
 import junit.framework.Assert;
 
 import org.apache.photark.services.jcr.JCRRepositoryManager;
-import org.apache.photark.social.appdata.AppDataManager;
-import org.apache.photark.social.appdata.AppDataManagerImpl;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.AppDataService;
+import org.apache.photark.social.services.impl.JCRAppDataServiceImpl;
 import org.junit.Test;
 
 public class AppDataManagerTestCase {
@@ -47,7 +47,7 @@ public class AppDataManagerTestCase {
         homeDir.delete();
         homeDir.mkdir();
         repositoryManager.setRepositoryHome(dir);
-        AppDataManager appDataManager = new AppDataManagerImpl(repositoryManager);
+        AppDataService appDataManager = new JCRAppDataServiceImpl(repositoryManager);
         Map<String, String> data1 = new HashMap<String, String>();
         data1.put("albumName", "USTrip");
         data1.put("a", "1");

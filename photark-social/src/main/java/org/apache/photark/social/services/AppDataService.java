@@ -17,14 +17,14 @@
  * under the License.
  */
 
-package org.apache.photark.social.appdata;
+package org.apache.photark.social.services;
 
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
 
-public interface AppDataManager {
+public interface AppDataService {
 
     /**
      * Retrieve person data

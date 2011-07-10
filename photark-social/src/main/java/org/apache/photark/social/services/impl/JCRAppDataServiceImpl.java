@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.appdata;
+package org.apache.photark.social.services.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,19 +34,20 @@ import javax.jcr.Session;
 
 import org.apache.photark.services.PhotarkRuntimeException;
 import org.apache.photark.services.jcr.JCRRepositoryManager;
-import org.apache.photark.social.exception.PhotArkSocialException;
+import org.apache.photark.social.PhotArkSocialException;
+import org.apache.photark.social.services.AppDataService;
 import org.apache.photark.social.util.PhotArkSocialUtil;
 
-public class AppDataManagerImpl implements AppDataManager {
+public class JCRAppDataServiceImpl implements AppDataService {
     private JCRRepositoryManager repositoryManager;
-    private static final Logger logger = Logger.getLogger(AppDataManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(JCRAppDataServiceImpl.class.getName());
     private static final String JCR_APPDATA_ROOT_NODE = "appdata";
 
-    public AppDataManagerImpl(JCRRepositoryManager repositoryManager) {
+    public JCRAppDataServiceImpl(JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
-    public AppDataManagerImpl() {
+    public JCRAppDataServiceImpl() {
 
     }
 

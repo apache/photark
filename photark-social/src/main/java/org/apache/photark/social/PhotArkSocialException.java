@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.photark.social.exception;
+package org.apache.photark.social;
 
 public class PhotArkSocialException extends Throwable {
 

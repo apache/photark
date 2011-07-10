@@ -17,13 +17,12 @@
  * under the License.
  */
 
-package org.apache.photark.social.appdata;
+package org.apache.photark.social;
 
-public class AppData {
-
-    private String id; // id of this app data
-    private String key; // key of the app data
-    private String value; // value of the app data
+public class Group {
+    private String id; // ID representing this group
+    private String title; // title of the group
+    private String description; // description of the group
 
     public String getId() {
         return id;
@@ -33,20 +32,19 @@ public class AppData {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getTitle() {
+        return title;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getValue() {
-        return value;
+    public String getDescription() {
+        return description;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
 }
