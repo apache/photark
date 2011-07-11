@@ -73,10 +73,16 @@
 		</dependency>
 
 		<!-- Use Log4J for logging -->
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.5.8</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.3</version>
+			<version>1.5.8</version>
 		</dependency>
 
 		<dependency>
