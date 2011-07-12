@@ -26,14 +26,11 @@ import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
 import com.github.mhendred.face4j.response.TrainResponse;
 import com.github.mhendred.face4j.response.UsersResponse;
-import org.oasisopen.sca.annotation.Init;
-import org.oasisopen.sca.annotation.Reference;
-import org.oasisopen.sca.annotation.Remotable;
-import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.*;
 
 import java.io.File;
 import java.util.List;
-
+ @Service(FaceRecognitionService.class)
 @Scope("COMPOSITE")
 public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 
