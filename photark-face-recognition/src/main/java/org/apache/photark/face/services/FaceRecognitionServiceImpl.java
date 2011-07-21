@@ -18,19 +18,26 @@
  */
 package org.apache.photark.face.services;
 
+import java.io.File;
+import java.util.List;
+
+import org.oasisopen.sca.annotation.Scope;
+import org.oasisopen.sca.annotation.Service;
+
 import com.github.mhendred.face4j.DefaultFaceClient;
 import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
-import com.github.mhendred.face4j.model.*;
+import com.github.mhendred.face4j.model.Namespace;
+import com.github.mhendred.face4j.model.Photo;
+import com.github.mhendred.face4j.model.RemovedTag;
+import com.github.mhendred.face4j.model.SavedTag;
+import com.github.mhendred.face4j.model.UserStatus;
 import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
 import com.github.mhendred.face4j.response.TrainResponse;
 import com.github.mhendred.face4j.response.UsersResponse;
-import org.oasisopen.sca.annotation.*;
-
-import java.io.File;
-import java.util.List;
- @Service(FaceRecognitionService.class)
+ 
+@Service(FaceRecognitionService.class)
 @Scope("COMPOSITE")
 public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 

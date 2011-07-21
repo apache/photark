@@ -54,6 +54,14 @@
             <version>${tuscany.version}</version>
         </dependency>
 
+         <dependency>
+            <groupId>org.apache.tuscany.sca</groupId>
+            <artifactId>tuscany-node-impl</artifactId>
+            <version>${tuscany.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
 		<!-- JackRabbit Dependencies -->
 		<!-- The JCR API -->
 		<dependency>
