@@ -57,8 +57,6 @@ var SECURITY_TOKEN;
 var permissions = new Array();
 var albumImageToBeLoaded = null;
 
-var FACE_API_KEY = "5ae7a7ddcba07b5d4731930bfe06f4c7";
-var FACE_API_SECRET = "6877f93df2c2bcef2a1ddb6ba26a0d6c";
 var facebook_ff;
 
 dojo.addOnLoad(function() {
@@ -97,7 +95,6 @@ function initServices(){
     gallery = new dojo.rpc.JsonService( photark.constants.GalleryServiceEndpoint );
     remoteGallery = new dojo.rpc.JsonService(photark.constants.RemoteGalleryServiceEndpoint);
     faceService = new dojo.rpc.JsonService(photark.constants.FaceRecognitionService);
-    faceService.createNewDefaultFaceClient(FACE_API_KEY,FACE_API_SECRET).addCallback(face_callback);
     facebook_ff = new dojo.rpc.JsonService(photark.constants.FacebookFriendFinder);
 }
 
@@ -279,27 +276,36 @@ function addTag() {
 }
 
 function showFacebookFriends(){
-     facebook_ff.getAllMyFBFriendsInThisPicture().addCallback(facebook_ff_callback);
+ facebook_ff.getAllMyFBFriendsFromPictureLocal("/home/subash/IdeaProjects/pics/friends_2.jpg").addCallback(facebook_ff_callback);
+
+//facebook_ff.getAllMyFBFriendsFromPictureUrl("https://lh4.googleusercontent.com/-rb_m-GQcL00/Ti8sqThvrDI/AAAAAAAAAMY/kUBurbFKJ0A/s640/friends_2.jpg").addCallback(facebook_ff_callback);
+//facebook_ff.getTest("/home/subash/IdeaProjects/pics/friends_2.jpg").addCallback(facebook_ff_callback);
 }
 
 function face_callback(items, exception) {
     if(exception) {
-       // alert(exception.msg);
-        displayGallery();
-         logout();
-      //  return;
+        alert("FB AUTH Error");
+
     }
+    //alert("FB AUTH OK");
 
 }
 
+function face_callback1(items, exception) {
+    if(exception) {
+        alert("FB AUTH Error");
+
+    }
+    //alert("FB AUTH OK");
+
+}
+
+
 function facebook_ff_callback(items, exception) {
     if(exception) {
-       // alert(exception.msg);
-        displayGallery();
-         logout();
-      //  return;
+        alert("Error");
     }
-    alert(items[0]);
+    alert(items.length);
 
 }
 

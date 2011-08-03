@@ -39,8 +39,8 @@ import com.github.mhendred.face4j.model.Photo;
 public class GenericFaceRecognitionTestCase {
 
     private DefaultFaceClient defaultFaceClient;
-    private String apiKey = "";
-    private String apiSecret = "";
+    private String apiKey = "5ae7a7ddcba07b5d4731930bfe06f4c7";
+    private String apiSecret = "6877f93df2c2bcef2a1ddb6ba26a0d6c";
     private static Node node;
 
 

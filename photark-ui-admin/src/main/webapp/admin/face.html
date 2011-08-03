@@ -24,6 +24,7 @@
 
     <title>Apache PhotArk - Face Recognition</title>
 
+    <script type="text/javascript" src="js/constants.js"></script>
     <script type="text/javascript" src="../dojo/dojo.js"
             djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
     <script type="text/javascript" src="js/face.js"></script>
@@ -89,7 +90,7 @@
 
                                     <br>
 
-                                    <div id="import_submit" class="uploadBtn btn" onClick="">
+                                    <div id="import_submit" class="uploadBtn btn" onClick="trainUser();">
                                         Train User
                                     </div>
                                     <div id="authFBLabel" align="left"><br/>Before train users, first you should

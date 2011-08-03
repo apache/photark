@@ -21,17 +21,17 @@ package org.apache.photark.face.services;
 import java.io.File;
 import java.util.List;
 
+import com.github.mhendred.face4j.model.*;
+import org.apache.photark.face.services.beans.BeanGeneratorUtil;
+import org.apache.photark.face.services.beans.PhotArkFace;
+import org.apache.photark.face.services.beans.PhotarkPhoto;
+import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
 import com.github.mhendred.face4j.DefaultFaceClient;
 import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
-import com.github.mhendred.face4j.model.Namespace;
-import com.github.mhendred.face4j.model.Photo;
-import com.github.mhendred.face4j.model.RemovedTag;
-import com.github.mhendred.face4j.model.SavedTag;
-import com.github.mhendred.face4j.model.UserStatus;
 import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
 import com.github.mhendred.face4j.response.TrainResponse;
@@ -42,6 +42,14 @@ import com.github.mhendred.face4j.response.UsersResponse;
 public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 
     private DefaultFaceClient defaultFaceClient;
+    private String API_KEY = "";
+    private String API_SECRET = "";
+
+
+    @Init
+    public void init() {
+        defaultFaceClient = new DefaultFaceClient(API_KEY,API_SECRET);
+    }
 
     /**
      * @see {@link FaceRecognitionService#removeTags(String)}
@@ -88,15 +96,20 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#recognizeFromFile(File,String)}
      */
-    public Photo recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.recognize(imageFile, uids);
+    public PhotarkPhoto recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException {
+       Photo photo = defaultFaceClient.recognize(imageFile, uids);
+      return BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**
      * @see {@link FaceRecognitionService#recognizeFromUrls(String,String)}
      */
-    public List<Photo> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.recognize(urls, uids);
+    public List<PhotarkPhoto> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException {
+        List<PhotarkPhoto> photarkPhotoList = null;
+        for(Photo p : defaultFaceClient.recognize(urls, uids)) {
+        photarkPhotoList.add(BeanGeneratorUtil.createPhotarkPhoto(p));
+        }
+        return photarkPhotoList ;
     }
 
     /**
@@ -217,5 +230,6 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     public void createNewDefaultFaceClient(String apiKey, String apiSecret) {
         defaultFaceClient = new DefaultFaceClient(apiKey, apiSecret);
     }
+
 
 }

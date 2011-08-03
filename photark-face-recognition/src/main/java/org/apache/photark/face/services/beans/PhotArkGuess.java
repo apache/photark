@@ -16,18 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.photark.face.services.applications.facebook;
+package org.apache.photark.face.services.beans;
 
-import org.apache.tuscany.sca.data.collection.Entry;
-import org.oasisopen.sca.annotation.Remotable;
+import java.io.Serializable;
 
-@Remotable
-public interface FacebookFriendFinder {
+public class PhotArkGuess implements Serializable {
+    private String confidence;
+    private String guessID;
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile);
+    public PhotArkGuess(String confidence, String guessID) {
+        this.confidence = confidence;
+        this.guessID = guessID;
+    }
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl);
+    public String getConfidence() {
+        return confidence;
+    }
 
-    public void setFacebookAuth(String facebookId, String fbAccessToken);
+    public void setConfidence(String confidence) {
+        this.confidence = confidence;
+    }
 
+    public void setGuessID(String guessID) {
+        this.guessID = guessID;
+    }
+
+    public String getGuessID() {
+        return guessID;
+    }
 }

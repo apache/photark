@@ -25,6 +25,7 @@ import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
 import com.github.mhendred.face4j.response.TrainResponse;
 import com.github.mhendred.face4j.response.UsersResponse;
+import org.apache.photark.face.services.beans.PhotarkPhoto;
 import org.oasisopen.sca.annotation.Remotable;
 
 import java.io.File;
@@ -124,7 +125,7 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public Photo recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException;
+    public PhotarkPhoto recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException;
 
     /**
      * Recognizes same as {@recognizeFromFile} except, this time the domain can be given as a url itself.
@@ -134,7 +135,7 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public List<Photo> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException ;
+    public List<PhotarkPhoto> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException ;
 
     /**  Gives tags of the detected faces of the given photo with multiple details of the Photo
      *
