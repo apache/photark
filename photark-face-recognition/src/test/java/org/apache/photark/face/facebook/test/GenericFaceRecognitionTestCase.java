@@ -20,6 +20,8 @@
 package org.apache.photark.face.facebook.test;
 
 import org.apache.photark.face.services.FaceRecognitionService;
+import org.apache.photark.face.services.beans.PhotArkFace;
+import org.apache.photark.face.services.beans.PhotarkPhoto;
 import org.apache.tuscany.sca.node.Contribution;
 import org.apache.tuscany.sca.node.ContributionLocationHelper;
 import org.apache.tuscany.sca.node.Node;
@@ -85,12 +87,12 @@ public class GenericFaceRecognitionTestCase {
         defaultFaceClient.saveTags(p2.getFace().getTID(), "jenifer@photark.com", "jenifer");
 
         defaultFaceClient.train("jenifer@photark.com");
-        Photo p =
+        PhotarkPhoto p =
             defaultFaceClient
                 .recognizeFromUrls("https://lh3.googleusercontent.com/-4I_Yn56XwAw/Thi6LIZSutI/AAAAAAAAABo/jOjx2cGgHao/s128/110306_latinjlo_400X400.jpg",
                                    "jenifer@photark.com").get(0);
 
-        for (Face f : p.getFaces()) {
+        for (PhotArkFace f : p.getPhotArkFaces()) {
             if (f.getGuess() == null) {
                 System.out.println(" > Cannot identify Jenifer Lopez :: " + f.toString());
             } else {
