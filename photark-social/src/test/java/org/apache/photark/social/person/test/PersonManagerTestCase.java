@@ -59,7 +59,7 @@ public class PersonManagerTestCase {
         activities.add("Cricket");
         person.setActivities(activities);
         pm.savePerson("testuser1", person);
-        Person person2 = pm.getPerson("testuser1");
+        Person person2 = pm.getPerson("testuser1", null);
         Assert.assertNotNull(person2);
         Assert.assertEquals("testuser1", person2.getId());
         Assert.assertEquals(person.getDisplayName(), person2.getDisplayName());
@@ -68,7 +68,7 @@ public class PersonManagerTestCase {
         Assert.assertNotNull(person2.getActivities());
         Assert.assertEquals("Movies", person2.getActivities().get(0));
         pm.removePerson("testuser1");
-        person2 = pm.getPerson("testuser1");
+        person2 = pm.getPerson("testuser1", null);
         Assert.assertNull(person2);
 
     }
