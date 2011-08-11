@@ -41,7 +41,10 @@ import org.apache.photark.social.PhotArkSocialException;
 import org.apache.photark.social.services.ActivityService;
 import org.apache.photark.social.util.FilterOptions;
 import org.apache.photark.social.util.PhotArkSocialUtil;
+import org.oasisopen.sca.annotation.Reference;
+import org.oasisopen.sca.annotation.Scope;
 
+@Scope("COMPOSITE")
 public class JCRActivityServiceImpl implements ActivityService {
     private JCRRepositoryManager repositoryManager;
     private static final Logger logger = Logger.getLogger(JCRActivityServiceImpl.class.getName());
@@ -52,13 +55,13 @@ public class JCRActivityServiceImpl implements ActivityService {
         repositoryManager = new JCRRepositoryManager();
     }
 
-    public JCRActivityServiceImpl(JCRRepositoryManager repositoryManager) {
+    public JCRActivityServiceImpl(@Reference(name="repositoryManager") JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
 
     public Activity createActivity(String userId, String groupId, Set<String> fields) throws PhotArkSocialException {
         // TODO Auto-generated method stub
-        return null;
+		return null;
     }
 
     public void saveActivity(String userId, Activity activity) throws PhotArkSocialException {

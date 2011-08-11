@@ -218,6 +218,7 @@
                 <module>photark-security</module>
                 <module>photark-itest</module>
 		<module>photark-social</module>
+		<module>photark-social-ui</module>
             </modules>
         </profile>
 
@@ -233,6 +234,7 @@
                 <module>photark-jcr</module>
                 <module>photark-security</module>
 		<module>photark-social</module>
+		<module>photark-social-ui</module>
             </modules>
         </profile>
 
@@ -248,6 +250,7 @@
                 <module>photark-jcr</module>
                 <module>photark-security</module>
 		<module>photark-social</module>
+		<module>photark-social-ui</module>
             </modules>
         </profile>
         <!-- ====================================================================== -->

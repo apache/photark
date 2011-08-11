@@ -1,0 +1,273 @@
+<!--
+    * Licensed to the Apache Software Foundation (ASF) under one
+    * or more contributor license agreements.  See the NOTICE file
+    * distributed with this work for additional information
+    * regarding copyright ownership.  The ASF licenses this file
+    * to you under the Apache License, Version 2.0 (the
+    * "License"); you may not use this file except in compliance
+    * with the License.  You may obtain a copy of the License at
+    *
+    *   http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing,
+    * software distributed under the License is distributed on an
+    * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    * KIND, either express or implied.  See the License for the
+    * specific language governing permissions and limitations
+    * under the License.
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>User Profile</title>
+<script type="text/javascript" src="../dojo/dojo.js"></script>
+
+<script type="text/javascript">
+	function init() {
+
+		var getPersonCallback = function(person) {
+			document.getElementById('userId').innerHTML = person
+					.getDisplayName();
+			document.getElementById('displayName').innerHTML = "Test User"; //for tetsing purpose 
+			document.getElementById('u_displayName').value = 'Test User'; //for tetsing purpose 
+			document.getElementById('u_firstName').value = 'XXX'; //for tetsing purpose 
+		}
+		userId = "admin"; // need to retrieve the userId of the loggen in user 
+		var xhrArgs = {
+			url : "/photark/people/" + userId + "/@self",
+			handleAs : "json",
+			headers : {
+				"Accept" : "application/json"
+			}
+		};
+
+		//Call the asynchronous xhrGet 
+		var deferred = dojo.xhrGet(xhrArgs);
+
+		deferred.addCallback(getPersonCallback);
+
+		deferred.addErrback(function(error) {
+			alert("An unexpected error occurred: " + error);
+		});
+	}
+
+	function switchToView(toView) {
+		currentView = toView;
+		if ('ShowProfile' == toView) {
+			dojo.byId("updateProfileDiv").style.display = "none";
+			dojo.byId("showProfileDiv").style.display = "";
+
+		} else if ('UpdateProfile' == toView) {
+			dojo.byId("showProfileDiv").style.display = "none";
+			dojo.byId("updateProfileDiv").style.display = "";
+
+		} else {
+
+		}
+	}
+</script>
+<style type="text/css">
+#container {
+	padding: 1em;
+}
+
+#container p {
+	font-size: 1.2em;
+	font-family: Tahoma, Verdana;
+}
+
+.switchView {
+	border: 1px solid #333333;
+	background: url(images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px
+		top;
+	font-size: 14px;
+	width: 201px;
+	height: 30px;
+	vertical-align: middle; /* emulates a <button> if node is not */
+	text-align: center;
+	text-shadow: green;
+	text-indent: 1.2 em;
+}
+</style>
+
+</head>
+
+<body onload="init()">
+
+	<div id="container" style="margin-left: 5px">
+		<div id="menuDiv" style="margin-left: 5px">
+			<div style="float: right; margin-right: 20px;"
+				onclick="switchToView('ShowProfile');" class="switchView"
+				id="switchToShowProfile">Show Profile</div>
+			<div style="float: right; margin-right: 20px;"
+				onclick="switchToView('UpdateProfile');" class="switchView"
+				id="switchToUpdateProfile">Update Profile</div>
+		</div>
+		<div id="showProfileDiv">
+			<p>
+				<span style="color: orange">User Profile</span>
+			</p>
+
+			<table border="0">
+				<tr>
+					<td>User ID :</td>
+					<td>
+						<div id="userId" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>First Name :</td>
+					<td>
+						<div id="firstName" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Last Name :</td>
+					<td>
+						<div id="lastName" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Display Name :</td>
+					<td>
+						<div id="displayName" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>E-mail :</td>
+					<td>
+						<div id="emails" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Nickname :</td>
+					<td>
+						<div id="nickname" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Gender :</td>
+					<td>
+						<div id="gender" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>About Me :</td>
+					<td>
+						<div id="aboutme" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Address :</td>
+					<td>
+						<div id="address" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Activities :</td>
+					<td>
+						<div id="activities" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Birthday :</td>
+					<td>
+						<div id="birthday" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+					<td>Organization :</td>
+					<td>
+						<div id="organization" style="color: blue;"></div></td>
+				</tr>
+				<tr>
+				</tr>
+			</table>
+		</div>
+		<div id="updateProfileDiv" style="display: none;">
+			<p>
+				<span style="color: orange"> Update User Profile</span>
+			</p>
+
+			<table border="0">
+				<tr>
+					<td>User ID :</td>
+					<td>
+						<div id="u_userId" style="color: green;"></div></td>
+				</tr>
+				<tr>
+					<td>First Name :</td>
+					<td><label> <input id="u_firstName" type="text"
+							name="u_firstName" size="20" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Last Name :</td>
+					<td><label> <input id="u_lastName" type="text"
+							name="u_lastName" size="20" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td><span>Display Name </span><span style="color: red">*</span><span>
+							: </span>
+					</td>
+					<td><label> <input id="u_displayName" type="text"
+							name="u_displayName" size="20" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>E-mail :</td>
+					<td><label> <input id="emails" type="text"
+							name="emails" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Nickname :</td>
+					<td><label> <input id="u_nickname" type="text"
+							name="u_nickname" size="20" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Gender :</td>
+					<td><label> <select id="u_gender" name="u_gender">
+								<option>Female</option>
+								<option>Male</option>
+						</select> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>About Me :</td>
+					<td><label> <input id="u_aboutme" type="text"
+							name="u_aboutme" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Address :</td>
+					<td><label> <input id="u_address" type="text"
+							name="u_address" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Activities :</td>
+					<td><label> <input id="u_activities" type="text"
+							name="u_activities" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Birthday :</td>
+					<td><label> <input id="u_birthday" type="text"
+							name="u_birthday" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+					<td>Organization :</td>
+					<td><label> <input id="u_organization" type="text"
+							name="u_organization" size="35" /> </label>
+					</td>
+				</tr>
+				<tr>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button id="submit" type="button" onclick=""
+							style="margin-right: 5px">Update</button>
+						<button id="cancel" type="button" onclick="">Cancel</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>

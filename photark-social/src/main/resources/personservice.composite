@@ -17,39 +17,23 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
-<composite	xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+<composite xmlns="http://docs.oasis-open.org/ns/opencsa/sca/200912"
 		xmlns:tuscany="http://tuscany.apache.org/xmlns/sca/1.1"
 		targetNamespace="http://org.apache.photoark"
-		name="gallery">
+		name="people">
 
     <!-- Component responsible for providing JCR Management Support -->
     <component name="RepositoryManager">
 		<implementation.java class="org.apache.photark.services.jcr.JCRRepositoryManager"/>
 		<property name="repositoryHome">target/photark</property>
 	</component>
-
-	<component name="SubscriptionComponent">
-		<implementation.java class="org.apache.photark.services.jcr.JCRSubscriptionCollection"/>
-		<reference name="repositoryManager" target="RepositoryManager"/>
-	</component>
-
-	<component name="GalleryComponent">
-		<implementation.java class="org.apache.photark.services.jcr.JCRGalleryService"/>
-		<service name="GalleryService">
-			<tuscany:binding.rest uri="http://localhost:8085/gallery">
+	<component name="PersonServiceComponent">
+		<implementation.java class="org.apache.photark.social.services.impl.JCRPersonServiceImpl "/>
+		<service name="PersonService">
+			<tuscany:binding.rest uri="/people">
 			    <tuscany:operationSelector.jaxrs />
     		</tuscany:binding.rest>
    		</service>
    		<reference name="repositoryManager" target="RepositoryManager" />
-	</component>
-	
-		<component name="ImageUploadComponent">
-		<implementation.java class="org.apache.photark.services.jcr.JCRImageUploadService"/>
-		<service name="ImageUploadService">
-			<tuscany:binding.rest uri="/upload">
-			    <tuscany:operationSelector.jaxrs />
-    		</tuscany:binding.rest>
-   		</service>
-   		<reference name="repositoryManager" target="RepositoryManager" />
-	</component>
+	</component>		
 </composite>
