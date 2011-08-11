@@ -25,8 +25,9 @@
     <!-- Component responsible for providing JCR Management Support -->
     <component name="RepositoryManager">
 		<implementation.java class="org.apache.photark.services.jcr.JCRRepositoryManager"/>
-		<property name="repositoryHome">target/photark</property>
+		<property name="repositoryHome">photark</property>
 	</component>
+	
 	<component name="PersonServiceComponent">
 		<implementation.java class="org.apache.photark.social.services.impl.JCRPersonServiceImpl"/>
 		<service name="PersonService">
