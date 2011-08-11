@@ -28,7 +28,7 @@
 		<property name="repositoryHome">target/photark</property>
 	</component>
 	<component name="PersonServiceComponent">
-		<implementation.java class="org.apache.photark.social.services.impl.JCRPersonServiceImpl "/>
+		<implementation.java class="org.apache.photark.social.services.impl.JCRPersonServiceImpl"/>
 		<service name="PersonService">
 			<tuscany:binding.rest uri="/people">
 			    <tuscany:operationSelector.jaxrs />
