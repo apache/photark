@@ -148,7 +148,7 @@ public class JCRPersonServiceImpl implements PersonService {
 
 	}*/
 
-	public Person getPerson(String personId, String[] fields)
+	public Person getPerson(String personId)
 			throws PhotArkSocialException {
 		Node personProfileNode = null;
 		Person personObj = null;

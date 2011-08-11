@@ -105,8 +105,8 @@ public interface PersonService {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/people/{userId}/@self")
-	Person getPerson(@PathParam("userId") String personId, String[] fields)
+	@Path("/people/{userId}/self")
+	Person getPerson(@PathParam("userId") String personId)
 			throws PhotArkSocialException;
 
 	/**
