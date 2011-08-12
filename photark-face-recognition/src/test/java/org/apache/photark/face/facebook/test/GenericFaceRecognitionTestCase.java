@@ -41,8 +41,8 @@ import com.github.mhendred.face4j.model.Photo;
 public class GenericFaceRecognitionTestCase {
 
     private DefaultFaceClient defaultFaceClient;
-    private String apiKey = "5ae7a7ddcba07b5d4731930bfe06f4c7";
-    private String apiSecret = "6877f93df2c2bcef2a1ddb6ba26a0d6c";
+    private String apiKey = "";
+    private String apiSecret = "";
     private static Node node;
 
 
@@ -89,8 +89,8 @@ public class GenericFaceRecognitionTestCase {
         defaultFaceClient.train("jenifer@photark.com");
         PhotarkPhoto p =
             defaultFaceClient
-                .recognizeFromUrls("https://lh3.googleusercontent.com/-4I_Yn56XwAw/Thi6LIZSutI/AAAAAAAAABo/jOjx2cGgHao/s128/110306_latinjlo_400X400.jpg",
-                                   "jenifer@photark.com").get(0);
+                .recognizeFromUrl("https://lh3.googleusercontent.com/-4I_Yn56XwAw/Thi6LIZSutI/AAAAAAAAABo/jOjx2cGgHao/s128/110306_latinjlo_400X400.jpg",
+                                   "jenifer@photark.com");
 
         for (PhotArkFace f : p.getPhotArkFaces()) {
             if (f.getGuess() == null) {

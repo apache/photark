@@ -53,7 +53,7 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public TrainResponse train(String uids) throws FaceClientException, FaceServerException;
+    public void train(String uids) throws FaceClientException, FaceServerException;
 
     /** Adds a manual tag for a Photo.But manual tags are not used to train the system. They are used for the purpose
      * of adding face tags for the Photos which were not detected by your program.
@@ -135,7 +135,7 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public List<PhotarkPhoto> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException ;
+    public PhotarkPhoto recognizeFromUrl(String urls, String uids) throws FaceClientException, FaceServerException ;
 
     /**  Gives tags of the detected faces of the given photo with multiple details of the Photo
      *

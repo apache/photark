@@ -287,7 +287,7 @@ function confirmDelete(item, type) {
 }
 
 
-function populateUserInfo() {
+function populateUserInfo() {  
     dojo.xhrPost({
         url:"../security", //photark.constants.SecurityEndpoint,
         content:{request:"getUser"},

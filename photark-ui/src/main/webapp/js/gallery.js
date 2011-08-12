@@ -276,10 +276,19 @@ function addTag() {
 }
 
 function showFacebookFriends(){
- facebook_ff.getAllMyFBFriendsFromPictureLocal("/home/subash/IdeaProjects/pics/friends_2.jpg").addCallback(facebook_ff_callback);
+ var file_path =  document.getElementById("albumImage").src;
+    dojo.xhrPost({
+        url:"security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+          facebook_ff.getAllMyFBFriendsFromPictureUrl(file_path,response.user.userId).addCallback(facebook_ff_callback);
+        },
+        error: function(response, ioArgs) {
 
-//facebook_ff.getAllMyFBFriendsFromPictureUrl("https://lh4.googleusercontent.com/-rb_m-GQcL00/Ti8sqThvrDI/AAAAAAAAAMY/kUBurbFKJ0A/s640/friends_2.jpg").addCallback(facebook_ff_callback);
-//facebook_ff.getTest("/home/subash/IdeaProjects/pics/friends_2.jpg").addCallback(facebook_ff_callback);
+        }
+    });
+
 }
 
 function face_callback(items, exception) {

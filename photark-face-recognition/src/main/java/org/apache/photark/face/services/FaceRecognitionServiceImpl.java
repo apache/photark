@@ -61,8 +61,8 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#train(String)}
      */
-    public TrainResponse train(String uids) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.train(uids);
+    public void train(String uids) throws FaceClientException, FaceServerException {
+       defaultFaceClient.train(uids);
     }
 
     /**
@@ -102,14 +102,12 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     }
 
     /**
-     * @see {@link FaceRecognitionService#recognizeFromUrls(String,String)}
+     * @see {@link FaceRecognitionService#recognizeFromUrl(String,String)}
      */
-    public List<PhotarkPhoto> recognizeFromUrls(String urls, String uids) throws FaceClientException, FaceServerException {
-        List<PhotarkPhoto> photarkPhotoList = null;
-        for(Photo p : defaultFaceClient.recognize(urls, uids)) {
-        photarkPhotoList.add(BeanGeneratorUtil.createPhotarkPhoto(p));
-        }
-        return photarkPhotoList ;
+    public PhotarkPhoto recognizeFromUrl(String url, String uid) throws FaceClientException, FaceServerException {
+        Photo p = defaultFaceClient.recognize(url, uid).get(0);
+        return BeanGeneratorUtil.createPhotarkPhoto(p);
+
     }
 
     /**

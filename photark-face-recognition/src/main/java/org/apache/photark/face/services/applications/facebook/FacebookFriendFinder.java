@@ -24,10 +24,12 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface FacebookFriendFinder {
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile);
+    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile,String photarkUid);
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl);
+    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl,String photarkUid);
 
     public void setFacebookAuth(String facebookId, String fbAccessToken);
+
+    public void storeFacebookAccessToken(String photarkUid, String accessToken);
 
 }

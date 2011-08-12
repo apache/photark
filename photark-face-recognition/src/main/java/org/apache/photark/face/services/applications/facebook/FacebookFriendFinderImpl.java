@@ -18,12 +18,20 @@
  */
 package org.apache.photark.face.services.applications.facebook;
 
+import com.github.mhendred.face4j.DefaultFaceClient;
 import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.types.User;
 import org.apache.photark.face.services.FaceRecognitionService;
 import org.apache.photark.face.services.beans.PhotArkFace;
 import org.apache.photark.face.services.beans.PhotarkPhoto;
+import org.apache.photark.security.authorization.services.AccessManager;
+import org.apache.photark.security.authorization.services.SecurityServiceImpl;
+import org.apache.photark.security.utils.Constants;
 import org.apache.tuscany.sca.data.collection.Entry;
+import org.oasisopen.sca.annotation.Init;
 import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 
@@ -37,38 +45,55 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
     private FaceRecognitionService faceRecognitionService;
     private final String adamFBUserId = "";
     private final String adamAccessToken = "";
+    private AccessManager accessManager;
 
-
+       @Init
+    public void init() {
+           System.out.println("############## INIT..............############");
+    }
+    
     @Reference(name = "faceRecognitionService")
     protected void setFaceRecognitionService(FaceRecognitionService faceRecognitionService) {
         this.faceRecognitionService = faceRecognitionService;
     }
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile) {
 
-        return processFBFriends(pathToFile, true);
+    @Reference(name = "accessmanager")
+    protected void setAccessService(AccessManager accessManager) {
+        this.accessManager = accessManager;
     }
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl) {
+    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile,String photarkUid) {
 
-        return processFBFriends(fileUrl, false);
+        return processFBFriends(pathToFile, true, photarkUid);
+    }
+
+    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl, String photarkUid) {
+
+        return processFBFriends(fileUrl, false, photarkUid);
+    }
+
+    public void storeFacebookAccessToken(String photarkUid, String accessToken) {
+        faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken), accessToken);
+        accessManager.setFacebookAccessTokenToUser(photarkUid,Constants.REGISTERED_USER_LIST,accessToken);
     }
 
     public void setFacebookAuth(String facebookId, String fbAccessToken) {
         faceRecognitionService.setFacebookOauth2(facebookId, fbAccessToken);
     }
 
-    private Entry<String, String>[] processFBFriends(String fileLocation, boolean isLocal) {
+
+    private Entry<String, String>[] processFBFriends(String fileLocation, boolean isLocal, String photarkUid) {
 
         PhotarkPhoto photo = null;
         List<Entry<String, String>> detectedFriends = new ArrayList<Entry<String, String>>();
-
+        String accessToken = accessManager.getUserFacebookAccessToken(photarkUid,Constants.REGISTERED_USER_LIST);
         try {
-            faceRecognitionService.setFacebookOauth2(adamFBUserId, adamAccessToken);
+            faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken),accessToken);
             if (isLocal) {
                 photo = faceRecognitionService.recognizeFromFile(new File(fileLocation), "friends@facebook.com");
             } else {
-                photo = faceRecognitionService.recognizeFromUrls(fileLocation, "friends@facebook.com").get(0);
+                photo = faceRecognitionService.recognizeFromUrl(fileLocation, "friends@facebook.com");
             }
 
             for (PhotArkFace face : photo.getPhotArkFaces()) {
@@ -93,6 +118,12 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         Entry<String, String>[] imageArray = new Entry[detectedFriends.size()];
         return detectedFriends.toArray(imageArray);
 
+    }
+
+    private String getMyFacebookUserId(String accessToken) {
+       FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+       User user = facebookClient.fetchObject("me", User.class);
+     return user.getId();
     }
 
 }

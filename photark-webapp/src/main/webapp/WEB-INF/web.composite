@@ -187,6 +187,8 @@
    			<tuscany:binding.jsonrpc uri="/FacebookFriendFinder"/>
    		</service>
         <reference name="faceRecognitionService" target="FaceRecognitionService"/>
+        <reference name="accessmanager" target="AccessManager"/>
+
 	</component>
     
 	

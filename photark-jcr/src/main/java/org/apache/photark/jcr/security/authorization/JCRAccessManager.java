@@ -1170,6 +1170,65 @@ public class JCRAccessManager implements AccessManager, JSONAccessManager {
 
     }
 
+    public void setFacebookAccessTokenToUser(String userId, String listName, String accesstoken) {
+
+           Session session;
+        try {
+
+            if(isUserStoredInList(userId,listName)) {
+
+                session = repositoryManager.getSession();
+
+                Node listNodeUsers = (Node)session.getItem("/" + USER_STORE + "/" + USER_LISTS + "/" + listName);
+                Node userNode = listNodeUsers.getNode(JCREncoder.toJCRFormat(userId));
+
+                if(!userNode.hasProperty("photark.facebook.accesstoken")) {
+                   userNode.setProperty("photark.facebook.accesstoken",accesstoken);
+                }
+                session.save();
+
+            }
+        } catch (LoginException e) {
+
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getUserFacebookAccessToken(String userId, String listName) {
+
+        Session session;
+        String accessToken = "";
+     try {
+
+         if(isUserStoredInList(userId,listName)) {
+
+             session = repositoryManager.getSession();
+
+             Node listNodeUsers = (Node)session.getItem("/" + USER_STORE + "/" + USER_LISTS + "/" + listName);
+             Node userNode = listNodeUsers.getNode(JCREncoder.toJCRFormat(userId));
+
+             if(userNode.hasProperty("photark.facebook.accesstoken")) {
+              accessToken = userNode.getProperty("photark.facebook.accesstoken").getValue().getString();
+             }
+             session.save();
+
+         }
+     } catch (LoginException e) {
+
+         e.printStackTrace();
+     } catch (RepositoryException e) {
+
+         e.printStackTrace();
+     }
+
+
+        return accessToken;
+    }
+
     // save access list and token in the access token map
 
     public synchronized void putAccessListAndToken(AccessList accessList, String token) {

@@ -157,4 +157,22 @@ public interface AccessManager {
      * @return The userID of the user
      */
     String getUserIdFromSecurityToken(String token);
+
+    /**
+     *
+     * @param userId  user id of the currrent user
+     * @param accesstoken  facebook access token
+     * @param listName - list name to retrieve the user
+     * @return
+     */
+    void setFacebookAccessTokenToUser(String userId, String listName, String accesstoken);
+
+    /**
+     *
+     * @param userId  user id of the currrent user
+     * @param listName list name to retrieve the user
+     * @return
+     */
+    String getUserFacebookAccessToken(String userId, String listName);
+
 }

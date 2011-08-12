@@ -80,9 +80,8 @@ function checkAccessTokenRedirect() {
     var url = window.location.href;
     if (url != "http://localhost:8080/photark/admin/face.html") {
         var accesstoken = url.split("&")[0].split("=")[1];
-
-        alert(accesstoken);
-     
+        store_facebook_access_token(accesstoken) ;
+        
     }
 }
 
@@ -95,27 +94,44 @@ function facebookAuth() {
     window.location = url;
 }
 
-function trainUser() {
+function trainUser(user_name) {
     if (selectFaceApp.value == "General-Face-Recognition") {
         //TODO call train method in generic face app
 
     } else if (selectFaceApp.value == "FaceBook-Friend-Finder") {
-        faceService.train("1271543184@facebook.com").addCallback(facebook_ff_callback);
+        faceService.train(user_name).addCallback(facebook_ff_callback);
     }
 
+}
+
+function store_facebook_access_token(accessToken) {
+        dojo.xhrPost({
+        url:"../security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+        facebookService.storeFacebookAccessToken(response.user.userId,accessToken).addCallback(facebook_ff_void_callback);
+        },
+        error: function(response, ioArgs) {
+
+        }
+    });
 }
 
 function face_callback(items, exception) {
     if (exception) {
         alert("Error");
     }
+
+    alert(items);
 }
 
-function facebook_ff_callback(items, exception) {
+function facebook_ff_void_callback(items, exception) {
     if (exception) {
         alert("Error");
+    }  else {
+//      alert("CAME");
     }
-    alert("AA");
 }
 
 
