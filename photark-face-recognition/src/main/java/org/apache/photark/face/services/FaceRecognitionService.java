@@ -115,7 +115,7 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public List<SavedTag> saveTags(String tids, String uid, String label) throws FaceClientException, FaceServerException;
+    public void saveTags(String tids, String uid, String label) throws FaceClientException, FaceServerException;
 
     /**
      *  Does recognize whether the given image contains any of given users(by ID).
@@ -144,16 +144,16 @@ public interface FaceRecognitionService {
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public Photo detectFromFile(File imageFile) throws FaceClientException, FaceServerException;
+    public PhotarkPhoto detectFromFile(File imageFile) throws FaceClientException, FaceServerException;
 
     /**
      * Detection happens same as {@detectFromFile} except this time its from urls
-     * @param urls
+     * @param url
      * @return
      * @throws FaceClientException
      * @throws FaceServerException
      */
-    public List<Photo> detectFromUrls(String urls) throws FaceClientException, FaceServerException;
+    public PhotarkPhoto detectFromUrl(String url) throws FaceClientException, FaceServerException;
 
     /**
      * Gives the status of the given User IDs from the training set.

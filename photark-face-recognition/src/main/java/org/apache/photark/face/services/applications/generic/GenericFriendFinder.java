@@ -16,20 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.photark.face.services.applications.facebook;
+
+package org.apache.photark.face.services.applications.generic;
 
 import org.apache.tuscany.sca.data.collection.Entry;
 import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
-public interface FacebookFriendFinder {
+public interface GenericFriendFinder {
 
-    public Entry<String, String[]>[] getAllMyFBFriendsFromPictureLocal(String pathToFile,String photarkUid);
+    public String check();
 
-    public Entry<String, String[]>[] getAllMyFBFriendsFromPictureUrl(String fileUrl,String photarkUid);
+    public void trainUrlImage(String imagePath, String userName, String label) ;
 
-    public void setFacebookAuth(String facebookId, String fbAccessToken);
+    public void trainLocalImage(String imagePath, String userName, String label);
 
-    public void storeFacebookAccessToken(String photarkUid, String accessToken);
-      public Entry<String, String[]>[] check();
+    public Entry<String, String[]>[] getAllMyFriendsFromPictureLocal(String pathToFile, String uids, String photarkUid);
+
+    public Entry<String, String[]>[] getAllMyFriendsFromPictureUrl(String fileUrl,String uids, String photarkUid);
+
 }

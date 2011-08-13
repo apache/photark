@@ -48,6 +48,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 
     @Init
     public void init() {
+        System.out.println("# ... Initializing FaceRecognitionService ...");
         defaultFaceClient = new DefaultFaceClient(API_KEY,API_SECRET);
     }
 
@@ -61,8 +62,14 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#train(String)}
      */
-    public void train(String uids) throws FaceClientException, FaceServerException {
-       defaultFaceClient.train(uids);
+    public void train(String uids)  {
+        try {
+            defaultFaceClient.train(uids);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     /**
@@ -89,23 +96,43 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#saveTags(String,String,String)}
      */
-    public List<SavedTag> saveTags(String tids, String uid, String label) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.saveTags(tids, uid, label);
+    public void saveTags(String tids, String uid, String label)  {
+        try {
+             defaultFaceClient.saveTags(tids, uid, label);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     /**
      * @see {@link FaceRecognitionService#recognizeFromFile(File,String)}
      */
-    public PhotarkPhoto recognizeFromFile(File imageFile, String uids) throws FaceClientException, FaceServerException {
-       Photo photo = defaultFaceClient.recognize(imageFile, uids);
-      return BeanGeneratorUtil.createPhotarkPhoto(photo);
+    public PhotarkPhoto recognizeFromFile(File imageFile, String uids)  {
+        Photo photo = null;
+        try {
+            photo = defaultFaceClient.recognize(imageFile, uids);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**
      * @see {@link FaceRecognitionService#recognizeFromUrl(String,String)}
      */
-    public PhotarkPhoto recognizeFromUrl(String url, String uid) throws FaceClientException, FaceServerException {
-        Photo p = defaultFaceClient.recognize(url, uid).get(0);
+    public PhotarkPhoto recognizeFromUrl(String url, String uid)  {
+        Photo p = null;
+        try {
+            p = defaultFaceClient.recognize(url, uid).get(0);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         return BeanGeneratorUtil.createPhotarkPhoto(p);
 
     }
@@ -113,15 +140,31 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#detectFromFile(File)}
      */
-    public Photo detectFromFile(File imageFile) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.detect(imageFile);
+    public PhotarkPhoto detectFromFile(File imageFile) {
+       Photo photo = null;
+        try {
+            photo = defaultFaceClient.detect(imageFile);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+       return BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**
-     * @see {@link FaceRecognitionService#detectFromUrls(String)}
+     * @see {@link FaceRecognitionService#detectFromUrl(String)}
      */
-    public List<Photo> detectFromUrls(String urls) throws FaceClientException, FaceServerException {
-        return defaultFaceClient.detect(urls);
+    public PhotarkPhoto detectFromUrl(String url)  {
+        Photo photo = null;
+        try {
+            photo = defaultFaceClient.detect(url).get(0);
+        } catch (FaceClientException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FaceServerException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return  BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**

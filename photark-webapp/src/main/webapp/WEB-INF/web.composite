@@ -190,6 +190,19 @@
         <reference name="accessmanager" target="AccessManager"/>
 
 	</component>
-    
+
+
+         <component name="GenericFriendFinder">
+		<implementation.java class="org.apache.photark.face.services.applications.generic.GenericFriendFinderImpl"/>
+
+		<service name="GenericFriendFinder">
+   			<interface.java interface="org.apache.photark.face.services.applications.generic.GenericFriendFinder"/>
+   			<binding.sca name="local"/>
+   			<tuscany:binding.jsonrpc uri="/GenericFriendFinder"/>
+   		</service>
+        <reference name="faceRecognitionService" target="FaceRecognitionService"/>
+        <reference name="accessmanager" target="AccessManager"/>
+
+      	</component>
 	
 </composite>

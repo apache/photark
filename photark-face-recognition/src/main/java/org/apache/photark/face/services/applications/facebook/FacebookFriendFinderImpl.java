@@ -47,11 +47,11 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
     private final String adamAccessToken = "";
     private AccessManager accessManager;
 
-       @Init
+    @Init
     public void init() {
-           System.out.println("############## INIT..............############");
+        System.out.println("# ... Initializing FacebookFriendFinder Service ...");
     }
-    
+
     @Reference(name = "faceRecognitionService")
     protected void setFaceRecognitionService(FaceRecognitionService faceRecognitionService) {
         this.faceRecognitionService = faceRecognitionService;
@@ -63,19 +63,27 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         this.accessManager = accessManager;
     }
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureLocal(String pathToFile,String photarkUid) {
+    public Entry<String, String[]>[] check() {
+        List<Entry<String, String[]>> detectedFriends = new ArrayList<Entry<String, String[]>>();
+        detectedFriends.add(new Entry<String, String[]>("uid", new String[]{"AAAA", "BBBB"}));
+        Entry<String, String[]>[] imageArray = new Entry[detectedFriends.size()];
+        return detectedFriends.toArray(imageArray);
+
+    }
+
+    public Entry<String, String[]>[] getAllMyFBFriendsFromPictureLocal(String pathToFile, String photarkUid) {
 
         return processFBFriends(pathToFile, true, photarkUid);
     }
 
-    public Entry<String, String>[] getAllMyFBFriendsFromPictureUrl(String fileUrl, String photarkUid) {
+    public Entry<String, String[]>[] getAllMyFBFriendsFromPictureUrl(String fileUrl, String photarkUid) {
 
         return processFBFriends(fileUrl, false, photarkUid);
     }
 
     public void storeFacebookAccessToken(String photarkUid, String accessToken) {
         faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken), accessToken);
-        accessManager.setFacebookAccessTokenToUser(photarkUid,Constants.REGISTERED_USER_LIST,accessToken);
+        accessManager.setFacebookAccessTokenToUser(photarkUid, Constants.REGISTERED_USER_LIST, accessToken);
     }
 
     public void setFacebookAuth(String facebookId, String fbAccessToken) {
@@ -83,28 +91,32 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
     }
 
 
-    private Entry<String, String>[] processFBFriends(String fileLocation, boolean isLocal, String photarkUid) {
+    private Entry<String, String[]>[] processFBFriends(String fileLocation, boolean isLocal, String photarkUid) {
 
         PhotarkPhoto photo = null;
-        List<Entry<String, String>> detectedFriends = new ArrayList<Entry<String, String>>();
-        String accessToken = accessManager.getUserFacebookAccessToken(photarkUid,Constants.REGISTERED_USER_LIST);
+        List<Entry<String, String[]>> detectedFriends = new ArrayList<Entry<String, String[]>>();
+        String accessToken = accessManager.getUserFacebookAccessToken(photarkUid, Constants.REGISTERED_USER_LIST);
         try {
-            faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken),accessToken);
+            faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken), accessToken);
             if (isLocal) {
                 photo = faceRecognitionService.recognizeFromFile(new File(fileLocation), "friends@facebook.com");
             } else {
                 photo = faceRecognitionService.recognizeFromUrl(fileLocation, "friends@facebook.com");
             }
 
+//          output tuple = [name, link, gender, confidence,]
+
             for (PhotArkFace face : photo.getPhotArkFaces()) {
 
                 String uid = "";
                 String confidence = "";
+                String gender = "";
                 if (face.getGuess() != null) {
                     System.out.println("***Identified*** " + face.getGuess().toString());
                     uid = face.getGuess().getGuessID();
                     confidence = face.getGuess().getConfidence();
-                    detectedFriends.add(new Entry<String, String>(uid, confidence));
+                    gender = face.getGender();
+                    detectedFriends.add(new Entry<String, String[]>(uid, getFacebookUserDataTuple(accessToken, uid, gender, confidence)));
                 } else {
                     System.out.println("??? Unidentified ..");
                 }
@@ -115,15 +127,29 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         } catch (FaceServerException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        Entry<String, String>[] imageArray = new Entry[detectedFriends.size()];
-        return detectedFriends.toArray(imageArray);
+        //TODO If want can validate and remove duplicates from the "detectedFriends".
+
+        Entry<String, String[]>[] dataArray = new Entry[detectedFriends.size()];
+        return detectedFriends.toArray(dataArray);
 
     }
 
     private String getMyFacebookUserId(String accessToken) {
-       FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-       User user = facebookClient.fetchObject("me", User.class);
-     return user.getId();
+        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+        User user = facebookClient.fetchObject("me", User.class);
+        return user.getId();
+    }
+
+    private String[] getFacebookUserDataTuple(String accessToken, String uid, String gender, String confidence) {
+        String name = "";
+        String link = "";
+        String userId = uid.trim().split("@")[0];
+
+        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+        User user = facebookClient.fetchObject(userId, User.class);
+        name = user.getName();
+        link = user.getLink();
+        return new String[]{name, link, gender, confidence};
     }
 
 }

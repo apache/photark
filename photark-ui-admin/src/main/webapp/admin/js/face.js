@@ -21,6 +21,7 @@ var genericFaceService;
 var selectFaceApp
 var faceService;
 
+
 dojo.addOnLoad(function() {
     dojo.require("dojo._base.xhr");
     dojo.require("dojo.rpc.JsonService");
@@ -33,6 +34,8 @@ dojo.addOnLoad(function() {
 function initServices() {
     faceService = new dojo.rpc.JsonService(photark.constants.FaceRecognitionService);
     facebookService = new dojo.rpc.JsonService(photark.constants.FacebookFriendFinder);
+    genericFaceService = new dojo.rpc.JsonService(photark.constants.GenericFriendFinder);
+
 }
 
 
@@ -80,8 +83,8 @@ function checkAccessTokenRedirect() {
     var url = window.location.href;
     if (url != "http://localhost:8080/photark/admin/face.html") {
         var accesstoken = url.split("&")[0].split("=")[1];
-        store_facebook_access_token(accesstoken) ;
-        
+        store_facebook_access_token(accesstoken);
+
     }
 }
 
@@ -94,23 +97,41 @@ function facebookAuth() {
     window.location = url;
 }
 
-function trainUser(user_name) {
+function trainUser() {
+     var userName = dojo.byId("train_uname_input").value;
+
     if (selectFaceApp.value == "General-Face-Recognition") {
-        //TODO call train method in generic face app
+        var filePath = dojo.byId("imageFilePathInput").value;
+        var fileUrl = dojo.byId("imageUrlInput").value;
+        var label = dojo.byId("train_label_input").value;
+
+        if (label == "") {
+            label = "photark_default";
+        }
+
+        if ((filePath == "" ) && (fileUrl != "")) {
+            genericFaceService.trainUrlImage(fileUrl, userName, label).addCallback(facebook_gff_void_callback);
+        } else if ((fileUrl == "" ) && (filePath != "")) {
+
+            genericFaceService.trainLocalImage(filePath, userName, label).addCallback(facebook_gff_void_callback);
+        } else {
+           alert("..You should fill either image file path or url ...!!! ");
+        }
+
 
     } else if (selectFaceApp.value == "FaceBook-Friend-Finder") {
-        faceService.train(user_name).addCallback(facebook_ff_callback);
+        faceService.train(userName).addCallback(facebook_ff_callback);
     }
 
 }
 
 function store_facebook_access_token(accessToken) {
-        dojo.xhrPost({
+    dojo.xhrPost({
         url:"../security", //photark.constants.SecurityEndpoint,
         content:{request:"getUser"},
         handleAs: "json",
         load: function(response, ioArgs) {
-        facebookService.storeFacebookAccessToken(response.user.userId,accessToken).addCallback(facebook_ff_void_callback);
+            facebookService.storeFacebookAccessToken(response.user.userId, accessToken).addCallback(facebook_ff_void_callback);
         },
         error: function(response, ioArgs) {
 
@@ -129,8 +150,16 @@ function face_callback(items, exception) {
 function facebook_ff_void_callback(items, exception) {
     if (exception) {
         alert("Error");
-    }  else {
-//      alert("CAME");
+    } else {
+        //      alert("CAME");
+    }
+}
+
+function facebook_gff_void_callback(items, exception) {
+    if (exception) {
+        alert("Error");
+    } else {
+          alert("GFF CAME");
     }
 }
 

@@ -76,15 +76,15 @@ public class GenericFaceRecognitionTestCase {
     public void testFaceRecognition() throws FaceServerException, FaceClientException {
         FaceRecognitionService defaultFaceClient =
             (FaceRecognitionService)node.getService(FaceRecognitionService.class, "FaceRecognitionService");
-        Photo p1 =
+        PhotarkPhoto p1 =
             defaultFaceClient
-                .detectFromUrls("https://lh3.googleusercontent.com/-z13PTuGA9mg/Thi6cKAiJVI/AAAAAAAAABs/lTEMvH9in1s/s128/Jennifer-Lopez0045.jpg").get(0);
-        Photo p2 =
+                .detectFromUrl("https://lh3.googleusercontent.com/-z13PTuGA9mg/Thi6cKAiJVI/AAAAAAAAABs/lTEMvH9in1s/s128/Jennifer-Lopez0045.jpg");
+        PhotarkPhoto p2 =
             defaultFaceClient
-                .detectFromUrls("https://lh5.googleusercontent.com/-K6Jpe-1liwc/Thk0cEGT9cI/AAAAAAAAAB4/9a_84-oMqL8/s128/jennifer-lopez.jpg").get(0);
+                .detectFromUrl("https://lh5.googleusercontent.com/-K6Jpe-1liwc/Thk0cEGT9cI/AAAAAAAAAB4/9a_84-oMqL8/s128/jennifer-lopez.jpg");
 
-        defaultFaceClient.saveTags(p1.getFace().getTID(), "jenifer@photark.com", "jenifer");
-        defaultFaceClient.saveTags(p2.getFace().getTID(), "jenifer@photark.com", "jenifer");
+        defaultFaceClient.saveTags(p1.getPhotArkFace().getTid(), "jenifer@photark.com", "jenifer");
+        defaultFaceClient.saveTags(p2.getPhotArkFace().getTid(), "jenifer@photark.com", "jenifer");
 
         defaultFaceClient.train("jenifer@photark.com");
         PhotarkPhoto p =
