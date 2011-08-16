@@ -39,116 +39,120 @@ public class Person {
     private List<String> phoneNumbers;
     private String thumbnailUrl;
 
-    public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
+    public Person() {
+        
     }
 
     public String getAboutMe() {
         return aboutMe;
     }
 
-    public void setActivities(List<String> activities) {
-        this.activities = activities;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public List<String> getActivities() {
         return activities;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setActivities(List<String> activities) {
+        this.activities = activities;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getBirthday() {
         return birthday;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setEmails(List<String> emails) {
-        this.emails = emails;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public List<String> getEmails() {
         return emails;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmails(List<String> emails) {
+        this.emails = emails;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setOrganizations(List<String> organizations) {
-        this.organizations = organizations;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public List<String> getOrganizations() {
-        return organizations;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setPhoneNumbers(List<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public List<String> getOrganizations() {
+        return organizations;
+    }
+
+    public void setOrganizations(List<String> organizations) {
+        this.organizations = organizations;
     }
 
     public List<String> getPhoneNumbers() {
         return phoneNumbers;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setPhoneNumbers(List<String> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
 }
