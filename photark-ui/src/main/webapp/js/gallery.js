@@ -70,6 +70,7 @@ var permissions = new Array();
 var albumImageToBeLoaded = null;
 
 var facebook_ff;
+var genericFaceService;
 
 dojo.addOnLoad(function() {
     dojo.require("dojo._base.xhr");
@@ -108,6 +109,8 @@ function initServices() {
     remoteGallery = new dojo.rpc.JsonService(photark.constants.RemoteGalleryServiceEndpoint);
     faceService = new dojo.rpc.JsonService(photark.constants.FaceRecognitionService);
     facebook_ff = new dojo.rpc.JsonService(photark.constants.FacebookFriendFinder);
+    genericFaceService = new dojo.rpc.JsonService(photark.constants.GenericFriendFinder);
+
 }
 
 function initGallery() {
@@ -302,15 +305,32 @@ function showFriends() {
     if (facetype == "facebook") {
         showFacebookFriends();
     } else if (facetype == "private") {
-
-
+       showGenericFriends(textField.value);
     }
 
 
 }
 
-function showFacebookFriends() {
+function showGenericFriends(userName) {
+//  var file_path =  document.getElementById("albumImage").src;
+    var file_path = "https://lh4.googleusercontent.com/-rb_m-GQcL00/Ti8sqThvrDI/AAAAAAAAAMY/kUBurbFKJ0A/s640/friends_2.jpg";
 
+    dojo.xhrPost({
+        url:"security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+            genericFaceService.getAllMyFriendsFromPictureUrl(file_path, userName, response.user.userId).addCallback(facebook_gff_callback);
+        },
+        error: function(response, ioArgs) {
+
+        }
+    });
+
+}
+
+function showFacebookFriends() {
+//  var file_path =  document.getElementById("albumImage").src;
     var file_path = "https://lh4.googleusercontent.com/-rb_m-GQcL00/Ti8sqThvrDI/AAAAAAAAAMY/kUBurbFKJ0A/s640/friends_2.jpg";
 
     dojo.xhrPost({
@@ -336,9 +356,11 @@ function face_callback(items, exception) {
 
 }
 
-function face_callback1(entries, exception) {
+function facebook_gff_callback(entries, exception) {
     if (exception) {
         alert("FB AUTH Error");
+    } else {
+        viewFaceResults(entries,"gff"); // gff refers to Generic Friend Finder
     }
 
 
@@ -349,20 +371,12 @@ function facebook_ff_callback(entries, exception) {
     if (exception) {
         alert("Error");
     } else {
-        viewFaceResults(entries);
-        //    for (var i=0; i<entries.length; i++) {
-        //        var user_data = entries[i];
-        //        var name = entries[i].data[0];
-        //        var link = entries[i].data[1];
-        //        var confidence = entries[i].data[2];
-        //    // TODO Display these data in a table
-        //        alert(name+ ":: "+link+":: "+confidence);
-        //    }
+        viewFaceResults(entries,"fff"); // fff refers to Facebook Friend Finder
     }
 
 }
 
-function viewFaceResults(entries) {
+function viewFaceResults(entries,faceAppType) {
 
     var table = document.getElementById('faceTable');
     var lastRow = 0;
@@ -376,6 +390,7 @@ function viewFaceResults(entries) {
     column = row.insertCell(2);column.width = 400;
     column.innerHTML = "<span style=\"color:#336633\">"+"Confidence"+"</span>";
 
+    if(faceAppType == "fff") {
     for (var i = 0; i < entries.length; i++) {
         var row = table.insertRow(i+1);
         var user_data = entries[i];
@@ -393,6 +408,25 @@ function viewFaceResults(entries) {
         column = row.insertCell(2);
         column.innerHTML =  "<span style=\"color:green\">"+confidence+" %"+"</span>";
     }
+    } else  if(faceAppType == "gff") {
+    for (var i = 0; i < entries.length; i++) {
+        var row = table.insertRow(i+1);
+        var user_data = entries[i];
+        var uname = entries[i].data[0];
+        var gender = entries[i].data[1];
+        var confidence = entries[i].data[2];
+
+        column = row.insertCell(0);
+        column.innerHTML = "<span style=\"color:green\">"+uname+"</span>";
+
+        column = row.insertCell(1);
+        column.innerHTML = "<span style=\"color:green\">"+gender+"</span>";
+
+        column = row.insertCell(2);
+        column.innerHTML =  "<span style=\"color:green\">"+confidence+" %"+"</span>";
+    }
+    }
+
 }
 
 

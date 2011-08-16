@@ -24,12 +24,39 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface FacebookFriendFinder {
 
+
+    /**
+     * Recognize all facebook friends who are in the give picture
+     * @param pathToFile Local file location of the image which should be recognized
+     * @param photarkUid Current logged in user's Photark security ID
+     * @return Entry
+     */
     public Entry<String, String[]>[] getAllMyFBFriendsFromPictureLocal(String pathToFile,String photarkUid);
 
+
+
+    /**
+     * Recognize all facebook friends who are in the give picture
+     * @param fileUrl  URL of the file location of the image which should be recognized
+     * @param photarkUid  Current logged in user's Photark security ID
+     * @return Entry
+     */
     public Entry<String, String[]>[] getAllMyFBFriendsFromPictureUrl(String fileUrl,String photarkUid);
 
+
+
+    /**
+     *  Authenticate Photark Face recognition Facebook  app
+     * @param facebookId
+     * @param fbAccessToken
+     */
     public void setFacebookAuth(String facebookId, String fbAccessToken);
 
+
+    /** Stores the Facebook access token in local JCR with the user's security credentials
+     *
+     * @param photarkUid
+     * @param accessToken
+     */
     public void storeFacebookAccessToken(String photarkUid, String accessToken);
-      public Entry<String, String[]>[] check();
 }

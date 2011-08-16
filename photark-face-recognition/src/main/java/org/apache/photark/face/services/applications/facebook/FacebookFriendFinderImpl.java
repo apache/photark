@@ -36,15 +36,12 @@ import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Scope("COMPOSITE")
 public class FacebookFriendFinderImpl implements FacebookFriendFinder {
 
     private FaceRecognitionService faceRecognitionService;
-    private final String adamFBUserId = "";
-    private final String adamAccessToken = "";
     private AccessManager accessManager;
 
     @Init
@@ -61,14 +58,6 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
     @Reference(name = "accessmanager")
     protected void setAccessService(AccessManager accessManager) {
         this.accessManager = accessManager;
-    }
-
-    public Entry<String, String[]>[] check() {
-        List<Entry<String, String[]>> detectedFriends = new ArrayList<Entry<String, String[]>>();
-        detectedFriends.add(new Entry<String, String[]>("uid", new String[]{"AAAA", "BBBB"}));
-        Entry<String, String[]>[] imageArray = new Entry[detectedFriends.size()];
-        return detectedFriends.toArray(imageArray);
-
     }
 
     public Entry<String, String[]>[] getAllMyFBFriendsFromPictureLocal(String pathToFile, String photarkUid) {
@@ -96,6 +85,8 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         PhotarkPhoto photo = null;
         List<Entry<String, String[]>> detectedFriends = new ArrayList<Entry<String, String[]>>();
         String accessToken = accessManager.getUserFacebookAccessToken(photarkUid, Constants.REGISTERED_USER_LIST);
+        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
+
         try {
             faceRecognitionService.setFacebookOauth2(getMyFacebookUserId(accessToken), accessToken);
             if (isLocal) {
@@ -106,6 +97,7 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
 
 //          output tuple = [name, link, gender, confidence,]
 
+            Map<String, Integer> faceMap = new HashMap<String, Integer>();
             for (PhotArkFace face : photo.getPhotArkFaces()) {
 
                 String uid = "";
@@ -116,7 +108,13 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
                     uid = face.getGuess().getGuessID();
                     confidence = face.getGuess().getConfidence();
                     gender = face.getGender();
-                    detectedFriends.add(new Entry<String, String[]>(uid, getFacebookUserDataTuple(accessToken, uid, gender, confidence)));
+
+                    faceMap.put(uid, Integer.valueOf(confidence));
+                    if (faceMap.containsKey(uid) && (faceMap.get(uid) < Integer.valueOf(confidence))) {
+                        faceMap.remove(uid);
+                    }
+
+                    detectedFriends.add(new Entry<String, String[]>(uid, getFacebookUserDataTuple(facebookClient, uid, gender, confidence)));
                 } else {
                     System.out.println("??? Unidentified ..");
                 }
@@ -127,11 +125,31 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         } catch (FaceServerException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        //TODO If want can validate and remove duplicates from the "detectedFriends".
 
-        Entry<String, String[]>[] dataArray = new Entry[detectedFriends.size()];
-        return detectedFriends.toArray(dataArray);
+        return removeDuplicates(detectedFriends);
+    }
 
+    private Entry<String, String[]>[] removeDuplicates(List<Entry<String, String[]>> detectedFriends) {
+        List<Entry<String, String[]>> filteredDetectedFriends = new ArrayList<Entry<String, String[]>>();
+        Map faceFilter = new HashMap();
+        for (int i = 0; i < detectedFriends.size(); i++) {
+            Entry<String, String[]> entry = detectedFriends.get(i);
+            String key = entry.getKey();
+            int maxConfidence = 0;
+            if (!faceFilter.containsKey(key)) {
+                for (int j = 0; j < detectedFriends.size(); j++) {
+                    Entry<String, String[]> subEntry = detectedFriends.get(j);
+                    int confidence = Integer.valueOf(subEntry.getData()[3]);
+                    if ((key == subEntry.getKey()) && (confidence > maxConfidence)) {
+                        maxConfidence = confidence;
+                    }
+                }
+            }
+            filteredDetectedFriends.add(new Entry<String, String[]>(entry.getData()[0], new String[]{entry.getData()[0], entry.getData()[1], entry.getData()[2], String.valueOf(maxConfidence)}));
+            faceFilter.put(key, "added");
+        }
+        Entry<String, String[]>[] dataArray = new Entry[filteredDetectedFriends.size()];
+        return filteredDetectedFriends.toArray(dataArray);
     }
 
     private String getMyFacebookUserId(String accessToken) {
@@ -140,12 +158,10 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
         return user.getId();
     }
 
-    private String[] getFacebookUserDataTuple(String accessToken, String uid, String gender, String confidence) {
+    private String[] getFacebookUserDataTuple(FacebookClient facebookClient, String uid, String gender, String confidence) {
         String name = "";
         String link = "";
         String userId = uid.trim().split("@")[0];
-
-        FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
         User user = facebookClient.fetchObject(userId, User.class);
         name = user.getName();
         link = user.getLink();

@@ -25,14 +25,39 @@ import org.oasisopen.sca.annotation.Remotable;
 @Remotable
 public interface GenericFriendFinder {
 
-    public String check();
 
+    /**
+     * Train the face.com index with the given picture
+     * @param imagePath  local image location
+     * @param userName username under the private namespace i.e xxx@photark.com
+     * @param label optional, a label to the tag
+     */
     public void trainUrlImage(String imagePath, String userName, String label) ;
 
+    /**
+     * Train the face.com index with the given picture
+     * @param imagePath URL image location
+     * @param userName userName username under the private namespace i.e xxx@photark.com
+     * @param label optional, a label to the tag
+     */
     public void trainLocalImage(String imagePath, String userName, String label);
 
+    /**
+     * Recognize a given one or more private namespace trained friends
+     * @param pathToFile  local image path
+     * @param uids  private namespace user ids whom should be recognized.
+     * @param photarkUid  current photark logged in user id
+     * @return
+     */
     public Entry<String, String[]>[] getAllMyFriendsFromPictureLocal(String pathToFile, String uids, String photarkUid);
 
+    /**
+     * Recognize a given one or more private namespace trained friends  
+     * @param fileUrl URL image path
+     * @param uids   private namespace user ids whom should be recognized.
+     * @param photarkUid   current photark logged in user id
+     * @return
+     */
     public Entry<String, String[]>[] getAllMyFriendsFromPictureUrl(String fileUrl,String uids, String photarkUid);
 
 }

@@ -139,27 +139,19 @@ function store_facebook_access_token(accessToken) {
     });
 }
 
-function face_callback(items, exception) {
-    if (exception) {
-        alert("Error");
-    }
-
-    alert(items);
-}
-
 function facebook_ff_void_callback(items, exception) {
     if (exception) {
-        alert("Error");
+        alert("Error while Training the user..Please try again...");
     } else {
-        //      alert("CAME");
+        alert("Successfully Trained...!!");
     }
 }
 
 function facebook_gff_void_callback(items, exception) {
     if (exception) {
-        alert("Error");
+        alert("Error while Training the user..Please try again...");
     } else {
-          alert("GFF CAME");
+          alert("Successfully Trained...!!");
     }
 }
 

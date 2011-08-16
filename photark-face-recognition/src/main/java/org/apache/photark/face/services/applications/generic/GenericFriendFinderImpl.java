@@ -57,11 +57,6 @@ public class GenericFriendFinderImpl implements GenericFriendFinder {
         this.accessManager = accessManager;
     }
 
-    public String check() {
-        return "VVV";  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-
     public Entry<String, String[]>[] getAllMyFriendsFromPictureLocal(String pathToFile, String uids, String photarkUid) {
         return processMyFriends(pathToFile, uids, true, photarkUid);
     }
@@ -88,12 +83,15 @@ public class GenericFriendFinderImpl implements GenericFriendFinder {
                 String confidence = "";
                 String gender = "";
                 if (face.getGuess() != null) {
-                    System.out.println("***Identified*** " + face.getGuess().toString());
+//                    System.out.println("***Identified*** " + face.getGuess().toString());
                     userName = face.getGuess().getGuessID();
                     confidence = face.getGuess().getConfidence();
                     gender = face.getGender();
-                    detectedFriends.add(new Entry<String, String[]>(userName, new String[]{userName, confidence, gender}));
-                } else {
+                    System.out.println("***Identified*** " + userName+" : "+" : "+gender+" : "+confidence);
+                    if(userName != null) {
+                    detectedFriends.add(new Entry<String, String[]>(userName, new String[]{userName, gender, confidence}));
+                    }
+                    } else {
                     System.out.println("??? Unidentified ..");
                 }
             }
