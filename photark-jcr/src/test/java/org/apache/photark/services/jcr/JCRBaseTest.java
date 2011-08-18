@@ -53,8 +53,8 @@ public class JCRBaseTest {
     @BeforeClass
     public static void BeforeClass() {
         try {
-            String contribution = ContributionLocationHelper.getContributionLocation("gallery.composite");
-            node = NodeFactory.newInstance().createNode("gallery.composite", new Contribution("gallery", contribution));
+            String contribution = ContributionLocationHelper.getContributionLocation("gallery-test.composite");
+            node = NodeFactory.newInstance().createNode("gallery-test.composite", new Contribution("gallery", contribution));
             node.start();
         } catch (Exception e) {
             e.printStackTrace();

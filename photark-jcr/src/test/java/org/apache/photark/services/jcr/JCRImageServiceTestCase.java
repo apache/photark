@@ -26,6 +26,7 @@ import java.net.URL;
 import junit.framework.Assert;
 
 import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -34,6 +35,7 @@ import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebResponse;
 import com.meterware.httpunit.protocol.UploadFileSpec;
 
+@Ignore
 public class JCRImageServiceTestCase extends JCRBaseTest {
 
     @Test
