@@ -22,6 +22,10 @@ package org.apache.photark.social;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlRootElement(name="person")
 public class Person {
 
     private String aboutMe;
@@ -67,6 +71,7 @@ public class Person {
         this.address = address;
     }
 
+    @XmlJavaTypeAdapter(JAXBDateSerializer.class)
     public Date getBirthday() {
         return birthday;
     }

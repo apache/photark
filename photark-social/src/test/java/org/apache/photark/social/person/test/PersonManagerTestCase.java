@@ -34,19 +34,45 @@ import org.apache.photark.social.Person;
 import org.apache.photark.social.PhotArkSocialException;
 import org.apache.photark.social.services.PersonService;
 import org.apache.photark.social.services.impl.JCRPersonServiceImpl;
+import org.apache.tuscany.sca.node.Contribution;
+import org.apache.tuscany.sca.node.ContributionLocationHelper;
+import org.apache.tuscany.sca.node.Node;
+import org.apache.tuscany.sca.node.NodeFactory;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class PersonManagerTestCase {
+    private static Node node;
+    private static PersonService personService;
+
+    @BeforeClass
+    public static void BeforeClass() {
+        try {
+            String contribution = ContributionLocationHelper.getContributionLocation("person-test.composite");
+            node = NodeFactory.newInstance().createNode("person-test.composite", new Contribution("gallery", contribution));
+            node.start();
+            
+            personService = node.getService(PersonService.class, "PersonServiceComponent");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @AfterClass
+    public static void AfterClass() {
+        node.stop();
+    }
+
+
+    @Test
+    public void testServiceInjection() {
+        Assert.assertNotNull(personService);
+    }
+    
     @Test
     public void testPersonManagerImpl() throws IOException, PhotArkSocialException, LoginException, RepositoryException {
-        JCRRepositoryManager repositoryManager = new JCRRepositoryManager();
-        String dir = "socialtest";
-        File homeDir = File.createTempFile(dir, "");
-        homeDir.delete();
-        homeDir.mkdir();
-        repositoryManager.setRepositoryHome(dir);
-        PersonService pm = new JCRPersonServiceImpl(repositoryManager);
         Person person = new Person();
         person.setId("testuser1");
         person.setDisplayName("TestUser1");
@@ -58,8 +84,8 @@ public class PersonManagerTestCase {
         activities.add("Movies");
         activities.add("Cricket");
         person.setActivities(activities);
-        pm.savePerson("testuser1", person);
-        Person person2 = pm.getPerson("testuser1");
+        personService.savePerson("testuser1", person);
+        Person person2 = personService.getPerson("testuser1");
         Assert.assertNotNull(person2);
         Assert.assertEquals("testuser1", person2.getId());
         Assert.assertEquals(person.getDisplayName(), person2.getDisplayName());
@@ -67,8 +93,8 @@ public class PersonManagerTestCase {
         Assert.assertEquals(calendar.getTime(), person2.getBirthday());
         Assert.assertNotNull(person2.getActivities());
         Assert.assertEquals("Movies", person2.getActivities().get(0));
-        pm.removePerson("testuser1");
-        person2 = pm.getPerson("testuser1");
+        personService.removePerson("testuser1");
+        person2 = personService.getPerson("testuser1");
         Assert.assertNull(person2);
 
     }
