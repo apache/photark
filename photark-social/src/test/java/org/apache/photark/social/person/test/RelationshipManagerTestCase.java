@@ -52,19 +52,19 @@ public class RelationshipManagerTestCase {
         person.setDisplayName("TestUser1");
         person.setFirstName("test");
         person.setLastName("user1");
-        pm.savePerson("user1", person);
+        pm.addPerson(person);
         Person person2 = new Person();
         person2.setId("user2");
         person2.setDisplayName("TestUser2");
         person2.setFirstName("test");
         person2.setLastName("user2");
-        pm.savePerson("user2", person2);
+        pm.addPerson(person2);
         Person person3 = new Person();
         person3.setId("user3");
         person3.setDisplayName("TestUser3");
         person3.setFirstName("test");
         person3.setLastName("user3");
-        pm.savePerson("user3", person3);
+        pm.addPerson(person3);
         // Test acceptReationship()
         relationshipManager.requestRelationship("user2", "user1");
         // Test getPendingRelationship()
