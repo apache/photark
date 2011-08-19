@@ -19,6 +19,8 @@
 
 package org.apache.photark.social.services;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -35,96 +37,83 @@ import org.oasisopen.sca.annotation.Remotable;
 
 @Remotable
 public interface PersonService {
-	/**
-	 * Persists the Person data object
-	 * 
-	 * @param personId
-	 *            ID of the Person data object
-	 * @param person
-	 *            Person data object
-	 * @throws PhotArkSocialException
-	 */
-	@POST
-	@Path("/people/{userId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	void savePerson(@PathParam("userId") String personId, Person person)
-			throws PhotArkSocialException;
+    
+    /**
+     * Retrieves the Person data object for the given ID with specified fields
+     * 
+     * @param personId personId ID of the Person data object to be retrieved
+     * @param fields the fields of the Person data object to be retrieved
+     * @return the Person data object for the given ID with the specified fields
+     * @throws PhotArkSocialException
+     */
+    @GET
+    @Path("/people")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<Person> getPersons() throws PhotArkSocialException;
 
-	/**
-	 * Updates the Person data object with updated fields
-	 * 
-	 * @param personId
-	 *            ID of the Person data object
-	 * @param person
-	 *            Person data object with filed to update
-	 * @throws PhotArkSocialException
-	 */
-	@PUT
-	@Path("/people/{userId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	void updatePerson(@PathParam("userId") String personId, Person person)
-			throws PhotArkSocialException;
+    /**
+     * Retrieves the Person data object for the given ID with specified fields
+     * 
+     * @param personId personId ID of the Person data object to be retrieved
+     * @param fields the fields of the Person data object to be retrieved
+     * @return the Person data object for the given ID with the specified fields
+     * @throws PhotArkSocialException
+     */
+    @GET
+    @Path("/people/{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Person getPerson(@PathParam("userId") String personId) throws PhotArkSocialException;
+    
+    /**
+     * Persists the Person data object
+     * 
+     * @param personId ID of the Person data object
+     * @param person Person data object
+     * @throws PhotArkSocialException
+     */
+    @POST
+    @Path("/people")
+    @Consumes(MediaType.APPLICATION_JSON)
+    Person addPerson(Person person) throws PhotArkSocialException;
 
-	/**
-	 * Removes a Person data object from persistence
-	 * 
-	 * @param personId
-	 *            ID of the Person data object to be removed
-	 * @throws PhotArkSocialException
-	 */
+    /**
+     * Updates the Person data object with updated fields
+     * 
+     * @param personId ID of the Person data object
+     * @param person Person data object with filed to update
+     * @throws PhotArkSocialException
+     */
+    @PUT
+    @Path("/people/{userId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void updatePerson(@PathParam("userId") String personId, Person person) throws PhotArkSocialException;
 
-	@DELETE
-	@Path("/people/{userId}")
-	void removePerson(@PathParam("userId") String personId)
-			throws PhotArkSocialException;
+    /**
+     * Removes a Person data object from persistence
+     * 
+     * @param personId ID of the Person data object to be removed
+     * @throws PhotArkSocialException
+     */
 
-	/**
-	 * Retrieves the Person data object for the given ID
-	 * 
-	 * @param personId
-	 *            ID of the Person data object to be retrieved
-	 * @return the Person data object for the given ID
-	 * @throws PhotArkSocialException
-	 */
+    @DELETE
+    @Path("/people/{userId}")
+    void removePerson(@PathParam("userId") String personId) throws PhotArkSocialException;
 
-	/*@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/people/{userId}/@self")
-	Person getPerson(@PathParam("userId") String personId)
-			throws PhotArkSocialException;*/
 
-	/**
-	 * Retrieves the Person data object for the given ID with specified fields
-	 * 
-	 * @param personId
-	 *            personId ID of the Person data object to be retrieved
-	 * @param fields
-	 *            the fields of the Person data object to be retrieved
-	 * @return the Person data object for the given ID with the specified fields
-	 * @throws PhotArkSocialException
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/people/{userId}/self")
-	Person getPerson(@PathParam("userId") String personId)
-			throws PhotArkSocialException;
-
-	/**
-	 * Retrieves array of Person data objects for the given person IDs and group
-	 * 
-	 * @param personIds
-	 *            String array of IDs of the persons
-	 * @param groupId
-	 *            the ID of the group the persons belongs to; optional
-	 * @param fields
-	 *            the fields of the Person data object to be retrieved
-	 * @return an array of Person data objects
-	 * @throws PhotArkSocialException
-	 */
-	/*@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/people/{userId}/@friends")
-	Person[] getPeople(String[] personIds, String groupId, String[] fields)
-			throws PhotArkSocialException;*/
+    /**
+     * Retrieves array of Person data objects for the given person IDs and group
+     * 
+     * @param personIds String array of IDs of the persons
+     * @param groupId the ID of the group the persons belongs to; optional
+     * @param fields the fields of the Person data object to be retrieved
+     * @return an array of Person data objects
+     * @throws PhotArkSocialException
+     */
+    /*
+     * @GET
+     * @Produces(MediaType.APPLICATION_JSON)
+     * @Path("/people/{userId}/@friends") Person[] getPeople(String[] personIds,
+     * String groupId, String[] fields) throws PhotArkSocialException;
+     */
 
 }

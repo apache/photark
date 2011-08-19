@@ -21,6 +21,7 @@ package org.apache.photark.social.services.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,63 +54,7 @@ public class JCRPersonServiceImpl implements PersonService {
     public JCRPersonServiceImpl(@Reference(name = "repositoryManager") JCRRepositoryManager repositoryManager) {
         this.repositoryManager = repositoryManager;
     }
-
-    public void savePerson(String personId, Person person) throws PhotArkSocialException {
-        if (person == null) {
-            throw new PhotArkSocialException("Unable to save person. Given Person object is null");
-        }
-        Node socialDataRootNode = null;
-        Node personProfileNode = null;
-
-        try {
-            socialDataRootNode = PhotArkSocialUtil.getSocialDataRoot(repositoryManager);
-            if (socialDataRootNode.hasNode(personId)) {
-                // if such userId already exists, return error message
-                throw new PhotArkSocialException("UserId " + personId + " already exists");
-            }
-            personProfileNode = PhotArkSocialUtil.getPersonProfileRootNode(repositoryManager, person.getId(), true);
-            personProfileNode.setProperty(PhotArkSocialConstants.PERSON_USERID, person.getId());
-            personProfileNode = createPersonNodeFromPersonObj(person, personProfileNode);
-            repositoryManager.getSession().save();
-        } catch (RepositoryException e) {
-            logger.log(Level.SEVERE, "Error saving person data to photark repository :" + e.getMessage(), e);
-            throw new PhotArkSocialException("Error saving person data to photark repository :" + e.getMessage(), e);
-        } catch (PhotarkRuntimeException e) {
-            logger.log(Level.SEVERE, "Error saving person data to photark repository :" + e.getMessage(), e);
-            throw new PhotArkSocialException("Error saving person data to photark repository :" + e.getMessage(), e);
-        }
-
-    }
-
-    public void updatePerson(String personId, Person person) throws PhotArkSocialException {
-        Node socialDataRootNode = PhotArkSocialUtil.getSocialDataRoot(repositoryManager);
-        try {
-            if (!socialDataRootNode.hasNode(personId)) {
-                throw new PhotArkSocialException("Profile for user with user ID " + personId + " doesn't exist");
-            }
-        } catch (RepositoryException e) {
-            logger.log(Level.SEVERE, "Error retrieving social data root from photark repository :" + e.getMessage(), e);
-            throw new PhotArkSocialException("Error retrieving social data root from photark repository :" + e.getMessage(), e);
-        }
-        savePerson(personId, person);
-
-    }
-
-    public void removePerson(String personId) throws PhotArkSocialException {
-        Node personProfileNode = PhotArkSocialUtil.getPersonProfileRootNode(repositoryManager, personId, false);
-        if (personProfileNode != null) { // node exists
-            try {
-                personProfileNode.remove();
-                repositoryManager.getSession().save();
-            } catch (RepositoryException e) {
-                logger.log(Level.SEVERE, "Error removing person data from photark repository :" + e.getMessage(), e);
-                throw new PhotArkSocialException("Error removing person data from photark repository :" + e.getMessage(), e);
-            }
-        } else {
-            throw new PhotArkSocialException("Profile for user with user ID " + personId + " doesn't exist");
-        }
-
-    }
+    
 
     /*
      * public Person getPerson(String personId) throws PhotArkSocialException {
@@ -132,6 +77,69 @@ public class JCRPersonServiceImpl implements PersonService {
             throw new PhotArkSocialException("Error retrieving person data from photark repository :" + e.getMessage(), e);
         }
         return personObj;
+    }
+
+    public List<Person> getPersons() throws PhotArkSocialException {
+        return Collections.EMPTY_LIST;
+    }
+
+    public Person addPerson(Person person) throws PhotArkSocialException {
+        if (person == null) {
+            throw new PhotArkSocialException("Unable to save person. Given Person object is null");
+        }
+        String personId = person.getId();
+        Node socialDataRootNode = null;
+        Node personProfileNode = null;
+
+        try {
+            socialDataRootNode = PhotArkSocialUtil.getSocialDataRoot(repositoryManager);
+            if (socialDataRootNode.hasNode(personId)) {
+                // if such userId already exists, return error message
+                throw new PhotArkSocialException("UserId " + personId + " already exists");
+            }
+            personProfileNode = PhotArkSocialUtil.getPersonProfileRootNode(repositoryManager, person.getId(), true);
+            personProfileNode.setProperty(PhotArkSocialConstants.PERSON_USERID, person.getId());
+            personProfileNode = createPersonNodeFromPersonObj(person, personProfileNode);
+            repositoryManager.getSession().save();
+        } catch (RepositoryException e) {
+            logger.log(Level.SEVERE, "Error saving person data to photark repository :" + e.getMessage(), e);
+            throw new PhotArkSocialException("Error saving person data to photark repository :" + e.getMessage(), e);
+        } catch (PhotarkRuntimeException e) {
+            logger.log(Level.SEVERE, "Error saving person data to photark repository :" + e.getMessage(), e);
+            throw new PhotArkSocialException("Error saving person data to photark repository :" + e.getMessage(), e);
+        }
+
+        return person;
+    }
+
+    public void updatePerson(String personId, Person person) throws PhotArkSocialException {
+        Node socialDataRootNode = PhotArkSocialUtil.getSocialDataRoot(repositoryManager);
+        try {
+            if (!socialDataRootNode.hasNode(personId)) {
+                throw new PhotArkSocialException("Profile for user with user ID " + personId + " doesn't exist");
+            }
+        } catch (RepositoryException e) {
+            logger.log(Level.SEVERE, "Error retrieving social data root from photark repository :" + e.getMessage(), e);
+            throw new PhotArkSocialException("Error retrieving social data root from photark repository :" + e.getMessage(), e);
+        }
+        addPerson(person);
+
+    }
+
+    public void removePerson(String personId) throws PhotArkSocialException {
+        Node personProfileNode = PhotArkSocialUtil.getPersonProfileRootNode(repositoryManager, personId, false);
+        if (personProfileNode != null) { // node exists
+            try {
+                personProfileNode.remove();
+                repositoryManager.getSession().save();
+            } catch (RepositoryException e) {
+                logger.log(Level.SEVERE, "Error removing person data from photark repository :" + e.getMessage(), e);
+                throw new PhotArkSocialException("Error removing person data from photark repository :" + e.getMessage(), e);
+            }
+        } else {
+            throw new PhotArkSocialException("Profile for user with user ID " + personId + " doesn't exist");
+        }
+
     }
 
     /*

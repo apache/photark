@@ -19,31 +19,32 @@
 
 package org.apache.photark.social.person.test;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.jcr.LoginException;
-import javax.jcr.RepositoryException;
-
-import org.apache.photark.services.jcr.JCRRepositoryManager;
 import org.apache.photark.social.Person;
-import org.apache.photark.social.PhotArkSocialException;
 import org.apache.photark.social.services.PersonService;
-import org.apache.photark.social.services.impl.JCRPersonServiceImpl;
 import org.apache.tuscany.sca.node.Contribution;
 import org.apache.tuscany.sca.node.ContributionLocationHelper;
 import org.apache.tuscany.sca.node.Node;
 import org.apache.tuscany.sca.node.NodeFactory;
+import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.meterware.httpunit.PostMethodWebRequest;
+import com.meterware.httpunit.WebConversation;
+import com.meterware.httpunit.WebRequest;
+import com.meterware.httpunit.WebResponse;
+
 public class PersonManagerTestCase {
+    protected static final String PEOPLE_SERVICE_URL = "http://localhost:8085/people";
+        
     private static Node node;
     private static PersonService personService;
 
@@ -72,7 +73,7 @@ public class PersonManagerTestCase {
     }
     
     @Test
-    public void testPersonManagerImpl() throws IOException, PhotArkSocialException, LoginException, RepositoryException {
+    public void testPersonOperations() throws Exception {
         Person person = new Person();
         person.setId("testuser1");
         person.setDisplayName("TestUser1");
@@ -84,7 +85,7 @@ public class PersonManagerTestCase {
         activities.add("Movies");
         activities.add("Cricket");
         person.setActivities(activities);
-        personService.savePerson("testuser1", person);
+        personService.addPerson(person);
         Person person2 = personService.getPerson("testuser1");
         Assert.assertNotNull(person2);
         Assert.assertEquals("testuser1", person2.getId());
@@ -96,6 +97,22 @@ public class PersonManagerTestCase {
         personService.removePerson("testuser1");
         person2 = personService.getPerson("testuser1");
         Assert.assertNull(person2);
+    }
+    
+    
+    public void testPersonResource() throws Exception {
+        JSONObject jsonPerson = new JSONObject();
+        jsonPerson.put("id", "testuser2");
+        jsonPerson.put("firstName", "test");
+        jsonPerson.put("lastName", "user2");
 
+        WebConversation wc = new WebConversation();
+        WebRequest request   = new PostMethodWebRequest(PEOPLE_SERVICE_URL, new ByteArrayInputStream(jsonPerson.toString().getBytes("UTF-8")),"application/json");
+        request.setHeaderField("Content-Type", "application/json");
+        WebResponse response = wc.getResource(request);
+
+        Assert.assertEquals(204, response.getResponseCode());
+        
+        personService.removePerson("testuser2");
     }
 }

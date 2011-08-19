@@ -31,7 +31,7 @@
 	<component name="PersonServiceComponent">
 		<implementation.java class="org.apache.photark.social.services.impl.JCRPersonServiceImpl"/>
 		<service name="PersonService">
-			<tuscany:binding.rest name="rest" uri="/people">
+			<tuscany:binding.rest name="rest" uri="http://localhost:8085/people">
 			    <tuscany:operationSelector.jaxrs />
     		</tuscany:binding.rest>
     		
