@@ -37,7 +37,7 @@ import com.github.mhendred.face4j.exception.FaceServerException;
 import com.github.mhendred.face4j.model.Face;
 import com.github.mhendred.face4j.model.Photo;
 
-//@Ignore
+@Ignore
 public class GenericFaceRecognitionTestCase {
     private DefaultFaceClient defaultFaceClient;
     private String apiKey = "";

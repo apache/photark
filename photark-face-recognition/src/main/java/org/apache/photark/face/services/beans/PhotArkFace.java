@@ -65,8 +65,4 @@ public class PhotArkFace implements Serializable {
         return guesses;
     }
 
-    public String toString(){
-     return guess.toString();   
-    }
-
 }
