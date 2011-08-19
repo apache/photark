@@ -19,7 +19,7 @@
 
 package org.apache.photark.social;
 
-public class PhotArkSocialException extends Throwable {
+public class PhotArkSocialException extends Exception {
 
     private static final long serialVersionUID = -5053119486166764904L;
 
