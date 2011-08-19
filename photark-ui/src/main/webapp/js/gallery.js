@@ -311,6 +311,20 @@ function showFriends() {
 
 }
 
+function showPreLoader(){
+    var img = dojo.byId("loadingImg");
+                    dojo.attr(img, {
+                       style: {visibility:"visible"}
+                    });
+}
+
+function hidePreLoader(){
+    var img = dojo.byId("loadingImg");
+                    dojo.attr(img, {
+                       style: {visibility:"hidden"}
+                    });
+}
+
 function showGenericFriends(userName) {
 //  var file_path =  document.getElementById("albumImage").src;
     var file_path = "https://lh4.googleusercontent.com/-rb_m-GQcL00/Ti8sqThvrDI/AAAAAAAAAMY/kUBurbFKJ0A/s640/friends_2.jpg";
@@ -320,6 +334,7 @@ function showGenericFriends(userName) {
         content:{request:"getUser"},
         handleAs: "json",
         load: function(response, ioArgs) {
+            showPreLoader();
             genericFaceService.getAllMyFriendsFromPictureUrl(file_path, userName, response.user.userId).addCallback(facebook_gff_callback);
         },
         error: function(response, ioArgs) {
@@ -338,6 +353,7 @@ function showFacebookFriends() {
         content:{request:"getUser"},
         handleAs: "json",
         load: function(response, ioArgs) {
+            showPreLoader();
             facebook_ff.getAllMyFBFriendsFromPictureUrl(file_path, response.user.userId).addCallback(facebook_ff_callback);
         },
         error: function(response, ioArgs) {
@@ -360,6 +376,7 @@ function facebook_gff_callback(entries, exception) {
     if (exception) {
         alert("FB AUTH Error");
     } else {
+        hidePreLoader();
         viewFaceResults(entries,"gff"); // gff refers to Generic Friend Finder
     }
 
@@ -371,6 +388,7 @@ function facebook_ff_callback(entries, exception) {
     if (exception) {
         alert("Error");
     } else {
+        hidePreLoader();
         viewFaceResults(entries,"fff"); // fff refers to Facebook Friend Finder
     }
 
