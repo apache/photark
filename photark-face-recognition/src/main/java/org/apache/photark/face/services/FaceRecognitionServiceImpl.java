@@ -19,13 +19,19 @@
 package org.apache.photark.face.services;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.mhendred.face4j.model.*;
 import org.apache.photark.face.services.beans.BeanGeneratorUtil;
 import org.apache.photark.face.services.beans.PhotArkFace;
 import org.apache.photark.face.services.beans.PhotarkPhoto;
+import org.apache.photark.jcr.JCRRepositoryManager;
+import org.apache.photark.jcr.util.JCREncoder;
+import org.apache.photark.security.utils.Constants;
 import org.oasisopen.sca.annotation.Init;
+import org.oasisopen.sca.annotation.Reference;
 import org.oasisopen.sca.annotation.Scope;
 import org.oasisopen.sca.annotation.Service;
 
@@ -34,22 +40,67 @@ import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
 import com.github.mhendred.face4j.response.GroupResponse;
 import com.github.mhendred.face4j.response.LimitsResponse;
-import com.github.mhendred.face4j.response.TrainResponse;
 import com.github.mhendred.face4j.response.UsersResponse;
- 
+
+import javax.jcr.*;
+
 @Service(FaceRecognitionService.class)
 @Scope("COMPOSITE")
 public class FaceRecognitionServiceImpl implements FaceRecognitionService {
 
     private DefaultFaceClient defaultFaceClient;
-    private String API_KEY = "";
-    private String API_SECRET = "";
-
+    private final String API_KEY = "";
+    private final String API_SECRET = "";
+    private JCRRepositoryManager repositoryManager;
+    private Map<String, String> friendMap;
 
     @Init
     public void init() {
         System.out.println("# ... Initializing FaceRecognitionService ...");
-        defaultFaceClient = new DefaultFaceClient(API_KEY,API_SECRET);
+        defaultFaceClient = new DefaultFaceClient(API_KEY, API_SECRET);
+        friendMap = new HashMap<String, String>();
+        loadFriendMap();
+    }
+
+    private void loadFriendMap() {
+
+        Session session;
+        try {
+            session = repositoryManager.getSession();
+            Node listNodeUsers = (Node) session.getItem("/" + Constants.USER_STORE + "/" + Constants.USER_LISTS + "/" + Constants.REGISTERED_USER_LIST);
+
+            NodeIterator nit = listNodeUsers.getNodes();
+            while (nit.hasNext()) {
+                Node propertyNode;
+                Node userNode = nit.nextNode();
+                if (userNode.hasNode("face.friends.names")) {
+                    propertyNode = userNode.getNode("face.friends.names");
+                } else {
+                    propertyNode = userNode.addNode("face.friends.names");
+                }
+
+                PropertyIterator propertyIterator = propertyNode.getProperties();
+                while (propertyIterator.hasNext()) {
+                    Property property = propertyIterator.nextProperty();
+                    if ((property != null) && (property.getValue() != null)) {
+                        String userName = property.getValue().getString();
+                        friendMap.put(userName, "True");
+                    }
+                }
+
+            }
+
+        } catch (LoginException e) {
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Reference(name = "repositoryManager")
+    protected void setRepositoryManager(JCRRepositoryManager repositoryManager) {
+        this.repositoryManager = repositoryManager;
     }
 
     /**
@@ -62,7 +113,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#train(String)}
      */
-    public void train(String uids)  {
+    public void train(String uids) {
         try {
             defaultFaceClient.train(uids);
         } catch (FaceClientException e) {
@@ -96,9 +147,9 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#saveTags(String,String,String)}
      */
-    public void saveTags(String tids, String uid, String label)  {
+    public void saveTags(String tids, String uid, String label) {
         try {
-             defaultFaceClient.saveTags(tids, uid, label);
+            defaultFaceClient.saveTags(tids, uid, label);
         } catch (FaceClientException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (FaceServerException e) {
@@ -109,7 +160,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#recognizeFromFile(File,String)}
      */
-    public PhotarkPhoto recognizeFromFile(File imageFile, String uids)  {
+    public PhotarkPhoto recognizeFromFile(File imageFile, String uids) {
         Photo photo = null;
         try {
             photo = defaultFaceClient.recognize(imageFile, uids);
@@ -124,7 +175,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
     /**
      * @see {@link FaceRecognitionService#recognizeFromUrl(String,String)}
      */
-    public PhotarkPhoto recognizeFromUrl(String url, String uid)  {
+    public PhotarkPhoto recognizeFromUrl(String url, String uid) {
         Photo p = null;
         try {
             p = defaultFaceClient.recognize(url, uid).get(0);
@@ -141,7 +192,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
      * @see {@link FaceRecognitionService#detectFromFile(File)}
      */
     public PhotarkPhoto detectFromFile(File imageFile) {
-       Photo photo = null;
+        Photo photo = null;
         try {
             photo = defaultFaceClient.detect(imageFile);
         } catch (FaceClientException e) {
@@ -149,13 +200,13 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
         } catch (FaceServerException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-       return BeanGeneratorUtil.createPhotarkPhoto(photo);
+        return BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**
      * @see {@link FaceRecognitionService#detectFromUrl(String)}
      */
-    public PhotarkPhoto detectFromUrl(String url)  {
+    public PhotarkPhoto detectFromUrl(String url) {
         Photo photo = null;
         try {
             photo = defaultFaceClient.detect(url).get(0);
@@ -164,7 +215,7 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
         } catch (FaceServerException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return  BeanGeneratorUtil.createPhotarkPhoto(photo);
+        return BeanGeneratorUtil.createPhotarkPhoto(photo);
     }
 
     /**
@@ -272,5 +323,93 @@ public class FaceRecognitionServiceImpl implements FaceRecognitionService {
         defaultFaceClient = new DefaultFaceClient(apiKey, apiSecret);
     }
 
+
+    public boolean isUserAllowedToTrain(String photarkUid, String userName) {
+        boolean isUserAllowedToTrain = false;
+
+        if ((isUserNameContainsInPrivateNameSpace(photarkUid, userName))
+                || ((!isUserNameContainsInGlobalNameSpace(userName))) && (!isUserNameContainsInPrivateNameSpace(photarkUid, userName))) {
+            isUserAllowedToTrain = true;
+        }
+        return isUserAllowedToTrain;
+    }
+
+    public boolean isUserNameContainsInPrivateNameSpace(String photarkUid, String userName) {
+        boolean isUserNameContainsInPrivateNameSpace = false;
+        Session session;
+        try {
+            session = repositoryManager.getSession();
+            Node listNodeUsers = (Node) session.getItem("/" + Constants.USER_STORE + "/" + Constants.USER_LISTS + "/" + Constants.REGISTERED_USER_LIST);
+            Node userNode = listNodeUsers.getNode(JCREncoder.toJCRFormat(photarkUid));
+            Node propertyNode;
+            if (userNode.hasNode("face.friends.names")) {
+                propertyNode = userNode.getNode("face.friends.names");
+            } else {
+                propertyNode = userNode.addNode("face.friends.names");
+            }
+
+            if (propertyNode.hasProperty(userName)) {
+                isUserNameContainsInPrivateNameSpace = true;
+            }
+
+            session.save();
+
+        } catch (LoginException e) {
+
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+
+            e.printStackTrace();
+        }
+        return isUserNameContainsInPrivateNameSpace;
+    }
+
+    public String checkGenericRecognitionValidity(String photarkUid, String userName) {
+        if (isUserNameContainsInPrivateNameSpace(photarkUid, userName)) {
+            return userName;
+        } else {
+            return "photark.not.allowed";
+        }
+    }
+
+    public boolean isUserNameContainsInGlobalNameSpace(String userName) {
+        boolean isUserNameContainsInGlobalNameSpace = false;
+        if (friendMap.containsKey(userName)) {
+            isUserNameContainsInGlobalNameSpace = true;
+        }
+        return isUserNameContainsInGlobalNameSpace;
+    }
+
+    public boolean addFaceUserNameToUserProfile(String photarkUid, String userName) {
+        boolean userNameExists = true;
+        Session session;
+        try {
+            session = repositoryManager.getSession();
+            Node listNodeUsers = (Node) session.getItem("/" + Constants.USER_STORE + "/" + Constants.USER_LISTS + "/" + Constants.REGISTERED_USER_LIST);
+            Node userNode = listNodeUsers.getNode(JCREncoder.toJCRFormat(photarkUid));
+            Node propertyNode;
+            if (userNode.hasNode("face.friends.names")) {
+                propertyNode = userNode.getNode("face.friends.names");
+            } else {
+                propertyNode = userNode.addNode("face.friends.names");
+            }
+
+            if (!propertyNode.hasProperty(userName)) {
+                propertyNode.setProperty(userName, userName);
+                userNameExists = false;
+                friendMap.put(userName, "True");
+            }
+
+            session.save();
+
+        } catch (LoginException e) {
+
+            e.printStackTrace();
+        } catch (RepositoryException e) {
+
+            e.printStackTrace();
+        }
+        return userNameExists;
+    }
 
 }

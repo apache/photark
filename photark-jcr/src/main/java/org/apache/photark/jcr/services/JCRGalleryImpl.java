@@ -75,7 +75,7 @@ public class JCRGalleryImpl extends BaseGalleryImpl implements Gallery {
                Session session = repositoryManager.getSession();
                Node baseRoot = session.getRootNode();
                Node rootNode;
-
+                                         
                if (!baseRoot.hasNode("albums")) {
                    rootNode = baseRoot.addNode("albums");
                } else {

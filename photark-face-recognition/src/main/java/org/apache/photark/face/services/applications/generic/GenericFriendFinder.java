@@ -32,7 +32,7 @@ public interface GenericFriendFinder {
      * @param userName username under the private namespace i.e xxx@photark.com
      * @param label optional, a label to the tag
      */
-    public void trainUrlImage(String imagePath, String userName, String label) ;
+    public boolean trainUrlImage(String imagePath, String userName, String label, String photarkUid) ;
 
     /**
      * Train the face.com index with the given picture
@@ -40,7 +40,7 @@ public interface GenericFriendFinder {
      * @param userName userName username under the private namespace i.e xxx@photark.com
      * @param label optional, a label to the tag
      */
-    public void trainLocalImage(String imagePath, String userName, String label);
+    public boolean trainLocalImage(String imagePath, String userName, String label, String photarkUid);
 
     /**
      * Recognize a given one or more private namespace trained friends

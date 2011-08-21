@@ -297,6 +297,25 @@ function clearFaceTable() {
 }
 
 function showFriends() {
+     dojo.xhrPost({
+        url:"security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+            if(response.user.userId != "Guest") {
+              _showFriends();
+            } else {
+                alert("Please login before using Photark Face Apps....!!!");
+            }
+
+        },
+        error: function(response, ioArgs) {
+
+        }
+    });
+}
+
+function _showFriends() {
     clearFaceTable();
 
     var facetype = dojo.byId("faceAppType").value;
@@ -305,11 +324,27 @@ function showFriends() {
     if (facetype == "facebook") {
         showFacebookFriends();
     } else if (facetype == "private") {
-       showGenericFriends(textField.value);
+        checkGenericRecognition(textField.value);
+//       showGenericFriends(textField.value);
     }
 
 
 }
+
+function checkGenericRecognition(userName){
+       dojo.xhrPost({
+        url:"security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+            faceService.checkGenericRecognitionValidity(response.user.userId,userName).addCallback(face_callback);
+        },
+        error: function(response, ioArgs) {
+
+        }
+    });
+}
+
 
 function showPreLoader(){
     var img = dojo.byId("loadingImg");
@@ -324,6 +359,7 @@ function hidePreLoader(){
                        style: {visibility:"hidden"}
                     });
 }
+
 
 function showGenericFriends(userName) {
 //  var file_path =  document.getElementById("albumImage").src;
@@ -363,12 +399,18 @@ function showFacebookFriends() {
 
 }
 
-function face_callback(items, exception) {
+function face_callback(userName, exception) {
     if (exception) {
         alert("FB AUTH Error");
 
+    } else {
+        if(userName != "photark.not.allowed") {
+            showGenericFriends(userName);
+        } else {
+            alert("You are only allowed to Recognize friends from your own domain...!!!");
+        }
+
     }
-    //alert("FB AUTH OK");
 
 }
 

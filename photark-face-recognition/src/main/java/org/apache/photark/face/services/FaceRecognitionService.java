@@ -271,4 +271,46 @@ public interface FaceRecognitionService {
      */
     public void createNewDefaultFaceClient(String apiKey, String apiSecret);
 
+
+    /**
+     *   Checks whether User Name Contains In Private NameSpace
+     * @param photarkUid
+     * @param userName
+     * @return
+     */
+    public boolean isUserNameContainsInPrivateNameSpace(String photarkUid, String userName) ;
+
+
+    /**
+     *  Checks whether User Name Contains In Global NameSpace
+     * @param userName
+     * @return
+     */
+    public boolean isUserNameContainsInGlobalNameSpace(String userName) ;
+
+    /**
+     *  Stores the user specific trained index in the corresponding user profile in local jcr
+     * @param photarkUid
+     * @param userName
+     * @return
+     */
+    public boolean addFaceUserNameToUserProfile(String photarkUid, String userName);
+
+    /**
+     *  Checks whether a user name is allowed to recognize
+     * @param photarkUid
+     * @param userName
+     * @return
+     */
+    public boolean isUserAllowedToTrain(String photarkUid, String userName);
+
+    /**
+     * Use to handle authorization level of users in recognition
+     * @param photarkUid
+     * @param userName
+     * @return
+     */
+    public String checkGenericRecognitionValidity(String photarkUid, String userName);    
+
+
 }

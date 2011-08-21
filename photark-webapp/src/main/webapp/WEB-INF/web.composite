@@ -176,6 +176,7 @@
    			<binding.sca name="local"/>
    			<tuscany:binding.jsonrpc uri="/FaceRecognitionService"/>
    		</service>
+        <reference name="repositoryManager" target="RepositoryManager"/>
 	</component>
 
      <component name="FacebookFriendFinder">

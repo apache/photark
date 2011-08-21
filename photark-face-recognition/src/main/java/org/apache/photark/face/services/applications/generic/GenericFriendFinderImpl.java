@@ -83,15 +83,14 @@ public class GenericFriendFinderImpl implements GenericFriendFinder {
                 String confidence = "";
                 String gender = "";
                 if (face.getGuess() != null) {
-//                    System.out.println("***Identified*** " + face.getGuess().toString());
                     userName = face.getGuess().getGuessID();
                     confidence = face.getGuess().getConfidence();
                     gender = face.getGender();
-                    System.out.println("***Identified*** " + userName+" : "+" : "+gender+" : "+confidence);
-                    if(userName != null) {
-                    detectedFriends.add(new Entry<String, String[]>(userName, new String[]{userName, gender, confidence}));
+                    System.out.println("***Identified*** " + userName + " : " + " : " + gender + " : " + confidence);
+                    if ((userName != null) && (userName.endsWith("@photark.com"))) {
+                        detectedFriends.add(new Entry<String, String[]>(userName, new String[]{userName, gender, confidence}));
                     }
-                    } else {
+                } else {
                     System.out.println("??? Unidentified ..");
                 }
             }
@@ -106,47 +105,73 @@ public class GenericFriendFinderImpl implements GenericFriendFinder {
         return detectedFriends.toArray(dataArray);
     }
 
-    public void trainLocalImage(String imagePath, String userName, String label) {
-        try {
-            PhotarkPhoto photo = faceRecognitionService.detectFromFile(new File(imagePath));
-            for (PhotArkFace face : photo.getPhotArkFaces()) {
-                if (face.getGuess() != null) {
-                    userName = face.getGuess().getGuessID();
+    public boolean trainLocalImage(String imagePath, String userName, String label, String photarkUid) {
+        boolean isTrained = false;
+        if (faceRecognitionService.isUserAllowedToTrain(photarkUid, userName)) {
+            try {
+                PhotarkPhoto photo = faceRecognitionService.detectFromFile(new File(imagePath));
 
-                    faceRecognitionService.saveTags(face.getTid(), userName, label);
+                if (photo.getPhotArkFaces().size() == 1) {
+                    faceRecognitionService.saveTags(photo.getPhotArkFace().getTid(), userName, label);
+                    faceRecognitionService.train(userName);
+                    faceRecognitionService.addFaceUserNameToUserProfile(photarkUid, userName);
                 } else {
-                    faceRecognitionService.saveTags(face.getTid(), userName, label);
+                    for (PhotArkFace face : photo.getPhotArkFaces()) {
+                        if (face.getGuess() != null) {
+                            if (face.getGuess().getGuessID() != null) {
+                                userName = face.getGuess().getGuessID();
+                            }
+                            faceRecognitionService.saveTags(face.getTid(), userName, label);
+                        } else {
+                            faceRecognitionService.saveTags(face.getTid(), userName, label);
+                        }
+
+                        faceRecognitionService.train(userName);
+                        faceRecognitionService.addFaceUserNameToUserProfile(photarkUid, userName);
+                    }
                 }
-
-                faceRecognitionService.train(userName);
+                isTrained = true;
+            } catch (FaceClientException e) {
+                e.printStackTrace();
+            } catch (FaceServerException e) {
+                e.printStackTrace();
             }
-        } catch (FaceClientException e) {
-            e.printStackTrace();
-        } catch (FaceServerException e) {
-            e.printStackTrace();
         }
-
+        return isTrained;
     }
 
-    public void trainUrlImage(String imagePath, String userName, String label) {
-        try {
-            PhotarkPhoto photo = faceRecognitionService.detectFromUrl(imagePath);
-            for (PhotArkFace face : photo.getPhotArkFaces()) {
-                if (face.getGuess() != null) {
-                    userName = face.getGuess().getGuessID();
-
-                    faceRecognitionService.saveTags(face.getTid(), userName, label);
+    public boolean trainUrlImage(String imagePath, String userName, String label, String photarkUid) {
+        boolean isTrained = false;
+        if (faceRecognitionService.isUserAllowedToTrain(photarkUid, userName)) {
+            try {
+                PhotarkPhoto photo = faceRecognitionService.detectFromUrl(imagePath);
+                if (photo.getPhotArkFaces().size() == 1) {
+                    faceRecognitionService.saveTags(photo.getPhotArkFace().getTid(), userName, label);
+                    faceRecognitionService.train(userName);
+                    faceRecognitionService.addFaceUserNameToUserProfile(photarkUid, userName);
                 } else {
-                    faceRecognitionService.saveTags(face.getTid(), userName, label);
+                    for (PhotArkFace face : photo.getPhotArkFaces()) {
+                        if (face.getGuess() != null) {
+                            if (face.getGuess().getGuessID() != null) {
+                                userName = face.getGuess().getGuessID();
+                            }
+                            faceRecognitionService.saveTags(face.getTid(), userName, label);
+                        } else {
+                            faceRecognitionService.saveTags(face.getTid(), userName, label);
+                        }
+                        faceRecognitionService.train(userName);
+                        faceRecognitionService.addFaceUserNameToUserProfile(photarkUid, userName);
+                    }
                 }
-
-                faceRecognitionService.train(userName);
+                isTrained = true;
+            } catch (FaceClientException e) {
+                e.printStackTrace();
+            } catch (FaceServerException e) {
+                e.printStackTrace();
             }
-        } catch (FaceClientException e) {
-            e.printStackTrace();
-        } catch (FaceServerException e) {
-            e.printStackTrace();
         }
 
+        return isTrained;
     }
+
 }

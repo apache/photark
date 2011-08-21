@@ -97,8 +97,28 @@ function facebookAuth() {
     window.location = url;
 }
 
-function trainUser() {
-     var userName = dojo.byId("train_uname_input").value;
+function trainUser(){
+        dojo.xhrPost({
+        url:"../security", //photark.constants.SecurityEndpoint,
+        content:{request:"getUser"},
+        handleAs: "json",
+        load: function(response, ioArgs) {
+         if(response.user.userId != "Guest") {
+          _trainUsers(response.user.userId);
+         } else {
+             alert("Please logged in before using Photark FaceApps..!!!");
+         }
+        },
+        error: function(response, ioArgs) {
+
+        }
+    });
+
+}
+
+function _trainUsers(photark_uid) {
+    var photarkUid = photark_uid;
+    var userName = dojo.byId("train_uname_input").value;
 
     if (selectFaceApp.value == "General-Face-Recognition") {
         var filePath = dojo.byId("imageFilePathInput").value;
@@ -110,10 +130,10 @@ function trainUser() {
         }
 
         if ((filePath == "" ) && (fileUrl != "")) {
-            genericFaceService.trainUrlImage(fileUrl, userName, label).addCallback(facebook_gff_void_callback);
+            genericFaceService.trainUrlImage(fileUrl, userName, label, photarkUid).addCallback(facebook_gff_void_callback);
         } else if ((fileUrl == "" ) && (filePath != "")) {
 
-            genericFaceService.trainLocalImage(filePath, userName, label).addCallback(facebook_gff_void_callback);
+            genericFaceService.trainLocalImage(filePath, userName, label, photarkUid).addCallback(facebook_gff_void_callback);
         } else {
            alert("..You should fill either image file path or url ...!!! ");
         }
@@ -139,19 +159,31 @@ function store_facebook_access_token(accessToken) {
     });
 }
 
+function facebook_ff_callback(items, exception) {
+    if (exception) {
+        alert("Error while Training the user..Please try again...");
+    } else {
+        alert("Successfully Trained in Facebook...!!");
+    }
+}
+
 function facebook_ff_void_callback(items, exception) {
     if (exception) {
         alert("Error while Training the user..Please try again...");
     } else {
-        alert("Successfully Trained...!!");
+        alert("Successfully Authenticated in Facebook...!!");
     }
 }
 
-function facebook_gff_void_callback(items, exception) {
+function facebook_gff_void_callback(trained, exception) {
     if (exception) {
         alert("Error while Training the user..Please try again...");
     } else {
-          alert("Successfully Trained...!!");
+        if(trained) {
+            alert("Successfully Trained...!!");
+        } else {
+           alert("UserName already exists..Please choose another UserName..!!!");
+        }
     }
 }
 

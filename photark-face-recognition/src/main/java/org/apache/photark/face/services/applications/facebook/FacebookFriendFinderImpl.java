@@ -104,17 +104,17 @@ public class FacebookFriendFinderImpl implements FacebookFriendFinder {
                 String confidence = "";
                 String gender = "";
                 if (face.getGuess() != null) {
-                    System.out.println("***Identified*** " + face.getGuess().toString());
                     uid = face.getGuess().getGuessID();
                     confidence = face.getGuess().getConfidence();
                     gender = face.getGender();
-
+                    System.out.println("***Identified*** " + uid);
                     faceMap.put(uid, Integer.valueOf(confidence));
                     if (faceMap.containsKey(uid) && (faceMap.get(uid) < Integer.valueOf(confidence))) {
                         faceMap.remove(uid);
                     }
-
-                    detectedFriends.add(new Entry<String, String[]>(uid, getFacebookUserDataTuple(facebookClient, uid, gender, confidence)));
+                    if ((uid != null) && (uid.endsWith("@facebook.com"))) {
+                        detectedFriends.add(new Entry<String, String[]>(uid, getFacebookUserDataTuple(facebookClient, uid, gender, confidence)));
+                    }
                 } else {
                     System.out.println("??? Unidentified ..");
                 }
