@@ -221,7 +221,7 @@
                 <module>photark-appengine-webapp</module>                
                 <module>photark-face-recognition</module>
                 <module>photark-webapp</module>
-                <module>photark-client-android</module>
+                <!--module>photark-client-android</module-->
             </modules>
         </profile>
 
@@ -246,7 +246,7 @@
                 <module>photark-face-recognition</module>
                 <module>photark-social</module>
                 <module>photark-webapp</module>
-                <module>photark-client-android</module>
+                <!--module>photark-client-android</module-->
             </modules>
         </profile>
 
@@ -272,7 +272,7 @@
                 <module>photark-face-recognition</module>
                 <module>photark-social</module>
                 <module>photark-webapp</module>
-                <module>photark-client-android</module>
+                <!--module>photark-client-android</module-->
             </modules>
         </profile>
         <!-- ====================================================================== -->
